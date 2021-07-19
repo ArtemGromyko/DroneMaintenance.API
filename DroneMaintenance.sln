@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DroneMaintenance.API", "DroneMaintenance\DroneMaintenance.API.csproj", "{D288C7A5-4241-443C-B33D-7F912DC77151}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DroneMaintenance.API", "DroneMaintenance.API\DroneMaintenance.API.csproj", "{D288C7A5-4241-443C-B33D-7F912DC77151}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneMaintenance.DAL", "DroneMaintenance.DAL\DroneMaintenance.DAL.csproj", "{AB45210A-877F-4E8E-B9C9-86A36FAFF725}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D288C7A5-4241-443C-B33D-7F912DC77151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D288C7A5-4241-443C-B33D-7F912DC77151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D288C7A5-4241-443C-B33D-7F912DC77151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB45210A-877F-4E8E-B9C9-86A36FAFF725}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB45210A-877F-4E8E-B9C9-86A36FAFF725}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB45210A-877F-4E8E-B9C9-86A36FAFF725}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB45210A-877F-4E8E-B9C9-86A36FAFF725}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
