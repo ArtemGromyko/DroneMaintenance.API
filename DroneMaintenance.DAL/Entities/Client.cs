@@ -10,6 +10,7 @@ namespace DroneMaintenance.DAL.Entities
         [Required]
         [MaxLength(60)]
         public string Name { get; set; }
+
         public List<ServiceRequest> ServiceRequests { get; set; }
     }
 }

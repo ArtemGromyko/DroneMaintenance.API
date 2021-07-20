@@ -10,6 +10,9 @@ namespace DroneMaintenance.DAL.Entities
         [Required]
         [MaxLength(60)]
         public string Name { get; set; }
-        public List<Contract> Contracts { get; set; }
+        [Required]
+        public decimal Price { get; set; }
+
+        public List<ContractSparePart> ContractSpareParts { get; set; }
     }
 }

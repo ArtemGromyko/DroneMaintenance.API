@@ -12,6 +12,7 @@ namespace DroneMaintenance.DAL.Entities
         public string Model { get; set; }
         [MaxLength(60)]
         public string Manufacturer { get; set; }
+
         public List<ServiceRequest> ServiceRequests { get; set; }
     }
 }
