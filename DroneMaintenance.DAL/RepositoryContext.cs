@@ -6,7 +6,13 @@ namespace DroneMaintenance.DAL
 {
     public class RepositoryContext : DbContext
     {
-        public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options) { }
+        public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options)
+        {
+            /*
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+            */
+        }
 
         public DbSet<Client> Clients { get; set; }
         public DbSet<Drone> Drones { get; set; }
