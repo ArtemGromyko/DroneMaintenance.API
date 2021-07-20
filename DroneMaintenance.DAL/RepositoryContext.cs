@@ -1,4 +1,5 @@
-﻿using DroneMaintenance.DAL.Entities;
+﻿using DroneMaintenance.DAL.Configuration;
+using DroneMaintenance.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DroneMaintenance.DAL
@@ -18,8 +19,12 @@ namespace DroneMaintenance.DAL
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ContractSparePart>().HasKey(c => new { c.ContractId, c.SparePartId });
-            modelBuilder.Entity<SparePart>().Property(s => s.Price).HasColumnType("money");
+            modelBuilder.ApplyConfiguration(new ClientConfiguration());
+            modelBuilder.ApplyConfiguration(new DroneConfiguration());
+            modelBuilder.ApplyConfiguration(new ServiceRequestConfiguration());
+            modelBuilder.ApplyConfiguration(new ContractConfiguration());
+            modelBuilder.ApplyConfiguration(new SparePartConfiguration());
+            modelBuilder.ApplyConfiguration(new ContractSparePartConfiguration());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

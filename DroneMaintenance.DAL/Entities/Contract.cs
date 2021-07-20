@@ -8,8 +8,8 @@ namespace DroneMaintenance.DAL.Entities
     {
         public Guid Id { get; set; }
         [Required]
-        public DateTime WorkStart { get; set; }
-        public DateTime WorkEnd { get; set; }
+        public DateTime WorkStartDate { get; set; }
+        public DateTime WorkEndDate { get; set; }
 
         public Guid ServiceRequestId { get; set; }
         public ServiceRequest ServiceRequest { get; set; }
