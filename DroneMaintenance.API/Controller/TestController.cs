@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DroneMaintenance.DAL.Contracts;
-using DroneMaintenance.Models.ResponseModels.Client;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

@@ -26,6 +26,7 @@ namespace DroneMaintenance
             services.ConfigureSqlContext(Configuration);
             services.ConfigureRepositories();
             services.AddAutoMapper(typeof(Startup));
+            services.ConfigureServices();
 
             services.AddControllers();
         }
