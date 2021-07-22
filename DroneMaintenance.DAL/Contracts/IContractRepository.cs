@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.DAL.Contracts
 {
-    interface IContractRepository
+    public interface IContractRepository
     {
         Task<List<Contract>> GetAllContractsAsync();
         Task<Contract> GetContractAsync(Guid id);

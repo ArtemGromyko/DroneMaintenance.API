@@ -24,6 +24,8 @@ namespace DroneMaintenance
             services.ConfigureCors();
             services.ConfigureLoggerService();
             services.ConfigureSqlContext(Configuration);
+            services.ConfigureRepositories();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
         }
