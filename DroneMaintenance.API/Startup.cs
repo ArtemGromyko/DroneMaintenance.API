@@ -1,4 +1,5 @@
 using DroneMaintenance.API.Extensions;
+using DroneMaintenance.API.Filters.ActionFilters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,7 @@ namespace DroneMaintenance
             services.ConfigureRepositories();
             services.AddAutoMapper(typeof(Startup));
             services.ConfigureServices();
+            services.AddScoped<ValidationFilterAttribute>();
 
             services.AddControllers();
         }

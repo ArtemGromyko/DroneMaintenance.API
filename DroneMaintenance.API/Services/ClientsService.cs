@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DroneMaintenance.API.Contracts;
+using DroneMaintenance.API.Filters.ActionFilters;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Client;
@@ -47,6 +48,7 @@ namespace DroneMaintenance.API.Services
             return new OkObjectResult(clientModel);
         }
 
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<ClientModel> CreateClientAsync(ClientForCreationModel client)
         {
             var clientEntity = _mapper.Map<Client>(client);
