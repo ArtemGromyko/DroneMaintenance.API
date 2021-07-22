@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DroneMaintenance.DAL.Entities;
+using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.ResponseModels.Client;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 
@@ -12,8 +13,9 @@ namespace DroneMaintenance.API.Services
             CreateMap<ServiceRequest, ServiceRequestModel>()
                 .ForMember(srm => srm.RequestStatus, opts => opts.MapFrom(x => GetStatuses(x.RequestStatus)))
                 .ForMember(srm => srm.ServiceType, opts => opts.MapFrom(x => GetServiceTypes(x.ServiceType)));
-
             CreateMap<Client, ClientModel>();
+
+            CreateMap<ClientForCreationModel, Client>();
         }
 
         private string GetStatuses(RequestStatus request)

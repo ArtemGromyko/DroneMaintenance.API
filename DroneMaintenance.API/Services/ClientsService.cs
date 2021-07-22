@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using DroneMaintenance.API.Contracts;
 using DroneMaintenance.DAL.Contracts;
+using DroneMaintenance.DAL.Entities;
+using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.ResponseModels.Client;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -43,6 +45,17 @@ namespace DroneMaintenance.API.Services
             var clientModel = _mapper.Map<ClientModel>(clientEntity);
 
             return new OkObjectResult(clientModel);
+        }
+
+        public async Task<ClientModel> CreateClientAsync(ClientForCreationModel client)
+        {
+            var clientEntity = _mapper.Map<Client>(client);
+
+            await _clientRepository.CreateClientAsync(clientEntity);
+
+            var clientModel = _mapper.Map<ClientModel>(clientEntity);
+
+            return clientModel;
         }
     }
 }
