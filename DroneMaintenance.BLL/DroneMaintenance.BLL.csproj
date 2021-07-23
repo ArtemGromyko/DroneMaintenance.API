@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DroneMaintenance.DAL\DroneMaintenance.DAL.csproj" />
+    <ProjectReference Include="..\DroneMaintenance.Models\DroneMaintenance.Models.csproj" />
+  </ItemGroup>
+
+</Project>

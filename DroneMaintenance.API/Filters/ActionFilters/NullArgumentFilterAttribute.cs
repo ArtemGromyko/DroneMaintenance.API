@@ -1,14 +1,14 @@
 ﻿using DroneMaintenance.BLL.Contracts;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 
 namespace DroneMaintenance.API.Filters.ActionFilters
 {
-    public class ValidationFilterAttribute : IActionFilter
+    public class NullArgumentFilterAttribute : IActionFilter
     {
         private readonly ILoggerManager _logger;
 
-        public ValidationFilterAttribute(ILoggerManager logger)
+        public NullArgumentFilterAttribute(ILoggerManager logger)
         {
             _logger = logger;
         }
@@ -18,15 +18,12 @@ namespace DroneMaintenance.API.Filters.ActionFilters
             var action = context.RouteData.Values["action"];
             var controller = context.RouteData.Values["controller"];
 
-            if(!context.ModelState.IsValid)
-            {
-                _logger.LogError($"Invalid model state for the object. Controller: {controller}, action: {action}");
-                context.Result = new BadRequestObjectResult(context.ModelState);
-            }
+
         }
+
         public void OnActionExecuted(ActionExecutedContext context)
         {
- 
+            
         }
     }
 }

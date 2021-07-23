@@ -5,17 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DroneMaintenance.DAL\DroneMaintenance.DAL.csproj" />
-    <ProjectReference Include="..\DroneMaintenance.Models\DroneMaintenance.Models.csproj" />
+    <ProjectReference Include="..\DroneMaintenance.BLL\DroneMaintenance.BLL.csproj" />
   </ItemGroup>
 
 

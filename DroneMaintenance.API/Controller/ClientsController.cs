@@ -1,4 +1,5 @@
-﻿using DroneMaintenance.API.Contracts;
+﻿using DroneMaintenance.API.Filters.ActionFilters;
+using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.Models.RequestModels.Client;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,25 +21,26 @@ namespace DroneMaintenance.API.Controller
         [HttpGet]
         public async Task<IActionResult> GetClientsAsync()
         {
-            var clientModelsResult = await _clientsService.GetClientsAsync();
+            var clientModels = await _clientsService.GetClientsAsync();
 
-            return clientModelsResult;
+            return Ok(clientModels);
         }
 
-        [HttpGet("{id}", Name = "GetClient")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetClientAsync(Guid id)
         {
-            var clientModelResult = await _clientsService.GetClientAsync(id);
+            var clientModel = await _clientsService.GetClientAsync(id);
 
-            return clientModelResult;
+            return Ok(clientModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateClientAsync([FromBody]ClientForCreationModel client)
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> CreateClientAsync([FromBody] ClientForCreationModel client)
         {
             var clientModel = await _clientsService.CreateClientAsync(client);
 
-            return CreatedAtRoute("GetClient", new { id = clientModel.Id }, clientModel);
+            return Created("api/clients/"+clientModel.Id, clientModel);
         }
     }
 }

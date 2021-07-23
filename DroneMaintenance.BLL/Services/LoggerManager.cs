@@ -1,7 +1,7 @@
-﻿using DroneMaintenance.API.Contracts;
+﻿using DroneMaintenance.BLL.Contracts;
 using NLog;
 
-namespace DroneMaintenance.API.Services
+namespace DroneMaintenance.BLL.Services
 {
     public class LoggerManager : ILoggerManager
     {

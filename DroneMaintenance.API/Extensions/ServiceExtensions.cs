@@ -1,5 +1,5 @@
-﻿using DroneMaintenance.API.Contracts;
-using DroneMaintenance.API.Services;
+﻿using DroneMaintenance.BLL.Contracts;
+using DroneMaintenance.BLL.Services;
 using DroneMaintenance.DAL;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Repositories;
@@ -39,7 +39,7 @@ namespace DroneMaintenance.API.Extensions
 
         public static void ConfigureServices(this IServiceCollection services)
         {
-            services.AddScoped<IClientsService, ClientsService>();
+            services.AddScoped<IClientsService, ClientsService>();  
         }
     }
 }

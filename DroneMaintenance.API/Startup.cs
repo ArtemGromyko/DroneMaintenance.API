@@ -2,10 +2,12 @@ using DroneMaintenance.API.Extensions;
 using DroneMaintenance.API.Filters.ActionFilters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using System;
 using System.IO;
 
 namespace DroneMaintenance
@@ -26,7 +28,11 @@ namespace DroneMaintenance
             services.ConfigureLoggerService();
             services.ConfigureSqlContext(Configuration);
             services.ConfigureRepositories();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
             services.ConfigureServices();
             services.AddScoped<ValidationFilterAttribute>();
 

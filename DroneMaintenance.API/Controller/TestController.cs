@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controller
@@ -14,21 +14,22 @@ namespace DroneMaintenance.API.Controller
         private readonly IClientRepository _clientRepository;
         private readonly IServiceRequestRepository _serviceRequestRepository;
         private readonly IMapper _mapper;
-        
-        public TestController(IClientRepository clientRepository, IMapper mapper, IServiceRequestRepository serviceRequestRepository)
+        private readonly IClientsService _clientsService;
+
+        public TestController(IClientRepository clientRepository, IMapper mapper, IServiceRequestRepository serviceRequestRepository, IClientsService clientsService)
         {
             _clientRepository = clientRepository;
             _mapper = mapper;
             _serviceRequestRepository = serviceRequestRepository;
+            _clientsService = clientsService;
         }
 
         [HttpGet]
-        public async  Task<IActionResult> GetPersons()
+        public async Task<IActionResult> GetPersons()
         {
-            var serviceRequests = await _serviceRequestRepository.GetAllServiceRequestsAsync();
-            var serviceRequestModels = _mapper.Map<IEnumerable<ServiceRequestModel>>(serviceRequests);
+            var clientModels = await _clientsService.GetClientsAsync();
 
-            return Ok(serviceRequestModels);
+            return Ok(clientModels);
         }
     }
 }

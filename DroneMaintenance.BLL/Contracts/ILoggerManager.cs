@@ -1,4 +1,4 @@
-﻿namespace DroneMaintenance.API.Contracts
+﻿namespace DroneMaintenance.BLL.Contracts
 {
     public interface ILoggerManager
     {

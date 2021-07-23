@@ -4,7 +4,7 @@ using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.ResponseModels.Client;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 
-namespace DroneMaintenance.API.Services
+namespace DroneMaintenance.BLL.Services
 {
     public class MappingProfile : Profile
     {

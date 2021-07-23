@@ -1,6 +1,4 @@
-﻿using DroneMaintenance.Models.ResponseModels.ServiceRequest;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace DroneMaintenance.Models.ResponseModels.Client
 {
