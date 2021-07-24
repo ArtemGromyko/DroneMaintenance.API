@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace DroneMaintenance.API.Controller
+namespace DroneMaintenance.API.Controllers
 {
     [Route("api/clients")]
     [ApiController]
@@ -35,8 +35,9 @@ namespace DroneMaintenance.API.Controller
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(NullArgumentFilterAttribute))]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> CreateClientAsync([FromBody] ClientForCreationModel client)
+        public async Task<IActionResult> CreateClientAsync([FromBody]ClientForCreationModel client)
         {
             var clientModel = await _clientsService.CreateClientAsync(client);
 

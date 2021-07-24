@@ -35,6 +35,7 @@ namespace DroneMaintenance
             });
             services.ConfigureServices();
             services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<NullArgumentFilterAttribute>();
 
             services.AddControllers();
         }

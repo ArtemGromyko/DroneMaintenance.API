@@ -5,7 +5,7 @@ using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace DroneMaintenance.API.Controller
+namespace DroneMaintenance.API.Controllers
 {
     [Route("api/test")]
     [ApiController]
