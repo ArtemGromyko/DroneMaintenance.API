@@ -1,5 +1,6 @@
 using DroneMaintenance.API.Extensions;
 using DroneMaintenance.API.Filters.ActionFilters;
+using DroneMaintenance.API.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,8 @@ namespace DroneMaintenance
             {
                 app.UseHsts();
             }
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseHttpsRedirection();
 
