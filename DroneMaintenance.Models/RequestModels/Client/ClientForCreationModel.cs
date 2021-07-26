@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DroneMaintenance.Models.RequestModels.Client
+﻿namespace DroneMaintenance.Models.RequestModels.Client
 {
-    public class ClientForCreationModel
+    public class ClientForCreationModel : ClientForManipulationModel
     {
-        [Required]
-        public string Name { get; set; }
+        
     }
 }

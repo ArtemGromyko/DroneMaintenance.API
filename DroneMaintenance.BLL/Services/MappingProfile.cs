@@ -10,12 +10,19 @@ namespace DroneMaintenance.BLL.Services
     {
         public MappingProfile()
         {
+            CreateMapsForClient();
+        }
+
+        private void CreateMapsForClient()
+        {
             CreateMap<ServiceRequest, ServiceRequestModel>()
                 .ForMember(srm => srm.RequestStatus, opts => opts.MapFrom(x => GetStatuses(x.RequestStatus)))
                 .ForMember(srm => srm.ServiceType, opts => opts.MapFrom(x => GetServiceTypes(x.ServiceType)));
             CreateMap<Client, ClientModel>();
 
             CreateMap<ClientForCreationModel, Client>();
+
+            CreateMap<ClientForUpdateModel, Client>().ReverseMap();
         }
 
         private string GetStatuses(RequestStatus request)

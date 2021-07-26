@@ -38,7 +38,7 @@ namespace DroneMaintenance
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<NullArgumentFilterAttribute>();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

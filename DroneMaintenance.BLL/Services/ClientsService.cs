@@ -13,25 +13,21 @@ namespace DroneMaintenance.BLL.Services
 {
     public class ClientsService : IClientsService
     {
-        private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly IClientRepository _clientRepository;
 
-        public ClientsService(ILoggerManager logger, IMapper mapper, IClientRepository clientRepository)
+        public ClientsService(IMapper mapper, IClientRepository clientRepository)
         {
-            _logger = logger;
             _mapper = mapper;
             _clientRepository = clientRepository;
         }
 
-        private async Task<Client> TryGetClientByIdAsync(Guid id)
+        public async Task<Client> TryGetClientEntityByIdAsync(Guid id)
         {
             var clientEntity = await _clientRepository.GetClientAsync(id);
             if(clientEntity == null)
             {
-                string message = $"Client with id: {id} doesn't exist in the database.";
-                _logger.LogInfo(message);
-                throw new EntityNotFoundException(message);
+                throw new EntityNotFoundException($"Client with id: {id} doesn't exist in the database.");
             }
 
             return clientEntity;
@@ -48,22 +44,43 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task<ClientModel> GetClientAsync(Guid id)
         {
-            var clientEntity = await TryGetClientByIdAsync(id);
+            var clientEntity = await TryGetClientEntityByIdAsync(id);
 
             var clientModel = _mapper.Map<ClientModel>(clientEntity);
 
             return clientModel;
         }
 
-        public async Task<ClientModel> CreateClientAsync(ClientForCreationModel client)
+        public async Task<ClientModel> CreateClientAsync(ClientForCreationModel clientForCreationModel)
         {
-            var clientEntity = _mapper.Map<Client>(client);
+            var clientEntity = _mapper.Map<Client>(clientForCreationModel);
 
             await _clientRepository.CreateClientAsync(clientEntity);
 
             var clientModel = _mapper.Map<ClientModel>(clientEntity);
 
             return clientModel;
+        }
+
+        public async Task DeleteClientAsync(Guid id)
+        {
+            var clientEntity = await TryGetClientEntityByIdAsync(id);
+
+            await _clientRepository.DeleteClientAsync(clientEntity);
+        }
+
+        public async Task UpdateClientAsync(Client clientEntity, ClientForUpdateModel clientForUpdateModel)
+        {
+            _mapper.Map(clientForUpdateModel, clientEntity);
+
+            await _clientRepository.UpdateClientAsync(clientEntity);
+        }
+
+        public ClientForUpdateModel GetClientToPatch(Client clientEntity)
+        {
+            var reviewToPatch = _mapper.Map<ClientForUpdateModel>(clientEntity);
+
+            return reviewToPatch;
         }
     }
 }

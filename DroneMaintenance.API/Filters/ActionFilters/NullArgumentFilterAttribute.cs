@@ -1,7 +1,6 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
 using System.Linq;
 
 namespace DroneMaintenance.API.Filters.ActionFilters
@@ -26,8 +25,6 @@ namespace DroneMaintenance.API.Filters.ActionFilters
                 _logger.LogError($"Object sent from client is null. Controller: {controller}, action: {action}");
                 context.Result = new BadRequestObjectResult($"Object is null. Controller: {controller}, action: {action}");
             }
-
-
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
