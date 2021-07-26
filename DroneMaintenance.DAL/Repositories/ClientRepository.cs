@@ -13,15 +13,15 @@ namespace DroneMaintenance.DAL.Repositories
         public async Task<List<Client>> GetAllClientsAsync() =>
             await FindAll().ToListAsync();
 
-        public async Task<Client> GetClientAsync(Guid id) =>
+        public async Task<Client> GetClientByIdAsync(Guid id) =>
             await FindByCondition(c => c.Id.Equals(id)).SingleOrDefaultAsync();
-        public Task CreateClientAsync(Client client) =>
-            CreateAsync(client);
+        public async Task CreateClientAsync(Client client) =>
+            await CreateAsync(client);
 
-        public Task UpdateClientAsync(Client client) =>
-            UpdateAsync(client);
+        public async Task UpdateClientAsync(Client client) =>
+            await UpdateAsync(client);
 
-        public Task DeleteClientAsync(Client client) =>
-            DeleteAsync(client);
+        public async Task DeleteClientAsync(Client client) =>
+            await DeleteAsync(client);
     }
 }

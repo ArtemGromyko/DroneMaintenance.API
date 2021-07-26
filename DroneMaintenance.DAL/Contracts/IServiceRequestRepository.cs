@@ -8,7 +8,7 @@ namespace DroneMaintenance.DAL.Contracts
     public interface IServiceRequestRepository
     {
         Task<List<ServiceRequest>> GetAllServiceRequestsAsync();
-        Task<ServiceRequest> GetServiceRequestAsync(Guid id);
+        Task<ServiceRequest> GetServiceRequestByIdAsync(Guid id);
         Task CreateServiceRequestAsync(ServiceRequest serviceRequest);
         Task UpdateServiceRequestAsync(ServiceRequest serviceRequest);
         Task DeleteServiceRequestAsync(ServiceRequest serviceRequest);

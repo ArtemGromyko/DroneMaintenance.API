@@ -24,7 +24,7 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task<Client> TryGetClientEntityByIdAsync(Guid id)
         {
-            var clientEntity = await _clientRepository.GetClientAsync(id);
+            var clientEntity = await _clientRepository.GetClientByIdAsync(id);
             if(clientEntity == null)
             {
                 throw new EntityNotFoundException($"Client with id: {id} doesn't exist in the database.");

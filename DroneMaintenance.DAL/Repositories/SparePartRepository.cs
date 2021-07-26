@@ -13,15 +13,15 @@ namespace DroneMaintenance.DAL.Repositories
         public async Task<List<SparePart>> GetAllSparePartsAsync() =>
             await FindAll().ToListAsync();
 
-        public async Task<SparePart> GetSparePartAsync(Guid id) =>
+        public async Task<SparePart> GetSparePartByIdAsync(Guid id) =>
             await FindByCondition(c => c.Id.Equals(id)).SingleOrDefaultAsync();
-        public Task CreateSparePartAsync(SparePart sparePart) =>
-            CreateAsync(sparePart);
+        public async Task CreateSparePartAsync(SparePart sparePart) =>
+            await CreateAsync(sparePart);
 
-        public Task UpdateSparePartAsync(SparePart sparePart) =>
-            UpdateAsync(sparePart);
+        public async Task UpdateSparePartAsync(SparePart sparePart) =>
+            await UpdateAsync(sparePart);
 
-        public Task DeleteSparePartAsync(SparePart sparePart) =>
-            DeleteAsync(sparePart);
+        public async Task DeleteSparePartAsync(SparePart sparePart) =>
+            await DeleteAsync(sparePart);
     }
 }

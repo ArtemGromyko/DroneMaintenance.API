@@ -13,16 +13,16 @@ namespace DroneMaintenance.DAL.Repositories
         public async Task<List<Drone>> GetAllDronesAsync() =>
             await FindAll().ToListAsync();
 
-        public async Task<Drone> GetDroneAsync(Guid id) =>
+        public async Task<Drone> GetDroneByIdAsync(Guid id) =>
             await FindByCondition(c => c.Id.Equals(id)).SingleOrDefaultAsync();
-        public Task CreateDroneAsync(Drone drone) =>
-            CreateAsync(drone);
+        public async Task CreateDroneAsync(Drone drone) =>
+            await CreateAsync (drone);
 
-        public Task UpdateDroneAsync(Drone drone) =>
-            UpdateAsync(drone);
+        public async Task UpdateDroneAsync(Drone drone) =>
+            await UpdateAsync(drone);
 
-        public Task DeleteDroneAsync(Drone drone) =>
-            DeleteAsync(drone);
+        public async Task DeleteDroneAsync(Drone drone) =>
+            await DeleteAsync(drone);
     }
 }
 

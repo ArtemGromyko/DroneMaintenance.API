@@ -23,9 +23,9 @@ namespace DroneMaintenance.API.Controllers
         }
 
         /// <summary>
-        /// Gets clients
+        /// Gets a client list
         /// </summary>
-        /// <response code="200">Clients recived successfully</response>
+        /// <response code="200">The client list recived successfully</response>
         /// <response code="500">Internal server error</response>
         [HttpGet]
         public async Task<IActionResult> GetClientsAsync()
@@ -38,9 +38,9 @@ namespace DroneMaintenance.API.Controllers
         /// <summary>
         /// Gets a client by provided id
         /// </summary>
-        /// <param name="id">Client's id</param>
-        /// <response code="200">Client recived successfully</response>
-        /// <response code="404">Client with provided id doesn't exist in the database</response>
+        /// <param name="id">Client id</param>
+        /// <response code="200">The client recived successfully</response>
+        /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetClientByIdAsync(Guid id)
@@ -53,8 +53,8 @@ namespace DroneMaintenance.API.Controllers
         /// <summary>
         /// Creates new client
         /// </summary>
-        /// <param name="client">Client request model for creation</param>
-        /// <response code="201">Client created successfully</response>
+        /// <param name="client">The client request model for creation</param>
+        /// <response code="201">The client created successfully</response>
         /// <response code="400">Bad request</response>
         /// <response code="500">Internal server error</response>
         [HttpPost]
@@ -71,9 +71,9 @@ namespace DroneMaintenance.API.Controllers
         /// Deletes a client with provided id
         /// </summary>
         /// <param name="id">Client's id</param>
-        /// <response code="204">Client deleted successfully</response>
+        /// <response code="204">The client deleted successfully</response>
         /// <response code="400">Bad request</response>
-        /// <response code="404">Client with provided id doesn't exist in the database</response>
+        /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteClientAsync(Guid id)
@@ -109,9 +109,9 @@ namespace DroneMaintenance.API.Controllers
         /// </summary>
         /// <param name="id">Client's id</param>
         /// <param name="patchDoc"></param>
-        /// <response code="204">Client updated successfully</response>
+        /// <response code="204">The client updated successfully</response>
         /// <response code="400">Bad request</response>
-        /// <response code="404">Client with provided id doesn't exist in the database</response>
+        /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
         [HttpPatch("{id}")]
         [ServiceFilter(typeof(NullArgumentFilterAttribute))]
