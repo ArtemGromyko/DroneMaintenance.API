@@ -18,5 +18,9 @@
     <ProjectReference Include="..\DroneMaintenance.BLL\DroneMaintenance.BLL.csproj" />
   </ItemGroup>
 
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
 
 </Project>

@@ -16,9 +16,8 @@ namespace DroneMaintenance.BLL.Contracts
         /// Tries to get a client entity
         /// </summary>
         /// <param name="id">Client id</param>
-        /// <returns>The client with provided id</returns>
-        /// <exception cref="DroneMaintenance.BLL.Exceptions.EntityNotFoundException">Throws if a client with provided id doesn't exist in the database</exception>
-        Task<Client> TryGetClientEntityByIdAsync(Guid id);
+        /// <returns>The client entity with provided id or null</returns>
+        Task<Client> GetClientEntityByIdAsync(Guid id);
 
         /// <summary>
         /// Gets a list of clients
@@ -30,9 +29,8 @@ namespace DroneMaintenance.BLL.Contracts
         /// Gets a client 
         /// </summary>
         /// <param name="id">Client id</param>
-        /// <returns>The client with provided id</returns>
-        /// <exception cref="DroneMaintenance.BLL.Exceptions.EntityNotFoundException">Throws if a client with provided id doesn't exist in the database</exception>
-        Task<ClientModel> GetClientAsync(Guid id);
+        /// <returns>The client with provided id or null</returns>
+        Task<ClientModel> GetClientByIdAsync(Guid id);
 
         /// <summary>
         /// Creates a client
@@ -45,15 +43,14 @@ namespace DroneMaintenance.BLL.Contracts
         /// Deletes a client with provided id
         /// </summary>
         /// <param name="id">Client id</param>
-        /// <exception cref="DroneMaintenance.BLL.Exceptions.EntityNotFoundException">Throws if a client with provided id doesn't exist in the database</exception>
-        Task DeleteClientAsync(Guid id);
+        Task DeleteClientAsync(Client clientEntity);
 
         /// <summary>
         /// Updates a client
         /// </summary>
         /// <param name="clientEntity">Client to update</param>
         /// <param name="clientForUpdateModel">Client update model for the request</param>
-        Task UpdateClientAsync(Client clientEntity, ClientForUpdateModel clientForUpdateModel);
+        Task<ClientModel> UpdateClientAsync(Client clientEntity, ClientForUpdateModel clientForUpdateModel);
 
         /// <summary>
         /// Maps from the clientEntity to the clientForUpdateModel

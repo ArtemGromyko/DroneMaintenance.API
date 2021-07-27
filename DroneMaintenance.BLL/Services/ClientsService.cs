@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DroneMaintenance.BLL.Contracts;
-using DroneMaintenance.BLL.Exceptions;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Client;
@@ -22,13 +21,9 @@ namespace DroneMaintenance.BLL.Services
             _clientRepository = clientRepository;
         }
 
-        public async Task<Client> TryGetClientEntityByIdAsync(Guid id)
+        public async Task<Client> GetClientEntityByIdAsync(Guid id)
         {
             var clientEntity = await _clientRepository.GetClientByIdAsync(id);
-            if(clientEntity == null)
-            {
-                throw new EntityNotFoundException($"Client with id: {id} doesn't exist in the database.");
-            }
 
             return clientEntity;
         }
@@ -42,9 +37,13 @@ namespace DroneMaintenance.BLL.Services
             return clientModels;
         }
 
-        public async Task<ClientModel> GetClientAsync(Guid id)
+        public async Task<ClientModel> GetClientByIdAsync(Guid id)
         {
-            var clientEntity = await TryGetClientEntityByIdAsync(id);
+            var clientEntity = await GetClientEntityByIdAsync(id);
+            if (clientEntity == null)
+            {
+                return null;
+            }
 
             var clientModel = _mapper.Map<ClientModel>(clientEntity);
 
@@ -62,18 +61,20 @@ namespace DroneMaintenance.BLL.Services
             return clientModel;
         }
 
-        public async Task DeleteClientAsync(Guid id)
+        public async Task DeleteClientAsync(Client clientEntity)
         {
-            var clientEntity = await TryGetClientEntityByIdAsync(id);
-
             await _clientRepository.DeleteClientAsync(clientEntity);
         }
 
-        public async Task UpdateClientAsync(Client clientEntity, ClientForUpdateModel clientForUpdateModel)
+        public async Task<ClientModel> UpdateClientAsync(Client clientEntity, ClientForUpdateModel clientForUpdateModel)
         {
             _mapper.Map(clientForUpdateModel, clientEntity);
 
             await _clientRepository.UpdateClientAsync(clientEntity);
+
+            var clientModel = _mapper.Map<ClientModel>(clientEntity);
+
+            return clientModel;
         }
 
         public ClientForUpdateModel GetClientToPatch(Client clientEntity)

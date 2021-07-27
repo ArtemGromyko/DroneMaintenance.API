@@ -14,4 +14,8 @@
     <ProjectReference Include="..\DroneMaintenance.Models\DroneMaintenance.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
 </Project>

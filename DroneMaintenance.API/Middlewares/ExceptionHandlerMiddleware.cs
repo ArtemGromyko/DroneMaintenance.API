@@ -1,5 +1,4 @@
 ﻿using DroneMaintenance.BLL.Contracts;
-using DroneMaintenance.BLL.Exceptions;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
@@ -22,11 +21,6 @@ namespace DroneMaintenance.API.Middlewares
             try
             {
                 await _next.Invoke(context);
-            }
-            catch (EntityNotFoundException ex)
-            {
-                logger.LogInfo(ex.Message);
-                await HandleExceptionAsync(context, ex.Message, HttpStatusCode.NotFound);
             }
             catch (Exception ex)
             {
