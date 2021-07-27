@@ -30,13 +30,10 @@ namespace DroneMaintenance
             services.ConfigureSqlContext(Configuration);
             services.ConfigureRepositories();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
             services.ConfigureServices();
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<NullArgumentFilterAttribute>();
+            services.ConfigureSwagger();
 
             services.AddControllers().AddNewtonsoftJson();
         }
@@ -59,6 +56,12 @@ namespace DroneMaintenance
             app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DroneMaintenanceApi V1");
+            });
 
             app.UseRouting();
 

@@ -1,10 +1,12 @@
 ﻿using DroneMaintenance.API.Filters.ActionFilters;
 using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.Models.RequestModels.Client;
+using DroneMaintenance.Models.ResponseModels.Client;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
@@ -14,12 +16,10 @@ namespace DroneMaintenance.API.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly IClientsService _clientsService;
-        private readonly ILoggerManager _logger;
 
         public ClientsController(IClientsService clientsService, ILoggerManager logger)
         {
             _clientsService = clientsService;
-            _logger = logger;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="200">The client list recived successfully</response>
         /// <response code="500">Internal server error</response>
         [HttpGet]
-        public async Task<IActionResult> GetClientsAsync()
+        public async Task<ActionResult<IEnumerable<ClientModel>>> GetClientsAsync()
         {
             var clientModels = await _clientsService.GetClientsAsync();
 
@@ -58,8 +58,6 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="400">Bad request</response>
         /// <response code="500">Internal server error</response>
         [HttpPost]
-        [ServiceFilter(typeof(NullArgumentFilterAttribute))]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateClientAsync([FromBody]ClientForCreationModel client)
         {
             var clientModel = await _clientsService.CreateClientAsync(client);
@@ -114,7 +112,6 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
         [HttpPatch("{id}")]
-        [ServiceFilter(typeof(NullArgumentFilterAttribute))]
         public async Task<IActionResult> PartiallyUpdateClientAsync(Guid id, [FromBody]JsonPatchDocument<ClientForUpdateModel> patchDoc)
         {
             var clientEntity = await _clientsService.TryGetClientEntityByIdAsync(id);
@@ -124,8 +121,6 @@ namespace DroneMaintenance.API.Controllers
             TryValidateModel(clientToPatch);
             if(!ModelState.IsValid)
             {
-                _logger.LogError($"Invalid model state for the patch document. Controller: {HttpContext.GetRouteValue("controller")} " +
-                    $"action: {HttpContext.GetRouteValue("action")}");
                 return BadRequest(ModelState);
             }
 

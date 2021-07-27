@@ -6,6 +6,7 @@ using DroneMaintenance.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 namespace DroneMaintenance.API.Extensions
 {
@@ -40,6 +41,18 @@ namespace DroneMaintenance.API.Extensions
         public static void ConfigureServices(this IServiceCollection services)
         {
             services.AddScoped<IClientsService, ClientsService>();  
+        }
+
+        public static void ConfigureSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "DroneMaintenance API"
+                });
+            });
         }
     }
 }
