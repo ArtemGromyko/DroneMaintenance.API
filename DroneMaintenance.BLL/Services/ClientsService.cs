@@ -30,7 +30,7 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task<List<ClientModel>> GetClientsAsync()
         {
-            List<Client> clientEntities = await _clientRepository.GetAllClientsAsync();
+            var clientEntities = await _clientRepository.GetAllClientsAsync();
 
             var clientModels = _mapper.Map<List<ClientModel>>(clientEntities);
 

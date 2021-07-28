@@ -1,6 +1,7 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.ResponseModels.Client;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -26,6 +27,8 @@ namespace DroneMaintenance.API.Controllers
         /// </summary>
         /// <response code="200">The client list recived successfully</response>
         /// <response code="500">Internal server error</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClientModel>>> GetClientsAsync()
         {
@@ -41,8 +44,11 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="200">The client recived successfully</response>
         /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClientModel>> GetClientByIdAsync(Guid id)
+        public async Task<ActionResult<ClientModel>> GetClientAsync(Guid id)
         {
             var clientModel = await _clientsService.GetClientByIdAsync(id);
             if (clientModel == null)
@@ -50,7 +56,7 @@ namespace DroneMaintenance.API.Controllers
                 return NotFound($"Client with id: {id} doesn't exist in the database.");
             }
 
-            return Ok(clientModel);
+            return clientModel;
         }
 
         /// <summary>
@@ -60,8 +66,11 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="201">The client created successfully</response>
         /// <response code="400">Bad request</response>
         /// <response code="500">Internal server error</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<ActionResult> CreateClientAsync([FromBody]ClientForCreationModel client)
+        public async Task<ActionResult<ClientModel>> CreateClientAsync([FromBody]ClientForCreationModel client)
         {
             var clientModel = await _clientsService.CreateClientAsync(client);
 
@@ -76,6 +85,10 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="400">Bad request</response>
         /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ClientModel>> DeleteClientAsync(Guid id)
         {
@@ -99,6 +112,10 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="400">Bad request</response>
         /// <response code="404">Client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
         public async Task<ActionResult<ClientModel>> UpdatePersonAsync(Guid id, [FromBody]ClientForUpdateModel client)
         {
@@ -110,7 +127,7 @@ namespace DroneMaintenance.API.Controllers
 
             var clientModel = await _clientsService.UpdateClientAsync(clientEntity, client);
 
-            return Ok(clientModel);
+            return clientModel;
         }
 
         /// <summary>
@@ -123,6 +140,10 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
         [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> PartiallyUpdateClientAsync(Guid id, [FromBody]JsonPatchDocument<ClientForUpdateModel> patchDoc)
         {
             var clientEntity = await _clientsService.GetClientEntityByIdAsync(id);
