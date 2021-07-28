@@ -13,15 +13,15 @@ namespace DroneMaintenance.DAL.Repositories
         public async Task<List<ServiceRequest>> GetAllServiceRequestsAsync() =>
             await FindAll().ToListAsync();
 
-        public async Task<ServiceRequest> GetServiceRequestAsync(Guid id) =>
+        public async Task<ServiceRequest> GetServiceRequestByIdAsync(Guid id) =>
             await FindByCondition(c => c.Id.Equals(id)).SingleOrDefaultAsync();
-        public Task CreateServiceRequestAsync(ServiceRequest serviceRequest) =>
-            CreateAsync(serviceRequest);
+        public async Task CreateServiceRequestAsync(ServiceRequest serviceRequest) =>
+            await CreateAsync(serviceRequest);
 
-        public Task UpdateServiceRequestAsync(ServiceRequest serviceRequest) =>
-            UpdateAsync(serviceRequest);
+        public async Task UpdateServiceRequestAsync(ServiceRequest serviceRequest) =>
+            await UpdateAsync(serviceRequest);
 
-        public Task DeleteServiceRequestAsync(ServiceRequest serviceRequest) =>
-            DeleteAsync(serviceRequest);
+        public async Task DeleteServiceRequestAsync(ServiceRequest serviceRequest) =>
+            await DeleteAsync(serviceRequest);
     }
 }

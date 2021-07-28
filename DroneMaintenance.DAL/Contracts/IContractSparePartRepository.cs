@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.DAL.Contracts
 {
-    interface IContractSparePartRepository
+    public interface IContractSparePartRepository
     {
         Task<List<ContractSparePart>> GetAllContractSparePartsAsync();
-        Task<ContractSparePart> GetContractSparePartAsync(Guid id);
+        Task<ContractSparePart> GetContractSparePartByIdAsync(Guid id);
         Task CreateContractSparePartAsync(ContractSparePart contractSparePart);
         Task UpdateContractSparePartAsync(ContractSparePart contractSparePart);
         Task DeleteContractSparePartAsync(ContractSparePart contractSparePart);

@@ -10,7 +10,9 @@ namespace DroneMaintenance.DAL.Entities
         [MaxLength(200)]
         public string Description { get; set; }
         [Required]
+        [Range(0, 3)]
         public ServiceType ServiceType { get; set; }
+        [Range(0, 3)]
         public RequestStatus RequestStatus { get; set; }
         public DateTime Date { get; set; }
 

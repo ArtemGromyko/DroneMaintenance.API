@@ -1,10 +1,12 @@
 using DroneMaintenance.API.Extensions;
+using DroneMaintenance.API.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using System;
 using System.IO;
 
 namespace DroneMaintenance
@@ -24,8 +26,12 @@ namespace DroneMaintenance
             services.ConfigureCors();
             services.ConfigureLoggerService();
             services.ConfigureSqlContext(Configuration);
+            services.ConfigureRepositories();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.ConfigureServices();
+            services.ConfigureSwagger();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,11 +45,19 @@ namespace DroneMaintenance
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DroneMaintenanceApi V1");
+            });
 
             app.UseRouting();
 
