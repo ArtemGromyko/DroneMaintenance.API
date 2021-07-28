@@ -42,21 +42,21 @@ namespace DroneMaintenance.BLL.Contracts
         /// <summary>
         /// Deletes a client with provided id
         /// </summary>
-        /// <param name="id">Client id</param>
+        /// <param name="clientEntity"></param>
         Task DeleteClientAsync(Client clientEntity);
 
         /// <summary>
         /// Updates a client
         /// </summary>
         /// <param name="clientEntity">Client to update</param>
-        /// <param name="clientForUpdateModel">Client update model for the request</param>
+        /// <param name="clientForUpdateModel">Client update model</param>
         Task<ClientModel> UpdateClientAsync(Client clientEntity, ClientForUpdateModel clientForUpdateModel);
 
         /// <summary>
         /// Maps from the clientEntity to the clientForUpdateModel
         /// </summary>
         /// <param name="clientEntity"></param>
-        /// <returns>The client update model for the request</returns>
+        /// <returns>The client update model</returns>
         ClientForUpdateModel GetClientToPatch(Client clientEntity);
     }
 }
