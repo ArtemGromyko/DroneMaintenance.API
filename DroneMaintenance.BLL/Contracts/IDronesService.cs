@@ -19,6 +19,8 @@ namespace DroneMaintenance.BLL.Contracts
        
         Task<DroneModel> UpdateDroneAsync(Guid id, DroneForUpdateModel droneForUpdateModel);
 
+        Task<DroneModel> UpdateDroneAsync(Drone droneEntity, DroneForUpdateModel droneForUpdateModel);
+
         Task<(DroneForUpdateModel droneForUpdateModel, Drone droneEntity)> GetDroneToPatch(Guid id);
     }
 }

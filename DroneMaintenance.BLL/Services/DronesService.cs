@@ -25,6 +25,10 @@ namespace DroneMaintenance.BLL.Services
         public async Task<DroneModel> GetDroneByIdAsync(Guid id)
         {
             var droneEntity = await _droneRepository.GetDroneByIdAsync(id);
+            if(droneEntity == null)
+            {
+                return null;
+            }
 
             return _mapper.Map<DroneModel>(droneEntity);
         }
@@ -84,6 +88,15 @@ namespace DroneMaintenance.BLL.Services
             var droneForUpdateModel = _mapper.Map<DroneForUpdateModel>(droneEntity);
 
             return (droneForUpdateModel, droneEntity);
+        }
+
+        public async Task<DroneModel> UpdateDroneAsync(Drone droneEntity, DroneForUpdateModel droneForUpdateModel)
+        {
+            _mapper.Map(droneForUpdateModel, droneEntity);
+
+            await _droneRepository.UpdateDroneAsync(droneEntity);
+
+            return _mapper.Map<DroneModel>(droneEntity);
         }
     }
 }

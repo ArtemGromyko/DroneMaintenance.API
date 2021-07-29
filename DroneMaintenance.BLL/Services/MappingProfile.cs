@@ -35,7 +35,7 @@ namespace DroneMaintenance.BLL.Services
         {
             CreateMap<Drone, DroneModel>();
             CreateMap<DroneForCreationModel, Drone>();
-            CreateMap<DroneForUpdateModel, Drone>();
+            CreateMap<DroneForUpdateModel, Drone>().ReverseMap();
         }
 
         private string GetStatuses(RequestStatus request)
