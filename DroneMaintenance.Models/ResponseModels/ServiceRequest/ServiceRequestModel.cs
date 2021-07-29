@@ -2,7 +2,7 @@
 
 namespace DroneMaintenance.Models.ResponseModels.ServiceRequest
 {
-    public class ServiceRequestModel
+    public class ServiceRequestModel : BaseResponseModel
     {
         public Guid Id { get; set; }
         public string Description { get; set; }

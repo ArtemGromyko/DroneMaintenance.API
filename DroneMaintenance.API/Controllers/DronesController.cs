@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/drones")]
     [ApiController]
     public class DronesController : ControllerBase
     {

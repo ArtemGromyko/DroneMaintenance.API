@@ -6,7 +6,6 @@ using DroneMaintenance.Models.RequestModels.Drone;
 using DroneMaintenance.Models.ResponseModels.Drone;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DroneMaintenance.BLL.Services
@@ -25,11 +24,11 @@ namespace DroneMaintenance.BLL.Services
         public async Task<DroneModel> GetDroneByIdAsync(Guid id)
         {
             var droneEntity = await _droneRepository.GetDroneByIdAsync(id);
-            if(droneEntity == null)
+            if (droneEntity == null)
             {
                 return null;
             }
-
+                
             return _mapper.Map<DroneModel>(droneEntity);
         }
 
