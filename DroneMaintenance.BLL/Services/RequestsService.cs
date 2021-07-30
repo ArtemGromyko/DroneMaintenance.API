@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DroneMaintenance.BLL.Contracts;
+using DroneMaintenance.BLL.Exceptions;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
@@ -21,12 +22,24 @@ namespace DroneMaintenance.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceRequestModel> GetRequestByIdAsync(Guid id)
+        public async Task<ServiceRequest> TryGetRequestByIdAsync(Guid id)
         {
             var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(id);
+            if(requestEntity == null)
+            {
+                throw new EntityNotFoundException($"Service request with id: {id} doesn't exist in the database.");
+            }
 
-            return requestEntity == null ? null : _mapper.Map<ServiceRequestModel>(requestEntity);
+            return requestEntity;
         }
+
+        public async Task<ServiceRequestModel> GetRequestAsync(Guid id)
+        {
+            var requestEntity = await TryGetRequestByIdAsync(id);
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
+        }
+
         public async Task<ServiceRequestModel> CreateRequestAsync(ServiceRequestForCreationModel requestForCreationModel)
         {
             var requestEntity = _mapper.Map<ServiceRequest>(requestForCreationModel);
@@ -36,22 +49,11 @@ namespace DroneMaintenance.BLL.Services
             return _mapper.Map<ServiceRequestModel>(requestEntity);
         }
 
-        public async Task<ServiceRequest> DeleteRequestAsync(Guid id)
+        public async Task DeleteRequestAsync(Guid id)
         {
-            var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(id);
-            if(requestEntity == null)
-            {
-                return null;
-            }
+            var requestEntity = await TryGetRequestByIdAsync(id);
 
             await _requestRepository.DeleteServiceRequestAsync(requestEntity);
-
-            return requestEntity;
-        }
-
-        public Task<(ServiceRequestForUpdateModel requestForUpdateModel, ServiceRequest requestEntity)> GetDroneToPatch(Guid id)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<List<ServiceRequestModel>> GetRequestsAsync()
@@ -63,20 +65,12 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task<ServiceRequestModel> UpdateRequestAsync(Guid id, ServiceRequestForUpdateModel requestForUpdateModel)
         {
-            var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(id);
-            if(requestEntity == null)
-            {
-                return null;
-            }
+            var requestEntity = await TryGetRequestByIdAsync(id);
 
             await _requestRepository.UpdateServiceRequestAsync(requestEntity);
 
             return _mapper.Map<ServiceRequestModel>(requestEntity);
         }
 
-        public Task<ServiceRequestModel> UpdateRequestAsync(ServiceRequest requestEntity, ServiceRequestForUpdateModel requestForUpdateModel)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

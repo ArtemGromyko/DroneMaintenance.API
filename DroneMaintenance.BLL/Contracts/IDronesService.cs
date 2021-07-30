@@ -9,13 +9,15 @@ namespace DroneMaintenance.BLL.Contracts
 {
     public interface IDronesService
     {
-        Task<DroneModel> GetDroneByIdAsync(Guid id);
+        Task<Drone> TryGetDroneEntityByIdAsync(Guid id);
+
+        Task<DroneModel> GetDroneAsync(Guid id);
 
         Task<List<DroneModel>> GetDronesAsync();
 
         Task<DroneModel> CreateDroneAsync(DroneForCreationModel droneForCreationModel);
 
-        Task<Drone> DeleteDroneAsync(Guid id);
+        Task DeleteDroneAsync(Guid id);
        
         Task<DroneModel> UpdateDroneAsync(Guid id, DroneForUpdateModel droneForUpdateModel);
 

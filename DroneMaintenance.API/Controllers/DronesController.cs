@@ -20,8 +20,6 @@ namespace DroneMaintenance.API.Controllers
             _dronesService = dronesService;
         }
 
-        private ActionResult<DroneModel> ReturnNotFound(Guid id) => NotFound($"Drone with id: {id} doesn't exist in the database.");
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DroneModel>>> GetDronesAsync() =>
             await _dronesService.GetDronesAsync();
@@ -29,27 +27,23 @@ namespace DroneMaintenance.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DroneModel>> GetDroneAsync(Guid id)
         {
-            var droneModel = await _dronesService.GetDroneByIdAsync(id);
-            if(droneModel == null)
-            {
-                return ReturnNotFound(id);
-            }
+            var droneModel = await _dronesService.GetDroneAsync(id);
 
             return droneModel;
         }
 
         [HttpPost]
-        public async Task<ActionResult<DroneModel>> CreateDroneAsync([FromBody] DroneForCreationModel drone) =>
-            await _dronesService.CreateDroneAsync(drone);
+        public async Task<ActionResult<DroneModel>> CreateDroneAsync([FromBody] DroneForCreationModel drone)
+        {
+            var droneModel = await _dronesService.CreateDroneAsync(drone);
+
+            return Created("api/drones/" + droneModel.Id, droneModel);
+        }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<DroneModel>> DeleteDroneAsync(Guid id)
         {
-            var result = await _dronesService.DeleteDroneAsync(id);
-            if(result == null)
-            {
-                return ReturnNotFound(id);
-            }
+            await _dronesService.DeleteDroneAsync(id);
 
             return NoContent();
         }
@@ -58,10 +52,6 @@ namespace DroneMaintenance.API.Controllers
         public async Task<ActionResult<DroneModel>> UpdateDroneAsync(Guid id, [FromBody]DroneForUpdateModel droneForUpdateModel)
         {
             var droneModel = await _dronesService.UpdateDroneAsync(id, droneForUpdateModel);
-            if(droneModel == null)
-            {
-                return ReturnNotFound(id);
-            }
 
             return droneModel;
         }
@@ -70,10 +60,7 @@ namespace DroneMaintenance.API.Controllers
         public async Task<ActionResult<DroneModel>> PartiallyUpdateDroneAsync(Guid id, [FromBody]JsonPatchDocument<DroneForUpdateModel> patchDoc)
         {
             var (droneToPatch, droneEntity) = await _dronesService.GetDroneToPatch(id);
-            if(droneEntity == null)
-            {
-                return ReturnNotFound(id);
-            }
+
             patchDoc.ApplyTo(droneToPatch, ModelState);
             TryValidateModel(droneToPatch);
             if(!ModelState.IsValid)

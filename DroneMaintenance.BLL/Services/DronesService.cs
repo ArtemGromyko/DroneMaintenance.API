@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DroneMaintenance.BLL.Contracts;
+using DroneMaintenance.BLL.Exceptions;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Drone;
@@ -21,14 +22,21 @@ namespace DroneMaintenance.BLL.Services
             _droneRepository = droneRepository;
         }
 
-        public async Task<DroneModel> GetDroneByIdAsync(Guid id)
+        public async Task<Drone> TryGetDroneEntityByIdAsync(Guid id)
         {
             var droneEntity = await _droneRepository.GetDroneByIdAsync(id);
             if (droneEntity == null)
             {
-                return null;
+                throw new EntityNotFoundException($"Drone with id: {id} doesn't exist in the database.");
             }
-                
+
+            return droneEntity;
+        }
+
+        public async Task<DroneModel> GetDroneAsync(Guid id)
+        {
+            var droneEntity = await TryGetDroneEntityByIdAsync(id);
+
             return _mapper.Map<DroneModel>(droneEntity);
         }
 
@@ -50,11 +58,7 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task<DroneModel> UpdateDroneAsync(Guid id, DroneForUpdateModel droneForUpdateModel)
         {
-            var droneEntity = await _droneRepository.GetDroneByIdAsync(id);
-            if (droneEntity == null)
-            {
-                return null;
-            }
+            var droneEntity = await TryGetDroneEntityByIdAsync(id);
 
             _mapper.Map(droneForUpdateModel, droneEntity);
 
@@ -63,26 +67,16 @@ namespace DroneMaintenance.BLL.Services
             return _mapper.Map<DroneModel>(droneEntity);
         }
 
-        public async Task<Drone> DeleteDroneAsync(Guid id)
+        public async Task DeleteDroneAsync(Guid id)
         {
-            var droneEntity = await _droneRepository.GetDroneByIdAsync(id);
-            if (droneEntity == null)
-            {
-                return null;
-            }
+            var droneEntity = await TryGetDroneEntityByIdAsync(id);
 
             await _droneRepository.DeleteDroneAsync(droneEntity);
-
-            return droneEntity;
         }
 
         public async Task<(DroneForUpdateModel droneForUpdateModel, Drone droneEntity)> GetDroneToPatch(Guid id)
         {
-            var droneEntity = await _droneRepository.GetDroneByIdAsync(id);
-            if (droneEntity == null)
-            {
-                return (null, null);
-            }
+            var droneEntity = await TryGetDroneEntityByIdAsync(id);
 
             var droneForUpdateModel = _mapper.Map<DroneForUpdateModel>(droneEntity);
 

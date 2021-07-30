@@ -18,7 +18,7 @@ namespace DroneMaintenance.BLL.Contracts
         /// </summary>
         /// <param name="id">Client id</param>
         /// <returns>The client entity with provided id or null</returns>
-        Task<Client> GetClientEntityByIdAsync(Guid id);
+        Task<Client> TryGetClientEntityByIdAsync(Guid id);
 
         /// <summary>
         /// Gets a list of clients
@@ -31,7 +31,7 @@ namespace DroneMaintenance.BLL.Contracts
         /// </summary>
         /// <param name="id">Client id</param>
         /// <returns>The client with provided id or null</returns>
-        Task<ClientModel> GetClientByIdAsync(Guid id);
+        Task<ClientModel> GetClientAsync(Guid id);
 
         /// <summary>
         /// Creates a client
@@ -44,13 +44,15 @@ namespace DroneMaintenance.BLL.Contracts
         /// Deletes a client with provided id
         /// </summary>
         /// <param name="clientEntity"></param>
-        Task DeleteClientAsync(Client clientEntity);
+        Task DeleteClientAsync(Guid id);
 
         /// <summary>
         /// Updates a client
         /// </summary>
         /// <param name="clientEntity">Client to update</param>
         /// <param name="clientForUpdateModel">Client update model</param>
+        Task<ClientModel> UpdateClientAsync(Guid id, ClientForUpdateModel clientForUpdateModel);
+
         Task<ClientModel> UpdateClientAsync(Client clientEntity, ClientForUpdateModel clientForUpdateModel);
 
         /// <summary>
@@ -58,10 +60,10 @@ namespace DroneMaintenance.BLL.Contracts
         /// </summary>
         /// <param name="clientEntity"></param>
         /// <returns>The client update model</returns>
-        ClientForUpdateModel GetClientToPatch(Client clientEntity);
+        Task <(ClientForUpdateModel clientForUpdateModel, Client clientEntity)>GetClientToPatch(Guid id);
 
         Task<List<ServiceRequestModel>> GetRequestsForClientAsync(Guid clientId);
 
-        Task<ServiceRequestModel> GetServiceRequestForClient(Guid clientId, Guid id);
+        Task<ServiceRequestModel> GetRequestForClientAsync(Guid clientId, Guid id);
     }
 }

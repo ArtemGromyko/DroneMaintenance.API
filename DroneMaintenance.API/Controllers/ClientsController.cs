@@ -48,11 +48,7 @@ namespace DroneMaintenance.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ClientModel>> GetClientAsync(Guid id)
         {
-            var clientModel = await _clientsService.GetClientByIdAsync(id);
-            if (clientModel == null)
-            {
-                return NotFound($"Client with id: {id} doesn't exist in the database.");
-            }
+            var clientModel = await _clientsService.GetClientAsync(id);
 
             return clientModel;
         }
@@ -90,13 +86,7 @@ namespace DroneMaintenance.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ClientModel>> DeleteClientAsync(Guid id)
         {
-            var clientEntity = await _clientsService.GetClientEntityByIdAsync(id);
-            if (clientEntity == null)
-            {
-                return NotFound($"Client with id: {id} doesn't exist in the database.");
-            }
-
-            await _clientsService.DeleteClientAsync(clientEntity);
+            await _clientsService.DeleteClientAsync(id);
 
             return NoContent();
         }
@@ -117,13 +107,7 @@ namespace DroneMaintenance.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ClientModel>> UpdatePersonAsync(Guid id, [FromBody] ClientForUpdateModel client)
         {
-            var clientEntity = await _clientsService.GetClientEntityByIdAsync(id);
-            if (clientEntity == null)
-            {
-                return NotFound($"Client with id: {id} doesn't exist in the database.");
-            }
-
-            var clientModel = await _clientsService.UpdateClientAsync(clientEntity, client);
+            var clientModel = await _clientsService.UpdateClientAsync(id, client);
 
             return clientModel;
         }
@@ -144,12 +128,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> PartiallyUpdateClientAsync(Guid id, [FromBody] JsonPatchDocument<ClientForUpdateModel> patchDoc)
         {
-            var clientEntity = await _clientsService.GetClientEntityByIdAsync(id);
-            if (clientEntity == null)
-            {
-                return NotFound($"Client with id: {id} doesn't exist in the database.");
-            }
-            var clientToPatch = _clientsService.GetClientToPatch(clientEntity);
+            var (clientToPatch, clientEntity) = await _clientsService.GetClientToPatch(id);
 
             patchDoc.ApplyTo(clientToPatch, ModelState);
             TryValidateModel(clientToPatch);
@@ -170,7 +149,9 @@ namespace DroneMaintenance.API.Controllers
         [HttpGet("{clientId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> GetRequestForClientAsync(Guid clientId, Guid id)
         {
-            throw new NotImplementedException();
+            var requestModel = await _clientsService.GetRequestForClientAsync(clientId, id);
+
+            return requestModel;
         }
 
         [HttpPost("{clientId}/requests")]

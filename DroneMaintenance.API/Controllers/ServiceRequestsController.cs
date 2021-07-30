@@ -28,27 +28,23 @@ namespace ServiceRequestMaintenance.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceRequestModel>> GetServiceRequestAsync(Guid id)
         {
-            var requestModel = await _requestsService.GetRequestByIdAsync(id);
-            if(requestModel == null)
-            {
-                return ReturnNotFound(id);
-            }
+            var requestModel = await _requestsService.GetRequestAsync(id);
 
             return requestModel;
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceRequestModel>> CreateServiceRequestAsync([FromBody] ServiceRequestForCreationModel request) =>
-            await _requestsService.CreateRequestAsync(request);
+        public async Task<ActionResult<ServiceRequestModel>> CreateServiceRequestAsync([FromBody] ServiceRequestForCreationModel request)
+        {
+            var requestModel = await _requestsService.CreateRequestAsync(request);
+
+            return Created("api/drones/" + requestModel.Id, requestModel);
+        } 
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceRequestModel>> DeleteServiceRequestAsync(Guid id)
         {
-            var result = await _requestsService.DeleteRequestAsync(id);
-            if(result == null)
-            {
-                return ReturnNotFound(id);
-            }
+            await _requestsService.DeleteRequestAsync(id);
 
             return NoContent();
         }
@@ -57,10 +53,6 @@ namespace ServiceRequestMaintenance.API.Controllers
         public async Task<ActionResult<ServiceRequestModel>> UpdateServiceRequestAsync(Guid id, [FromBody]ServiceRequestForUpdateModel requestForUpdateModel)
         {
             var requestModel = await _requestsService.UpdateRequestAsync(id, requestForUpdateModel);
-            if(requestModel == null)
-            {
-                return ReturnNotFound(id);
-            }
 
             return requestModel;
         }

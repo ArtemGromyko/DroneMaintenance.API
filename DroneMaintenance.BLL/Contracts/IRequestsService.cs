@@ -9,18 +9,20 @@ namespace DroneMaintenance.BLL.Contracts
 {
     public interface IRequestsService
     {
-        Task<ServiceRequestModel> GetRequestByIdAsync(Guid id);
+        Task<ServiceRequest> TryGetRequestByIdAsync(Guid id);
+        Task<ServiceRequestModel> GetRequestAsync(Guid id);
 
         Task<List<ServiceRequestModel>> GetRequestsAsync();
 
         Task<ServiceRequestModel> CreateRequestAsync(ServiceRequestForCreationModel requestForCreationModel);
 
-        Task<ServiceRequest> DeleteRequestAsync(Guid id);
+        Task DeleteRequestAsync(Guid id);
 
         Task<ServiceRequestModel> UpdateRequestAsync(Guid id, ServiceRequestForUpdateModel requestForUpdateModel);
 
-        Task<ServiceRequestModel> UpdateRequestAsync(ServiceRequest requestEntity, ServiceRequestForUpdateModel requestForUpdateModel);
+        //For PATCH
+        //Task<ServiceRequestModel> UpdateRequestAsync(ServiceRequest requestEntity, ServiceRequestForUpdateModel requestForUpdateModel);
 
-        Task<(ServiceRequestForUpdateModel requestForUpdateModel, ServiceRequest requestEntity)> GetDroneToPatch(Guid id);
+        //Task<(ServiceRequestForUpdateModel requestForUpdateModel, ServiceRequest requestEntity)> GetRequestToPatch(Guid id);
     }
 }
