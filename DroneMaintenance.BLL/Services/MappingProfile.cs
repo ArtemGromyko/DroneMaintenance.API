@@ -2,6 +2,7 @@
 using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.RequestModels.Drone;
+using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.Client;
 using DroneMaintenance.Models.ResponseModels.Drone;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
@@ -22,6 +23,8 @@ namespace DroneMaintenance.BLL.Services
             CreateMap<ServiceRequest, ServiceRequestModel>()
                 .ForMember(srm => srm.RequestStatus, opts => opts.MapFrom(x => GetStatuses(x.RequestStatus)))
                 .ForMember(srm => srm.ServiceType, opts => opts.MapFrom(x => GetServiceTypes(x.ServiceType)));
+            CreateMap<ServiceRequestForCreationModel, ServiceRequest>();
+            CreateMap<ServiceRequestForUpdateModel, ServiceRequest>().ReverseMap();
         }
 
         private void CreateMapsForClient()

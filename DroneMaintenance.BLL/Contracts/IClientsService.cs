@@ -20,6 +20,8 @@ namespace DroneMaintenance.BLL.Contracts
         /// <returns>The client entity with provided id or null</returns>
         Task<Client> TryGetClientEntityByIdAsync(Guid id);
 
+        Task<ServiceRequest> TryGetRequestForClientAsync(Guid clientId, Guid id);
+
         /// <summary>
         /// Gets a list of clients
         /// </summary>
@@ -65,5 +67,7 @@ namespace DroneMaintenance.BLL.Contracts
         Task<List<ServiceRequestModel>> GetRequestsForClientAsync(Guid clientId);
 
         Task<ServiceRequestModel> GetRequestForClientAsync(Guid clientId, Guid id);
+
+        Task DeleteRequestForClientAsync(Guid clientId, Guid id);
     }
 }

@@ -27,6 +27,10 @@ namespace DroneMaintenance.API.Middlewares
             {
                 await HandleExceptionAsync(context, ex.Message, HttpStatusCode.NotFound);
             }
+            catch(ForbiddenActionException ex)
+            {
+                await HandleExceptionAsync(context, ex.Message, HttpStatusCode.Forbidden);
+            }
         }
 
         public async Task HandleExceptionAsync(HttpContext context, string message, HttpStatusCode code)

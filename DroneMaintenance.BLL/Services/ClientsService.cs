@@ -34,6 +34,17 @@ namespace DroneMaintenance.BLL.Services
             return clientEntity;
         }
 
+        public async Task<ServiceRequest> TryGetRequestForClientAsync(Guid clientId, Guid id)
+        {
+            var requestEntity = await _requestRepository.GetServiceRequestForClientAsync(clientId, id);
+            if (requestEntity == null)
+            {
+                throw new EntityNotFoundException($"Service request with id: {id} doesn't exist in the database.");
+            }
+
+            return requestEntity;
+        }
+
         public async Task<List<ClientModel>> GetClientsAsync()
         {
             var clientEntities = await _clientRepository.GetAllClientsAsync();
@@ -102,7 +113,7 @@ namespace DroneMaintenance.BLL.Services
             return _mapper.Map<List<ServiceRequestModel>>(requestEntities);
         }
 
-        public async Task<ServiceRequestModel> GetServiceRequestForClient(Guid clientId, Guid id)
+        public async Task<ServiceRequestModel> GetRequestForClientAsync(Guid clientId, Guid id)
         {
             await TryGetClientEntityByIdAsync(clientId);
 
@@ -115,10 +126,18 @@ namespace DroneMaintenance.BLL.Services
             return _mapper.Map<ServiceRequestModel>(requestEntity);
         }
 
-
-        public Task<ServiceRequestModel> GetRequestForClientAsync(Guid clientId, Guid id)
+        public async Task DeleteRequestForClientAsync(Guid clientId, Guid id)
         {
-            throw new NotImplementedException();
+            await TryGetClientEntityByIdAsync(clientId);
+
+            var requestEntity = await TryGetRequestForClientAsync(clientId, id);
+
+            if (requestEntity.RequestStatus != RequestStatus.Recived)
+            {
+                throw new ForbiddenActionException($"Unnable to delete service request with a status not equal RequestStatus.Recived");
+            }
+
+            await _requestRepository.DeleteServiceRequestAsync(requestEntity);
         }
     }
 }

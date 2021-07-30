@@ -163,7 +163,9 @@ namespace DroneMaintenance.API.Controllers
         [HttpDelete("{clientId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> DeleteRequestForClientAsync(Guid clientId, Guid id)
         {
-            throw new NotImplementedException();
+            await _clientsService.DeleteRequestForClientAsync(clientId, id);
+
+            return NoContent();
         }
     }
 }
