@@ -1,6 +1,8 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.Models.RequestModels.Client;
+using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.Client;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -30,12 +32,8 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClientModel>>> GetClientsAsync()
-        {
-            var clientModels = await _clientsService.GetClientsAsync();
-
-            return clientModels;
-        }
+        public async Task<ActionResult<IEnumerable<ClientModel>>> GetClientsAsync() =>
+            await _clientsService.GetClientsAsync();
 
         /// <summary>
         /// Gets a client by provided id
@@ -70,11 +68,11 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<ActionResult<ClientModel>> CreateClientAsync([FromBody]ClientForCreationModel client)
+        public async Task<ActionResult<ClientModel>> CreateClientAsync([FromBody] ClientForCreationModel client)
         {
             var clientModel = await _clientsService.CreateClientAsync(client);
 
-            return Created("api/clients/"+clientModel.Id, clientModel);
+            return Created("api/clients/" + clientModel.Id, clientModel);
         }
 
         /// <summary>
@@ -93,7 +91,7 @@ namespace DroneMaintenance.API.Controllers
         public async Task<ActionResult<ClientModel>> DeleteClientAsync(Guid id)
         {
             var clientEntity = await _clientsService.GetClientEntityByIdAsync(id);
-            if(clientEntity == null)
+            if (clientEntity == null)
             {
                 return NotFound($"Client with id: {id} doesn't exist in the database.");
             }
@@ -117,10 +115,10 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ClientModel>> UpdatePersonAsync(Guid id, [FromBody]ClientForUpdateModel client)
+        public async Task<ActionResult<ClientModel>> UpdatePersonAsync(Guid id, [FromBody] ClientForUpdateModel client)
         {
             var clientEntity = await _clientsService.GetClientEntityByIdAsync(id);
-            if(clientEntity == null)
+            if (clientEntity == null)
             {
                 return NotFound($"Client with id: {id} doesn't exist in the database.");
             }
@@ -144,7 +142,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> PartiallyUpdateClientAsync(Guid id, [FromBody]JsonPatchDocument<ClientForUpdateModel> patchDoc)
+        public async Task<ActionResult> PartiallyUpdateClientAsync(Guid id, [FromBody] JsonPatchDocument<ClientForUpdateModel> patchDoc)
         {
             var clientEntity = await _clientsService.GetClientEntityByIdAsync(id);
             if (clientEntity == null)
@@ -155,7 +153,7 @@ namespace DroneMaintenance.API.Controllers
 
             patchDoc.ApplyTo(clientToPatch, ModelState);
             TryValidateModel(clientToPatch);
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -163,6 +161,28 @@ namespace DroneMaintenance.API.Controllers
             await _clientsService.UpdateClientAsync(clientEntity, clientToPatch);
 
             return NoContent();
+        }
+
+        [HttpGet("{clientId}/requests")]
+        public async Task<ActionResult<IEnumerable<ServiceRequestModel>>> GetRequestsForClientAsync(Guid clientId) =>
+            await _clientsService.GetRequestsForClientAsync(clientId);
+
+        [HttpGet("{clientId}/requests/{id}")]
+        public async Task<ActionResult<ServiceRequestModel>> GetRequestForClientAsync(Guid clientId, Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{clientId}/requests")]
+        public async Task<ActionResult<ServiceRequestModel>> CreateRequestForClientAsync(Guid clientId, [FromBody]ServiceRequestForCreationModel request)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("{clientId}/requests/{id}")]
+        public async Task<ActionResult<ServiceRequestModel>> DeleteRequestForClientAsync(Guid clientId, Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

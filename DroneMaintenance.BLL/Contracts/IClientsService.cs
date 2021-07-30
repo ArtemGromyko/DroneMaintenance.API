@@ -1,6 +1,7 @@
 ﻿using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.ResponseModels.Client;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -58,5 +59,9 @@ namespace DroneMaintenance.BLL.Contracts
         /// <param name="clientEntity"></param>
         /// <returns>The client update model</returns>
         ClientForUpdateModel GetClientToPatch(Client clientEntity);
+
+        Task<List<ServiceRequestModel>> GetRequestsForClientAsync(Guid clientId);
+
+        Task<ServiceRequestModel> GetServiceRequestForClient(Guid clientId, Guid id);
     }
 }

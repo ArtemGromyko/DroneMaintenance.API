@@ -4,6 +4,7 @@ using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.ResponseModels.Client;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,11 +15,13 @@ namespace DroneMaintenance.BLL.Services
     {
         private readonly IMapper _mapper;
         private readonly IClientRepository _clientRepository;
+        private readonly IServiceRequestRepository _requestRepository;
 
-        public ClientsService(IMapper mapper, IClientRepository clientRepository)
+        public ClientsService(IMapper mapper, IClientRepository clientRepository, IServiceRequestRepository requestRepository)
         {
             _mapper = mapper;
             _clientRepository = clientRepository;
+            _requestRepository = requestRepository;
         }
 
         public async Task<Client> GetClientEntityByIdAsync(Guid id)
@@ -82,6 +85,20 @@ namespace DroneMaintenance.BLL.Services
             var reviewToPatch = _mapper.Map<ClientForUpdateModel>(clientEntity);
 
             return reviewToPatch;
+        }
+
+        public async Task<List<ServiceRequestModel>> GetRequestsForClientAsync(Guid clientId)
+        { 
+            var requestEntities = await _requestRepository.GetAllServiceRequestsForClientAsync(clientId);
+
+            return _mapper.Map<List<ServiceRequestModel>>(requestEntities);
+        }
+
+        public async Task<ServiceRequestModel> GetServiceRequestForClient(Guid clientId, Guid id)
+        {
+            var requestEntity = await _requestRepository.GetServiceRequestForClientAsync(clientId, id);
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
         }
     }
 }
