@@ -157,7 +157,9 @@ namespace DroneMaintenance.API.Controllers
         [HttpPost("{clientId}/requests")]
         public async Task<ActionResult<ServiceRequestModel>> CreateRequestForClientAsync(Guid clientId, [FromBody]ServiceRequestForCreationModel request)
         {
-            throw new NotImplementedException();
+            var requestModel = await _clientsService.CreateRequestForClientAsyn(clientId, request);
+
+            return requestModel;
         }
 
         [HttpDelete("{clientId}/requests/{id}")]

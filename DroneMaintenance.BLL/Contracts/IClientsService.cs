@@ -1,5 +1,6 @@
 ﻿using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Client;
+using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.Client;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using System;
@@ -67,6 +68,8 @@ namespace DroneMaintenance.BLL.Contracts
         Task<List<ServiceRequestModel>> GetRequestsForClientAsync(Guid clientId);
 
         Task<ServiceRequestModel> GetRequestForClientAsync(Guid clientId, Guid id);
+
+        Task<ServiceRequestModel> CreateRequestForClientAsyn(Guid clientId, ServiceRequestForCreationModel requestForCreationModel);
 
         Task DeleteRequestForClientAsync(Guid clientId, Guid id);
     }
