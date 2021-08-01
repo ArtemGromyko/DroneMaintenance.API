@@ -71,6 +71,8 @@ namespace DroneMaintenance.BLL.Contracts
 
         Task<ServiceRequestModel> CreateRequestForClientAsyn(Guid clientId, ServiceRequestForCreationModel requestForCreationModel);
 
+        Task<ServiceRequestModel> UpdateRequestForClientAsync(Guid clientId, Guid id, ServiceRequestForUpdateModel requestForUpdateModel);
+
         Task DeleteRequestForClientAsync(Guid clientId, Guid id);
     }
 }

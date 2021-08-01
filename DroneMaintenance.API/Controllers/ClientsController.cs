@@ -155,9 +155,19 @@ namespace DroneMaintenance.API.Controllers
         }
 
         [HttpPost("{clientId}/requests")]
-        public async Task<ActionResult<ServiceRequestModel>> CreateRequestForClientAsync(Guid clientId, [FromBody]ServiceRequestForCreationModel request)
+        public async Task<ActionResult<ServiceRequestModel>> CreateRequestForClientAsync(Guid clientId, 
+        [FromBody]ServiceRequestForCreationModel request)
         {
             var requestModel = await _clientsService.CreateRequestForClientAsyn(clientId, request);
+
+            return requestModel;
+        }
+
+        [HttpPut("{clientId}/requests/{Id}")]
+        public async Task<ActionResult<ServiceRequestModel>> UpdateRequestForClientAsync(Guid clientId, Guid id, 
+        [FromBody]ServiceRequestForUpdateModel request)
+        {
+            var requestModel = await _clientsService.UpdateRequestForClientAsync(clientId, id, request);
 
             return requestModel;
         }
