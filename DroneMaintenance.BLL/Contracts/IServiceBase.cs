@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DroneMaintenance.BLL.Contracts
 {
-    public interface IServiceBase<T>
+    public interface IServiceBase
     {
-
+        void CheckEntityExistence(Guid id, object entity, string entityName);
+        void CheckEntityExistence(Guid parentId, Guid id, object entity, string entityName, string parentEntityName);
     }
 }

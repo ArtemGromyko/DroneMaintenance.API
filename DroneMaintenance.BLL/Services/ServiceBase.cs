@@ -1,9 +1,10 @@
-﻿using DroneMaintenance.BLL.Exceptions;
+﻿using DroneMaintenance.BLL.Contracts;
+using DroneMaintenance.BLL.Exceptions;
 using System;
 
 namespace DroneMaintenance.BLL.Services
 {
-    public abstract class ServiceBase
+    public abstract class ServiceBase : IServiceBase
     {
         public void CheckEntityExistence(Guid id, object entity, string entityName)
         {

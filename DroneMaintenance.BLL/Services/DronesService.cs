@@ -5,30 +5,36 @@ using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Drone;
 using DroneMaintenance.Models.ResponseModels.Drone;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DroneMaintenance.BLL.Services
 {
-    public class DronesService : IDronesService
+    public class DronesService : ServiceBase, IDronesService
     {
         private readonly IMapper _mapper;
         private readonly IDroneRepository _droneRepository;
+        private readonly IServiceRequestRepository _requestRepository;
 
-        public DronesService(IMapper mapper, IDroneRepository droneRepository)
+        public DronesService(IMapper mapper, IDroneRepository droneRepository, IServiceRequestRepository requestRepository)
         {
             _mapper = mapper;
             _droneRepository = droneRepository;
+            _requestRepository = requestRepository;
+        }
+
+        public async Task CheckDroneExistence(Guid id)
+        {
+            var droneEntity = await _droneRepository.GetDroneByIdAsync(id);
+            CheckEntityExistence(id, droneEntity, nameof(Drone));
         }
 
         public async Task<Drone> TryGetDroneEntityByIdAsync(Guid id)
         {
             var droneEntity = await _droneRepository.GetDroneByIdAsync(id);
-            if (droneEntity == null)
-            {
-                throw new EntityNotFoundException($"Drone with id: {id} doesn't exist in the database.");
-            }
+            CheckEntityExistence(id, droneEntity, nameof(Drone));
 
             return droneEntity;
         }
@@ -90,6 +96,25 @@ namespace DroneMaintenance.BLL.Services
             await _droneRepository.UpdateDroneAsync(droneEntity);
 
             return _mapper.Map<DroneModel>(droneEntity);
+        }
+
+        public async Task<List<ServiceRequestModel>> GetRequestsForDroneAsync(Guid droneId)
+        {
+            await CheckDroneExistence(droneId);
+
+            var requestEntities = await _requestRepository.GetAllServiceRequestsForDroneAsync(droneId);
+
+            return _mapper.Map<List<ServiceRequestModel>>(requestEntities);
+        }
+
+        public async Task<ServiceRequestModel> GetRequestsForDroneAsync(Guid droneId, Guid id)
+        {
+            await CheckDroneExistence(droneId);
+
+            var requestEntity = await _requestRepository.GetServiceRequestForDroneAsync(droneId, id);
+            CheckEntityExistence(droneId, id, requestEntity, nameof(ServiceRequest), nameof(Drone));
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
         }
     }
 }

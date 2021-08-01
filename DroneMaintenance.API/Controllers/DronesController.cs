@@ -1,6 +1,7 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.Models.RequestModels.Drone;
 using DroneMaintenance.Models.ResponseModels.Drone;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -71,6 +72,22 @@ namespace DroneMaintenance.API.Controllers
             var droneModel = await _dronesService.UpdateDroneAsync(droneEntity, droneToPatch);
 
             return droneModel;
+        }
+
+        [HttpGet("{droneId}/requests")]
+        public async Task<ActionResult<IEnumerable<ServiceRequestModel>>> GetRequestsForDroneAsync(Guid droneId)
+        {
+            var requestModels = await _dronesService.GetRequestsForDroneAsync(droneId);
+
+            return requestModels;
+        }
+
+        [HttpGet("{droneId}/requests/{id}")]
+        public async Task<ActionResult<ServiceRequestModel>> GetRequestForModelAsync(Guid droneId, Guid id)
+        {
+            var requestModel = await _dronesService.GetRequestsForDroneAsync(droneId, id);
+
+            return requestModel; 
         }
     }
 }
