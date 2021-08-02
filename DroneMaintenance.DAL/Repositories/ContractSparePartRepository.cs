@@ -23,6 +23,12 @@ namespace DroneMaintenance.DAL.Repositories
 
         public async Task DeleteContractSparePartAsync(ContractSparePart contractSparePart) =>
             await DeleteAsync(contractSparePart);
+
+        public async Task<ContractSparePart> GetContractSparePartByContractIdAndPartId(Guid contractId, Guid partId) =>
+            await FindByCondition(cs => cs.ContractId.Equals(contractId) && cs.SparePartId.Equals(partId)).FirstOrDefaultAsync();
+
+        public async Task<List<ContractSparePart>> GetAllContractSparePartForContract(Guid contractId) =>
+            await FindByCondition(cs => cs.ContractId.Equals(contractId)).ToListAsync();
     }
 }
 

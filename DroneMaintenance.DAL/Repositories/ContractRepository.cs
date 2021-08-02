@@ -23,5 +23,11 @@ namespace DroneMaintenance.DAL.Repositories
 
         public async Task DeleteContractAsync(Contract contract) =>
             await DeleteAsync(contract);
+
+        public async Task<List<Contract>> GetAllContractsForRequestAsync(Guid requestId) =>
+            await FindByCondition(c => c.ServiceRequestId.Equals(requestId)).ToListAsync();
+
+        public async Task<Contract> CheckContractExistenceForRequestAsync(Guid requestId) =>
+            await FindByCondition(c => c.ServiceRequestId.Equals(requestId)).FirstOrDefaultAsync();
     }
 }

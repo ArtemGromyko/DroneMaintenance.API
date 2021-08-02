@@ -1,11 +1,17 @@
 ﻿using AutoMapper;
 using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.Client;
+using DroneMaintenance.Models.RequestModels.Contract;
+using DroneMaintenance.Models.RequestModels.ContractSparePart;
 using DroneMaintenance.Models.RequestModels.Drone;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
+using DroneMaintenance.Models.RequestModels.SparePart;
 using DroneMaintenance.Models.ResponseModels.Client;
+using DroneMaintenance.Models.ResponseModels.Contract;
+using DroneMaintenance.Models.ResponseModels.ContractSparePart;
 using DroneMaintenance.Models.ResponseModels.Drone;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
+using DroneMaintenance.Models.ResponseModels.SparePart;
 
 namespace DroneMaintenance.BLL.Services
 {
@@ -16,6 +22,29 @@ namespace DroneMaintenance.BLL.Services
             CreateMapsForServiceRequest();
             CreateMapsForClient();
             CreateMapsForDrone();
+            CreateMapsForContract();
+            CreateMapsForSparePart();
+        }
+
+        private void CreateMapsForContractSparePart()
+        {
+            CreateMap<ContractSparePart, ContractSparePartModel>();
+            CreateMap<ContractSparePartForCreationModel, ContractSparePart>();
+            CreateMap<ContractSparePartForUpdateModel, ContractSparePart>();
+        }
+
+        private void CreateMapsForContract()
+        {
+            CreateMap<Contract, ContractModel>();
+            CreateMap<ContractForUpdateModel, Contract>();
+            CreateMap<ContractForCreationModel, Contract>();
+        }
+
+        private void CreateMapsForSparePart()
+        {
+            CreateMap<SparePart, SparePartModel>();
+            CreateMap<SparePartForUpdateModel, SparePart>();
+            CreateMap<SparePartForCreationModel, SparePart>();
         }
 
         private void CreateMapsForServiceRequest()

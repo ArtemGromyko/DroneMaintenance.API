@@ -38,7 +38,7 @@ namespace ServiceRequestMaintenance.API.Controllers
         {
             var requestModel = await _requestsService.CreateRequestAsync(request);
 
-            return Created("api/drones/" + requestModel.Id, requestModel);
+            return Created("api/requests/" + requestModel.Id, requestModel);
         } 
 
         [HttpDelete("{id}")]
