@@ -24,6 +24,7 @@ namespace DroneMaintenance.BLL.Services
             CreateMapsForDrone();
             CreateMapsForContract();
             CreateMapsForSparePart();
+            CreateMapsForContractSparePart();
         }
 
         private void CreateMapsForContractSparePart()

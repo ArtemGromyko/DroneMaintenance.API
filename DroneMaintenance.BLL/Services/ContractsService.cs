@@ -7,7 +7,6 @@ using DroneMaintenance.Models.RequestModels.Contract;
 using DroneMaintenance.Models.RequestModels.ContractSparePart;
 using DroneMaintenance.Models.ResponseModels.Contract;
 using DroneMaintenance.Models.ResponseModels.ContractSparePart;
-using DroneMaintenance.Models.ResponseModels.SparePart;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -52,11 +51,12 @@ namespace DroneMaintenance.BLL.Services
             }
         }
 
-        public void SetWorkInProgressStatus(ServiceRequest request)
+        public async Task SetWorkInProgressStatus(ServiceRequest request)
         {
             if(request.RequestStatus != RequestStatus.WorkInProgress)
             {
                 request.RequestStatus = RequestStatus.WorkInProgress;
+                await _requestRepository.UpdateServiceRequestAsync(request);
             }
         }
 
@@ -92,9 +92,11 @@ namespace DroneMaintenance.BLL.Services
             var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(contractForCreationModel.ServiceRequestId);
             CheckEntityExistence(requestEntity.Id, requestEntity, nameof(ServiceRequest));
             CheckRequestStatus(requestEntity.RequestStatus);
-            SetWorkInProgressStatus(requestEntity);
+            await SetWorkInProgressStatus(requestEntity);
 
             var contrctEntity = _mapper.Map<Contract>(contractForCreationModel);
+
+            await _contractRepository.CreateContractAsync(contrctEntity);
 
             return _mapper.Map<ContractModel>(contrctEntity);
         }
@@ -112,6 +114,7 @@ namespace DroneMaintenance.BLL.Services
             if(contract == null && requestEntity.RequestStatus != RequestStatus.WorkFinished)
             {
                 requestEntity.RequestStatus = RequestStatus.WorkFinished;
+                await _requestRepository.UpdateServiceRequestAsync(requestEntity);
             }
         }
 
@@ -160,6 +163,8 @@ namespace DroneMaintenance.BLL.Services
                 throw new ForbiddenActionException("Unnable to add an already added spare part.");
             }
 
+            contractPartForCreationModel.ContractId = contractId;
+    
             var contractPartEntity = _mapper.Map<ContractSparePart>(contractPartForCreationModel);
 
             await _contractPartRepository.UpdateContractSparePartAsync(contractPartEntity);
@@ -181,6 +186,8 @@ namespace DroneMaintenance.BLL.Services
         {
             await CheckContractExistenceAsync(contractId);
             await _partsService.CheckSparePartExistenceAsync(partId);
+            contractPartForUpdateModel.ContractId = contractId;
+            contractPartForUpdateModel.SparePartId = partId;
 
             var contractPartEntity = await TryGetContractSparePartByIdAsync(contractId, partId);
             _mapper.Map(contractPartForUpdateModel, contractPartEntity);
