@@ -8,6 +8,8 @@ namespace DroneMaintenance.Models.ResponseModels.ServiceRequest
         public string Description { get; set; }
         public string ServiceType { get; set; }
         public string RequestStatus { get; set; }
+        public Guid ClientId { get; set; }
+        public Guid DroneId { get; set; }
         public DateTime Date { get; set; }
     }
 }

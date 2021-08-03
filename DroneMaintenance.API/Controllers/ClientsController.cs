@@ -163,7 +163,7 @@ namespace DroneMaintenance.API.Controllers
             return requestModel;
         }
 
-        [HttpPut("{clientId}/requests/{Id}")]
+        [HttpPut("{clientId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> UpdateRequestForClientAsync(Guid clientId, Guid id, 
         [FromBody]ServiceRequestForUpdateModel request)
         {

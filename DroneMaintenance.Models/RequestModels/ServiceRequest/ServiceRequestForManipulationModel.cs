@@ -10,6 +10,7 @@ namespace DroneMaintenance.Models.RequestModels.ServiceRequest
         [Required]
         [Range(0, 3)]
         public ServiceType ServiceType { get; set; }
+        [Required]
         public Guid DroneId { get; set; }
         public Guid ClientId { get; set; }
     }

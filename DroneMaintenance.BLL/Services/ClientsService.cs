@@ -150,7 +150,7 @@ namespace DroneMaintenance.BLL.Services
             await CheckClientExistence(clientId);
 
             var droneEntity = await _droneRepository.GetDroneByIdAsync(requestForCreationModel.DroneId);
-            CheckEntityExistence(droneEntity.Id, droneEntity, nameof(Drone));
+            CheckEntityExistence(requestForCreationModel.DroneId, droneEntity, nameof(Drone));
             
             requestForCreationModel.ClientId = clientId;
             var requestEntity = _mapper.Map<ServiceRequest>(requestForCreationModel);
