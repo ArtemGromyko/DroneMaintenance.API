@@ -43,7 +43,11 @@ namespace DroneMaintenance.API.Extensions
 
         public static void ConfigureServices(this IServiceCollection services)
         {
-            services.AddScoped<IClientsService, ClientsService>();  
+            services.AddScoped<IClientsService, ClientsService>();
+            services.AddScoped<IDronesService, DronesService>();
+            services.AddScoped<IRequestsService, RequestsService>();
+            services.AddScoped<ISparePartsService, SparePartsService>();
+            services.AddScoped<IContractsService, ContractsService>();
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)

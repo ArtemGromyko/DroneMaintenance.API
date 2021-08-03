@@ -9,6 +9,8 @@ namespace DroneMaintenance.DAL.Contracts
     {
         Task<List<ContractSparePart>> GetAllContractSparePartsAsync();
         Task<ContractSparePart> GetContractSparePartByIdAsync(Guid id);
+        Task<ContractSparePart> GetContractSparePartByContractIdAndPartId(Guid contractId, Guid partId);
+        Task<List<ContractSparePart>> GetAllContractSparePartForContract(Guid contractId);
         Task CreateContractSparePartAsync(ContractSparePart contractSparePart);
         Task UpdateContractSparePartAsync(ContractSparePart contractSparePart);
         Task DeleteContractSparePartAsync(ContractSparePart contractSparePart);
