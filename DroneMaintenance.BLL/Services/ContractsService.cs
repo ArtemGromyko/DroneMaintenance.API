@@ -36,7 +36,8 @@ namespace DroneMaintenance.BLL.Services
             var conntractPartEntity = await _contractPartRepository.GetContractSparePartByContractIdAndPartId(contractId, partId);
             if(conntractPartEntity == null)
             {
-                throw new ForbiddenActionException($"{nameof(ContractSparePart)} with contractId: {contractId} and partId: {partId} doesn't exist in the database.");
+                throw new ForbiddenActionException($"{nameof(ContractSparePart)} with contractId: {contractId} and partId: {partId} " +
+                    $"doesn't exist in the database.");
             }
 
             return conntractPartEntity;

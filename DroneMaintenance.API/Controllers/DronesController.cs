@@ -2,6 +2,7 @@
 using DroneMaintenance.Models.RequestModels.Drone;
 using DroneMaintenance.Models.ResponseModels.Drone;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,10 +22,15 @@ namespace DroneMaintenance.API.Controllers
             _dronesService = dronesService;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DroneModel>>> GetDronesAsync() =>
             await _dronesService.GetDronesAsync();
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
         public async Task<ActionResult<DroneModel>> GetDroneAsync(Guid id)
         {
@@ -33,14 +39,20 @@ namespace DroneMaintenance.API.Controllers
             return droneModel;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<ActionResult<DroneModel>> CreateDroneAsync([FromBody] DroneForCreationModel drone)
+        public async Task<ActionResult<DroneModel>> CreateDroneAsync([FromBody]DroneForCreationModel drone)
         {
             var droneModel = await _dronesService.CreateDroneAsync(drone);
 
             return Created("api/drones/" + droneModel.Id, droneModel);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<DroneModel>> DeleteDroneAsync(Guid id)
         {
@@ -49,6 +61,10 @@ namespace DroneMaintenance.API.Controllers
             return NoContent();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
         public async Task<ActionResult<DroneModel>> UpdateDroneAsync(Guid id, [FromBody]DroneForUpdateModel droneForUpdateModel)
         {
@@ -57,6 +73,10 @@ namespace DroneMaintenance.API.Controllers
             return droneModel;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPatch("{id}")]
         public async Task<ActionResult<DroneModel>> PartiallyUpdateDroneAsync(Guid id, [FromBody]JsonPatchDocument<DroneForUpdateModel> patchDoc)
         {
@@ -74,6 +94,9 @@ namespace DroneMaintenance.API.Controllers
             return droneModel;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{droneId}/requests")]
         public async Task<ActionResult<IEnumerable<ServiceRequestModel>>> GetRequestsForDroneAsync(Guid droneId)
         {
@@ -82,6 +105,9 @@ namespace DroneMaintenance.API.Controllers
             return requestModels;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{droneId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> GetRequestForModelAsync(Guid droneId, Guid id)
         {

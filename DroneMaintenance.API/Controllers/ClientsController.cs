@@ -126,7 +126,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> PartiallyUpdateClientAsync(Guid id, [FromBody] JsonPatchDocument<ClientForUpdateModel> patchDoc)
+        public async Task<ActionResult<ClientModel>> PartiallyUpdateClientAsync(Guid id, [FromBody] JsonPatchDocument<ClientForUpdateModel> patchDoc)
         {
             var (clientToPatch, clientEntity) = await _clientsService.GetClientToPatch(id);
 
@@ -142,10 +142,15 @@ namespace DroneMaintenance.API.Controllers
             return NoContent();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{clientId}/requests")]
         public async Task<ActionResult<IEnumerable<ServiceRequestModel>>> GetRequestsForClientAsync(Guid clientId) =>
             await _clientsService.GetRequestsForClientAsync(clientId);
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{clientId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> GetRequestForClientAsync(Guid clientId, Guid id)
         {
@@ -154,15 +159,23 @@ namespace DroneMaintenance.API.Controllers
             return requestModel;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("{clientId}/requests")]
         public async Task<ActionResult<ServiceRequestModel>> CreateRequestForClientAsync(Guid clientId, 
         [FromBody]ServiceRequestForCreationModel request)
         {
             var requestModel = await _clientsService.CreateRequestForClientAsyn(clientId, request);
 
-            return requestModel;
+            return Created($"api/clients/{clientId}/requests/{requestModel.Id}", requestModel);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{clientId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> UpdateRequestForClientAsync(Guid clientId, Guid id, 
         [FromBody]ServiceRequestForUpdateModel request)
@@ -172,6 +185,9 @@ namespace DroneMaintenance.API.Controllers
             return requestModel;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{clientId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> DeleteRequestForClientAsync(Guid clientId, Guid id)
         {

@@ -5,6 +5,7 @@ using DroneMaintenance.BLL.Contracts;
 using System.Collections.Generic;
 using System;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
+using Microsoft.AspNetCore.Http;
 
 namespace ServiceRequestMaintenance.API.Controllers
 {
@@ -19,12 +20,15 @@ namespace ServiceRequestMaintenance.API.Controllers
             _requestsService = requestsService;
         }
 
-         private ActionResult<ServiceRequestModel> ReturnNotFound(Guid id) => NotFound($"ServiceRequest with id: {id} doesn't exist in the database.");
-
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServiceRequestModel>>> GetServiceRequestsAsync() =>
             await _requestsService.GetRequestsAsync();
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceRequestModel>> GetServiceRequestAsync(Guid id)
         {
@@ -33,14 +37,21 @@ namespace ServiceRequestMaintenance.API.Controllers
             return requestModel;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
         public async Task<ActionResult<ServiceRequestModel>> CreateServiceRequestAsync([FromBody] ServiceRequestForCreationModel request)
         {
             var requestModel = await _requestsService.CreateRequestAsync(request);
 
             return Created("api/requests/" + requestModel.Id, requestModel);
-        } 
+        }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceRequestModel>> DeleteServiceRequestAsync(Guid id)
         {
@@ -49,8 +60,13 @@ namespace ServiceRequestMaintenance.API.Controllers
             return NoContent();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ServiceRequestModel>> UpdateServiceRequestAsync(Guid id, [FromBody]ServiceRequestForUpdateModel requestForUpdateModel)
+        public async Task<ActionResult<ServiceRequestModel>> UpdateServiceRequestAsync(Guid id, 
+        [FromBody]ServiceRequestForUpdateModel requestForUpdateModel)
         {
             var requestModel = await _requestsService.UpdateRequestAsync(id, requestForUpdateModel);
 
