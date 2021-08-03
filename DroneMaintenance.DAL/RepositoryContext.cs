@@ -31,6 +31,8 @@ namespace DroneMaintenance.DAL
             modelBuilder.ApplyConfiguration(new ContractConfiguration());
             modelBuilder.ApplyConfiguration(new SparePartConfiguration());
             modelBuilder.ApplyConfiguration(new ContractSparePartConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
