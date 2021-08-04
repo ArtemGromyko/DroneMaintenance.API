@@ -32,6 +32,8 @@ namespace DroneMaintenance
             services.ConfigureSwagger();
 
             services.AddControllers().AddNewtonsoftJson();
+
+            services.ConfigureAuthentication(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

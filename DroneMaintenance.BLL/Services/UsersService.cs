@@ -8,6 +8,7 @@ namespace DroneMaintenance.BLL.Services
 {
     public class UsersService : IUsersService
     {
+
         public Task<UserModel> AuthenticateAsync(string username, string password)
         {
             throw new NotImplementedException();
