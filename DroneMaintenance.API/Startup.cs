@@ -63,6 +63,7 @@ namespace DroneMaintenance
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ServiceRequestMaintenance.API.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("api/requests")]
     [ApiController]
     public class ServiceRequestsController : ControllerBase

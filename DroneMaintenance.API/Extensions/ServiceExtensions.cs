@@ -43,6 +43,7 @@ namespace DroneMaintenance.API.Extensions
             services.AddScoped<ISparePartRepository, SparePartRepository>();
             services.AddScoped<IContractSparePartRepository, ContractSparePartRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
         }
 
         public static void ConfigureServices(this IServiceCollection services)

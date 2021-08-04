@@ -2,6 +2,7 @@
 using DroneMaintenance.Models.RequestModels.Drone;
 using DroneMaintenance.Models.ResponseModels.Drone;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("api/drones")]
     [ApiController]
     public class DronesController : ControllerBase

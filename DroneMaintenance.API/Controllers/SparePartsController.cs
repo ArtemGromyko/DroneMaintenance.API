@@ -1,6 +1,7 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.Models.RequestModels.SparePart;
 using DroneMaintenance.Models.ResponseModels.SparePart;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("api/parts")]
     [ApiController]
     public class SparePartsController : ControllerBase
