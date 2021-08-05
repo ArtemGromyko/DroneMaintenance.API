@@ -25,6 +25,10 @@ namespace DroneMaintenance.API.Controllers
         public async Task<ActionResult<UserModel>> AuthenticateAsync([FromBody] AuthenticationModel model)
         {
             var token = await _usersService.AuthenticateAsync(model);
+            if(token == null)
+            {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
 
             return Ok(new { Token = token });
         }

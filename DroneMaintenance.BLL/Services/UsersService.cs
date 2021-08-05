@@ -3,12 +3,14 @@ using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.Models.RequestModels.User;
 using DroneMaintenance.Models.ResponseModels.User;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,11 +30,38 @@ namespace DroneMaintenance.BLL.Services
             _configuration = configuration;
             _mapper = mapper;
         }
+        
+        byte[] GenerateSalt()
+        {
+            var salt = new byte[16];
+
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+
+            return salt;
+        }
+
+        string GetHashedPassword(string password, byte[] salt) =>
+            Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 10000,
+                numBytesRequested: 32));
 
         public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
         {
-            var userEntity = await _userRepository.GetUserByEmailAndPasswordAsync(authenticationModel.Email, authenticationModel.Password);
-            if(userEntity == null)
+            var userEntity = await _userRepository.GetUserByEmailAsync(authenticationModel.Email);
+            if (userEntity == null)
+            {
+                return null;
+            }
+
+            byte[] salt = Convert.FromBase64String(userEntity.Salt);
+            var hashedPassword = GetHashedPassword(authenticationModel.Password, salt);
+            if(!userEntity.Password.Equals(hashedPassword))
             {
                 return null;
             }
