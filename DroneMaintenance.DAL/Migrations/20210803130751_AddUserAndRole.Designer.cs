@@ -4,14 +4,16 @@ using DroneMaintenance.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DroneMaintenance.DAL.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20210803130751_AddUserAndRole")]
+    partial class AddUserAndRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -281,18 +283,16 @@ namespace DroneMaintenance.DAL.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Salt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasAlternateKey("Email");
+
+                    b.HasAlternateKey("Password");
 
                     b.HasIndex("RoleId");
 
@@ -304,18 +304,16 @@ namespace DroneMaintenance.DAL.Migrations
                             Id = new Guid("85d2dad8-5ad5-4ad7-ab42-2a883cf0846a"),
                             Email = "sam@email.com",
                             Name = "Sam",
-                            Password = "4sLNhNFsQZl0q0JqGraIu6CxQXQfdGxCg2fpIymmBtg=",
-                            RoleId = new Guid("865ce3fc-de0d-4372-901d-05e0ba2b8d02"),
-                            Salt = "CN4lu7moUkoFxn73xK7EEA=="
+                            Password = "admin",
+                            RoleId = new Guid("865ce3fc-de0d-4372-901d-05e0ba2b8d02")
                         },
                         new
                         {
                             Id = new Guid("bf62c2cd-aa17-47ea-b575-f8d769966fb9"),
                             Email = "donald@email.com",
                             Name = "Donald",
-                            Password = "Jw2B38UvabRSqBkpX0T2wOrItHt/I7QkTsuMGApz7sQ=",
-                            RoleId = new Guid("f6736344-8a7e-43f4-9a1a-facf460b5f3f"),
-                            Salt = "qoLvOfVLiKdwflEH1LoPwQ=="
+                            Password = "user",
+                            RoleId = new Guid("f6736344-8a7e-43f4-9a1a-facf460b5f3f")
                         });
                 });
 

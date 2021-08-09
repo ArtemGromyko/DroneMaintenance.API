@@ -12,6 +12,7 @@ using DroneMaintenance.Models.ResponseModels.ContractSparePart;
 using DroneMaintenance.Models.ResponseModels.Drone;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.SparePart;
+using DroneMaintenance.Models.ResponseModels.User;
 
 namespace DroneMaintenance.BLL.Services
 {
@@ -25,6 +26,12 @@ namespace DroneMaintenance.BLL.Services
             CreateMapsForContract();
             CreateMapsForSparePart();
             CreateMapsForContractSparePart();
+            CreateMapsForUser();
+        }
+
+        private void CreateMapsForUser()
+        {
+            CreateMap<User, UserModel>();
         }
 
         private void CreateMapsForContractSparePart()

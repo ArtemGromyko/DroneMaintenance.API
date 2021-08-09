@@ -3,6 +3,7 @@ using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.Client;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
 {
+    [Authorize]
     [Route("api/clients")]
     [ApiController]
     public class ClientsController : ControllerBase
@@ -29,6 +31,7 @@ namespace DroneMaintenance.API.Controllers
         /// </summary>
         /// <response code="200">The client list recived successfully</response>
         /// <response code="500">Internal server error</response>
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
@@ -42,6 +45,7 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="200">The client recived successfully</response>
         /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -60,6 +64,7 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="201">The client created successfully</response>
         /// <response code="400">Bad request</response>
         /// <response code="500">Internal server error</response>
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -79,6 +84,7 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="400">Bad request</response>
         /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -105,7 +111,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ClientModel>> UpdatePersonAsync(Guid id, [FromBody] ClientForUpdateModel client)
+        public async Task<ActionResult<ClientModel>> UpdateClientAsync(Guid id, [FromBody] ClientForUpdateModel client)
         {
             var clientModel = await _clientsService.UpdateClientAsync(id, client);
 
@@ -121,6 +127,7 @@ namespace DroneMaintenance.API.Controllers
         /// <response code="400">Bad request</response>
         /// <response code="404">The client with provided id doesn't exist in the database</response>
         /// <response code="500">Internal server error</response>
+        [Authorize(Roles = "admin")]
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

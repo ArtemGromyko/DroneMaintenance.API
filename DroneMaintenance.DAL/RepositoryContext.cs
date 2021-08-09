@@ -8,10 +8,8 @@ namespace DroneMaintenance.DAL
     {
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options)
         {
-            /*
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
-            */
+            /*Database.EnsureDeleted();
+            Database.EnsureCreated();*/
         }
 
         public DbSet<Client> Clients { get; set; }
@@ -31,6 +29,8 @@ namespace DroneMaintenance.DAL
             modelBuilder.ApplyConfiguration(new ContractConfiguration());
             modelBuilder.ApplyConfiguration(new SparePartConfiguration());
             modelBuilder.ApplyConfiguration(new ContractSparePartConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

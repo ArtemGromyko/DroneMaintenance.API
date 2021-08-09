@@ -3,6 +3,7 @@ using DroneMaintenance.Models.RequestModels.Contract;
 using DroneMaintenance.Models.RequestModels.ContractSparePart;
 using DroneMaintenance.Models.ResponseModels.Contract;
 using DroneMaintenance.Models.ResponseModels.ContractSparePart;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("api/contracts")]
     [ApiController]
     public class ContractsController : ControllerBase
