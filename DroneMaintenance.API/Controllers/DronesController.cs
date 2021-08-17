@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
 {
-    [Authorize(Roles = "admin")]
+    //[Authorize(Roles = "admin")]
+    [Produces("application/json")]
     [Route("api/drones")]
     [ApiController]
     public class DronesController : ControllerBase

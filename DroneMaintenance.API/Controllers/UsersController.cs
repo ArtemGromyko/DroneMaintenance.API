@@ -33,6 +33,20 @@ namespace DroneMaintenance.API.Controllers
             return Ok(new { Token = token });
         }
 
+        [AllowAnonymous]
+        [Route("registration")]
+        [HttpPost]
+        public async Task<ActionResult<UserModel>> RegisterAsync([FromBody]RegistrationModel model)
+        {
+            var token = await _usersService.RegisterAsync(model);
+            if(token == null)
+            {
+                return BadRequest(new { message = $"User with email: {model.Email} already exists" });
+            }     
+
+            return Ok(new { Token = token });
+        }
+
         [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserModel>>> GetUsersAsync()

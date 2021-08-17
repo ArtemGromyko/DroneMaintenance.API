@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.DAL.Contracts;
+using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.User;
 using DroneMaintenance.Models.ResponseModels.User;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.BLL.Services
 {
-    public class UsersService : IUsersService
+    public class UsersService : ServiceBase, IUsersService
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
@@ -50,6 +51,28 @@ namespace DroneMaintenance.BLL.Services
                 prf: KeyDerivationPrf.HMACSHA256,
                 iterationCount: 10000,
                 numBytesRequested: 32));
+
+        public async Task<string> RegisterAsync(RegistrationModel registrationModel)
+        {
+            var userEntity = await _userRepository.GetUserByEmailAsync(registrationModel.Email);
+            if (userEntity != null)
+            {
+                return null;
+            }
+
+            var newUserEntity = _mapper.Map<User>(registrationModel);
+            var salt = GenerateSalt();
+            var stringSalt = Convert.ToBase64String(salt);
+            var hashedPassword = GetHashedPassword(registrationModel.Password, salt);
+
+            newUserEntity.Salt = stringSalt;
+            newUserEntity.Password = hashedPassword;
+            newUserEntity.RoleId = new Guid("f6736344-8a7e-43f4-9a1a-facf460b5f3f");
+            await _userRepository.CreateUserAsync(newUserEntity);
+            var authenticationModel = _mapper.Map<AuthenticationModel>(registrationModel);
+
+            return await AuthenticateAsync(authenticationModel);
+        }
 
         public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
         {
