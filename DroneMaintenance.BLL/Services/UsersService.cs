@@ -24,7 +24,8 @@ namespace DroneMaintenance.BLL.Services
         private readonly IRoleRepository _roleRepository;
         private readonly IConfiguration _configuration;
 
-        public UsersService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration, IMapper mapper)
+        public UsersService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration, 
+        IMapper mapper)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -71,20 +72,14 @@ namespace DroneMaintenance.BLL.Services
             await _userRepository.CreateUserAsync(newUserEntity);
             var authenticationModel = _mapper.Map<AuthenticationModel>(registrationModel);
 
-            return await AuthenticateAsync(authenticationModel);
+            return await CreateTokenAsync(newUserEntity, authenticationModel);
         }
 
-        public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
+        public async Task<string> CreateTokenAsync(User userEntity, AuthenticationModel authenticationModel)
         {
-            var userEntity = await _userRepository.GetUserByEmailAsync(authenticationModel.Email);
-            if (userEntity == null)
-            {
-                return null;
-            }
-
             byte[] salt = Convert.FromBase64String(userEntity.Salt);
             var hashedPassword = GetHashedPassword(authenticationModel.Password, salt);
-            if(!userEntity.Password.Equals(hashedPassword))
+            if (!userEntity.Password.Equals(hashedPassword))
             {
                 return null;
             }
@@ -106,6 +101,17 @@ namespace DroneMaintenance.BLL.Services
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
+        {
+            var userEntity = await _userRepository.GetUserByEmailAsync(authenticationModel.Email);
+            if (userEntity == null)
+            {
+                return null;
+            }
+
+            return await CreateTokenAsync(userEntity, authenticationModel);
         }
 
         public async Task<UserModel> GetUserAsync(Guid id)

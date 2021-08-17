@@ -8,8 +8,8 @@ namespace DroneMaintenance.DAL
     {
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options)
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+            /*Database.EnsureDeleted();
+            Database.EnsureCreated();*/
         }
 
         public DbSet<Client> Clients { get; set; }
