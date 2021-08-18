@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.DAL.Contracts;
+using DroneMaintenance.DAL.Entities;
 using DroneMaintenance.Models.RequestModels.User;
 using DroneMaintenance.Models.ResponseModels.User;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -16,14 +17,15 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.BLL.Services
 {
-    public class UsersService : IUsersService
+    public class UsersService : ServiceBase, IUsersService
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IConfiguration _configuration;
 
-        public UsersService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration, IMapper mapper)
+        public UsersService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration, 
+        IMapper mapper)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -51,17 +53,33 @@ namespace DroneMaintenance.BLL.Services
                 iterationCount: 10000,
                 numBytesRequested: 32));
 
-        public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
+        public async Task<string> RegisterAsync(RegistrationModel registrationModel)
         {
-            var userEntity = await _userRepository.GetUserByEmailAsync(authenticationModel.Email);
-            if (userEntity == null)
+            var userEntity = await _userRepository.GetUserByEmailAsync(registrationModel.Email);
+            if (userEntity != null)
             {
                 return null;
             }
 
+            var newUserEntity = _mapper.Map<User>(registrationModel);
+            var salt = GenerateSalt();
+            var stringSalt = Convert.ToBase64String(salt);
+            var hashedPassword = GetHashedPassword(registrationModel.Password, salt);
+
+            newUserEntity.Salt = stringSalt;
+            newUserEntity.Password = hashedPassword;
+            newUserEntity.RoleId = new Guid("f6736344-8a7e-43f4-9a1a-facf460b5f3f");
+            await _userRepository.CreateUserAsync(newUserEntity);
+            var authenticationModel = _mapper.Map<AuthenticationModel>(registrationModel);
+
+            return await CreateTokenAsync(newUserEntity, authenticationModel);
+        }
+
+        public async Task<string> CreateTokenAsync(User userEntity, AuthenticationModel authenticationModel)
+        {
             byte[] salt = Convert.FromBase64String(userEntity.Salt);
             var hashedPassword = GetHashedPassword(authenticationModel.Password, salt);
-            if(!userEntity.Password.Equals(hashedPassword))
+            if (!userEntity.Password.Equals(hashedPassword))
             {
                 return null;
             }
@@ -83,6 +101,17 @@ namespace DroneMaintenance.BLL.Services
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
+        {
+            var userEntity = await _userRepository.GetUserByEmailAsync(authenticationModel.Email);
+            if (userEntity == null)
+            {
+                return null;
+            }
+
+            return await CreateTokenAsync(userEntity, authenticationModel);
         }
 
         public async Task<UserModel> GetUserAsync(Guid id)
