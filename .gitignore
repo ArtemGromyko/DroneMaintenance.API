@@ -362,6 +362,12 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-#logger
-/logs/
-/internal_logs/
+# dependencies
+client/node_modules
+
+# testing
+client/coverage
+
+# production
+client/build
+
