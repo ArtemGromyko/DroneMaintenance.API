@@ -4,15 +4,16 @@ import LoggedComponent from '../logged-component';
 import WithJwt from '../with-jwt';
 import Header from '../header';
 import AuthComponent from '../auth-component';
+import MainPage from '../main-page';
 
 import './app.css';
 
 function App() {
     return (
-        <Switch>
+        <>
             <Route exact path='/'>
                 <Header />
-                <div>hello world</div>
+                <MainPage />
             </Route>
             <Route path='/login'>
                 <AuthComponent />
@@ -26,7 +27,7 @@ function App() {
                     <LoggedComponent />
                 </WithJwt>
             </Route>
-        </Switch>
+        </>
     );
 }
 
