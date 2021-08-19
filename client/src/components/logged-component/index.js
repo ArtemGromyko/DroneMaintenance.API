@@ -1,14 +1,14 @@
-import React, {useEffect, useContext, useState} from 'react';
-import {MainContext} from '../../contexts/main-context';
+import React, { useEffect, useContext, useState } from 'react';
+import { MainContext } from '../../contexts/main-context';
 
 function LoggedComponent(props) {
-    const {jwt} = useContext(MainContext);
-    const [parsedJwt, updateParsedJwt] = useState('')
-    useEffect(()=>{
-        try{
-            updateParsedJwt(JSON.parse(atob(jwt.split('.')[1])))
-        }catch(err){
-            updateParsedJwt('Not a valid JWT found')
+    const { jwt } = useContext(MainContext);
+    const [parsedJwt, updateParsedJwt] = useState('');
+    useEffect(() => {
+        try {
+            updateParsedJwt(JSON.parse(atob(jwt.split('.')[1])));
+        } catch (err) {
+            updateParsedJwt('Not a valid JWT found');
         }
     }, []);
 
@@ -19,4 +19,4 @@ function LoggedComponent(props) {
     )
 }
 
-export default LoggedComponent
+export default LoggedComponent;
