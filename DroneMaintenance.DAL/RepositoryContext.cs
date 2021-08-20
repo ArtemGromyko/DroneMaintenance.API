@@ -8,8 +8,6 @@ namespace DroneMaintenance.DAL
     {
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options)
         {
-            /*Database.EnsureDeleted();
-            Database.EnsureCreated();*/
         }
 
         public DbSet<Client> Clients { get; set; }
@@ -18,7 +16,7 @@ namespace DroneMaintenance.DAL
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<SparePart> SpareParts { get; set; }
         public DbSet<ContractSparePart> ContractSpareParts { get; set; }
-
+ 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

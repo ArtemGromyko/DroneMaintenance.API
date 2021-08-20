@@ -1,4 +1,5 @@
-﻿using DroneMaintenance.BLL.Contracts;
+﻿using DroneMaintenance.API.Filters.ActionFilters;
+using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.Models.RequestModels.User;
 using DroneMaintenance.Models.ResponseModels.User;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 namespace DroneMaintenance.API.Controllers
 {
     [Route("api/users")]
+    [Authorize]
+    [ServiceFilter(typeof(TokenValidationFilterAttribute))]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -25,7 +28,7 @@ namespace DroneMaintenance.API.Controllers
         public async Task<ActionResult<UserModel>> AuthenticateAsync([FromBody] AuthenticationModel model)
         {
             var token = await _usersService.AuthenticateAsync(model);
-            if(token == null)
+            if (token == null)
             {
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
@@ -36,13 +39,13 @@ namespace DroneMaintenance.API.Controllers
         [AllowAnonymous]
         [Route("registration")]
         [HttpPost]
-        public async Task<ActionResult<UserModel>> RegisterAsync([FromBody]RegistrationModel model)
+        public async Task<ActionResult<UserModel>> RegisterAsync([FromBody] RegistrationModel model)
         {
             var token = await _usersService.RegisterAsync(model);
-            if(token == null)
+            if (token == null)
             {
                 return BadRequest(new { message = $"User with email: {model.Email} already exists" });
-            }     
+            }
 
             return Ok(new { Token = token });
         }
@@ -63,6 +66,14 @@ namespace DroneMaintenance.API.Controllers
             var userModel = await _usersService.GetUserAsync(id);
 
             return userModel;
+        }
+
+        [HttpPost("signout/{id}")]
+        public async Task<ActionResult<UserModel>> SignOut(Guid id)
+        {
+            await _usersService.UpdateToken(id, null);
+
+            return Ok();
         }
     }
 }

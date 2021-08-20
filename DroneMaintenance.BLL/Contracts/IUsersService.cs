@@ -12,5 +12,6 @@ namespace DroneMaintenance.BLL.Contracts
         Task<List<UserModel>> GetUsersAsync();
         Task<UserModel> GetUserAsync(Guid id);
         Task<string> RegisterAsync(RegistrationModel registrationModel);
+        Task UpdateToken(Guid id, string token);
     }
 }

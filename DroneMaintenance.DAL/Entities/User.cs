@@ -14,6 +14,7 @@ namespace DroneMaintenance.DAL.Entities
         public string Password { get; set; }
         [Required]
         public string Salt { get; set; }
+        public string Token {  get; set; }
         public Guid RoleId { get; set; }
     }
 }

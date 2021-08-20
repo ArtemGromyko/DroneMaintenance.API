@@ -1,4 +1,5 @@
 using DroneMaintenance.API.Extensions;
+using DroneMaintenance.API.Filters.ActionFilters;
 using DroneMaintenance.API.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +31,7 @@ namespace DroneMaintenance
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.ConfigureServices();
             services.ConfigureSwagger();
-
+            services.AddScoped<TokenValidationFilterAttribute>();
             services.AddControllers().AddNewtonsoftJson();
 
             services.ConfigureAuthentication(Configuration);

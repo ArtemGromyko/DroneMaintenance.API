@@ -92,6 +92,7 @@ namespace DroneMaintenance.BLL.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
+                    new Claim("Id", userEntity.Id.ToString()),
                     new Claim(ClaimTypes.Email, userEntity.Email),
                     new Claim(ClaimTypes.Role, roleEntity.Name)
                 }),
@@ -100,7 +101,12 @@ namespace DroneMaintenance.BLL.Services
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            userEntity.Token = tokenString;
+            await _userRepository.UpdateUserAsync(userEntity);
+
+            return tokenString;
         }
 
         public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
@@ -117,6 +123,7 @@ namespace DroneMaintenance.BLL.Services
         public async Task<UserModel> GetUserAsync(Guid id)
         {
             var userEntity = await _userRepository.GetUserByIdAsync(id);
+            CheckEntityExistence(id, userEntity, nameof(User));
 
             return _mapper.Map<UserModel>(userEntity);
         }
@@ -126,6 +133,15 @@ namespace DroneMaintenance.BLL.Services
             var userEntities = await _userRepository.GetAllUsersAsync();
 
             return _mapper.Map<List<UserModel>>(userEntities);
+        }
+
+        public async Task UpdateToken(Guid id, string token)
+        {
+            var userEntity = await _userRepository.GetUserByIdAsync(id);
+            CheckEntityExistence(id, userEntity, nameof(User));
+
+            userEntity.Token = token;
+            await _userRepository.UpdateUserAsync(userEntity);
         }
     }
 }
