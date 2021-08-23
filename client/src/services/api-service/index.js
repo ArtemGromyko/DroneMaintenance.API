@@ -5,29 +5,39 @@ async function getResource(url) {
     if (!res.ok) {
         throw new Error(`Could not fetch ${url}, received ${res.status}`);
     }
+
     return await res.json();
+}
+
+async function postResource(url, options) {
+    return await fetch(`${_apiBase}${url}`, options);
 }
 
 const getAllDrones = () =>
     this.getResource(`/drones/`);
 
-const authenticate = async (user) => {
-    console.log(JSON.stringify(user));
-    return await fetch(`${_apiBase}/users/`, {
-        method: 'POST', headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }, body: JSON.stringify(user)
-    });
+const authenticationOptions = {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
 };
 
-const register = async (user) => {
-    return await fetch(`${_apiBase}/users/registration`, {
-        method: 'POST', headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }, body: JSON.stringify(user)
-    });
-}
+const authenticate = async (user, auth) => {
+    const options = { ...authenticationOptions, body: JSON.stringify(user) };
+    return auth ? await postResource(`/users/`, options) :
+        await postResource(`/users/registration`, options);
+};
 
-export { getAllDrones, authenticate, register };
+const signOut = async (id, token) => {
+    const options = {
+        method: 'POST', headers: {
+            ...authenticationOptions.headers, 'Authorization': 'Bearer ' + token
+        }
+    };
+    
+    return await postResource(`/users/signout/${id}`, options);
+};
+
+export { getAllDrones, authenticate, signOut };

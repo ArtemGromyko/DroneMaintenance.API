@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router';
-import { authenticate, register } from '../../services/api-service';
+import { authenticate } from '../../services/api-service';
 import { Avatar, Grid, Paper } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -17,7 +17,6 @@ const AuthComponent = ({ isSignUp }) => {
 
     const [isDisabled, changeDisabled] = useState(true);
     const { setJwt } = useContext(MainContext);
-    const { jwt } = useContext(MainContext);
     const history = useHistory();
 
     function toggleDisabled() {
@@ -51,20 +50,22 @@ const AuthComponent = ({ isSignUp }) => {
         event.preventDefault();
 
         if (isSignUp) {
-            register({ email, name, password })
+            authenticate({ email, name, password }, false)
                 .then((res) => {
                     return res.json();
                 })
                 .then((res) => {
+                    console.log(res.token);
                     setJwt(res.token);
                     history.push('/');
                 });
         } else {
-            authenticate({ email, password })
+            authenticate({ email, password }, true)
                 .then((res) => {
                     return res.json();
                 })
                 .then((res) => {
+                    console.log(res.token);
                     setJwt(res.token);
                     history.push('/');
                 });
@@ -103,7 +104,7 @@ const AuthComponent = ({ isSignUp }) => {
                     variant='contained' fullWidth onClick={handleSubmit} disabled={isDisabled}>{isSignUp ? 'Sign up' : 'Sign in'}
                 </Button>
                 {isSignUp ? null : (
-                    <Typography>
+                    <Typography component='span' variant='body2'>
                         <Link style={{ textDecoration: 'none' }} to="/register">
                             Create an account
                         </Link>

@@ -7,13 +7,11 @@ import { MainContextProvider } from "./contexts/main-context";
 
 ReactDOM.render(
     <React.StrictMode>
-        <Typography>
             <MainContextProvider>
                 <Router>
                     <App />
                 </Router>
             </MainContextProvider>
-        </Typography>
     </React.StrictMode>,
     document.getElementById('root')
 );

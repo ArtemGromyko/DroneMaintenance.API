@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import LoggedComponent from '../logged-component';
 import WithJwt from '../with-jwt';
 import Header from '../header';
@@ -7,10 +7,11 @@ import AuthComponent from '../auth-component';
 import MainPage from '../main-page';
 
 import './app.css';
+import RequestsPage from '../requests-page';
 
 function App() {
     return (
-        <>
+        <div>
             <Route exact path='/'>
                 <Header />
                 <MainPage />
@@ -22,12 +23,18 @@ function App() {
                 <AuthComponent isSignUp />
             </Route>
             <Route path='/home'>
-                <Header />
                 <WithJwt>
+                    <Header />
                     <LoggedComponent />
                 </WithJwt>
             </Route>
-        </>
+            <Route path='/requests'>
+                <WithJwt>
+                    <Header />
+                    <RequestsPage />
+                </WithJwt>
+            </Route>
+        </div>
     );
 }
 

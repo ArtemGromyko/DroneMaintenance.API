@@ -5,10 +5,11 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { MainContext } from '../../contexts/main-context';
+import { signOut } from '../../services/api-service';
 
 const useStyles = makeStyles({
     root: {
-        width: '70%',
+        width: '80%',
         minHeight: '75px',
         margin: '0 auto'
     },
@@ -48,8 +49,14 @@ const Header = () => {
     const classes = useStyles();
 
     const onSignOut = () => {
-        setJwt('');
-        history.push('/');
+        const id = JSON.parse(atob(jwt.split('.')[1])).Id;
+        console.log(id);
+        signOut(id, jwt).then((response) => {
+            if (response.ok) {
+                setJwt('');
+                history.push('/');
+            }
+        });
     }
 
     return (
@@ -61,6 +68,22 @@ const Header = () => {
                             Drone Maintenance
                         </Link>
                     </h1>
+
+                    {jwt === '' ? (null) : (
+                        <>
+                            <h4>
+                                <Link className={classes.link} to="/requests">
+                                    Requests
+                                </Link>
+                            </h4>
+                            <h4>
+                                <Link className={classes.link} to="/comments">
+                                    Comments
+                                </Link>
+                            </h4>
+                        </>
+                    )}
+
                     {jwt === '' ? (
                         <Button className={classes.buttonIn} onClick={() => history.push('/login')}>Sign in</Button>
                     ) : (
