@@ -32,8 +32,8 @@ const columns = [
   },
 ];
 
-function createData(name, code, population, size) {
-  return { name, code, population, size };
+function createData(requestStatus, serviceType, date, description) {
+  return { requestStatus, serviceType, date, description };
 }
 
 const rows = [
