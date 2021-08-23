@@ -55,7 +55,6 @@ const AuthComponent = ({ isSignUp }) => {
                     return res.json();
                 })
                 .then((res) => {
-                    console.log(res.token);
                     setJwt(res.token);
                     history.push('/');
                 });
@@ -65,7 +64,6 @@ const AuthComponent = ({ isSignUp }) => {
                     return res.json();
                 })
                 .then((res) => {
-                    console.log(res.token);
                     setJwt(res.token);
                     history.push('/');
                 });

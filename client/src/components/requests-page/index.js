@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -8,8 +8,16 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { MainContext } from '../../contexts/main-context';
+import { deleteRequestForUser} from '../../services/api-service';
 
 const columns = [
+  {
+    id: 'delete',
+    label: 'Action',
+  },
   {
     id: 'requestStatus',
     label: 'RequestStatus',
@@ -28,7 +36,7 @@ const columns = [
     id: 'description',
     label: 'Description',
     minWidth: 100,
-    align: 'right',
+    align: 'right'
   },
 ];
 
@@ -64,9 +72,19 @@ const useStyles = makeStyles({
 });
 
 export default function RequestsPage() {
+  const {jwt} = useContext(MainContext);
+
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const deleteRequest = (id) => {
+    deleteRequestForUser(id, jwt)
+  };
+
+  const handleDelete = (id) => {
+    return deleteRequest(id);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -95,11 +113,22 @@ export default function RequestsPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-                
-          
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                      
+                    </TableRow>
+                  );  
+                })}
+
+            {/* {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableCell>
+                    <IconButton onClick={handleDelete()} aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -110,7 +139,7 @@ export default function RequestsPage() {
                   })}
                 </TableRow>
               );
-            })}
+            })} */}
           </TableBody>
         </Table>
       </TableContainer>

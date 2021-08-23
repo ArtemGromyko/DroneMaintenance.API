@@ -43,17 +43,14 @@ const useStyles = makeStyles({
 });
 
 const Header = () => {
-    const { jwt } = useContext(MainContext);
-    const { setJwt } = useContext(MainContext);
+    const { setJwt, user, jwt } = useContext(MainContext);
     const history = useHistory();
     const classes = useStyles();
 
     const onSignOut = () => {
-        const id = JSON.parse(atob(jwt.split('.')[1])).Id;
-        console.log(id);
-        signOut(id, jwt).then((response) => {
+        signOut(user.id, jwt).then((response) => {
             if (response.ok) {
-                setJwt('');
+                setJwt();
                 history.push('/');
             }
         });
@@ -69,7 +66,7 @@ const Header = () => {
                         </Link>
                     </h1>
 
-                    {jwt === '' ? (null) : (
+                    {!user ? (null) : (
                         <>
                             <h4>
                                 <Link className={classes.link} to="/requests">
@@ -84,7 +81,7 @@ const Header = () => {
                         </>
                     )}
 
-                    {jwt === '' ? (
+                    {!user ? (
                         <Button className={classes.buttonIn} onClick={() => history.push('/login')}>Sign in</Button>
                     ) : (
                         <Button className={classes.buttonOut} onClick={onSignOut}>Sign out</Button>
