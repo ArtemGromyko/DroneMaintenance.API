@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { MainContext } from '../../contexts/main-context';
 import { signOut } from '../../services/api-service';
+import { getRequestsForUser } from '../../services/api-service';
 
 const useStyles = makeStyles({
     root: {
@@ -48,6 +49,7 @@ const Header = () => {
     const classes = useStyles();
 
     const onSignOut = () => {
+
         signOut(user.id, jwt).then((response) => {
             if (response.ok) {
                 setJwt();
@@ -59,7 +61,7 @@ const Header = () => {
     return (
         <Card variant='outlined'>
             <Typography>
-                <Grid className={classes.root} direction='row' container alignItems='center' justifyContent="space-between">
+                <Grid className={classes.root} direction='row' container alignItems='center' justifyContent='space-between'>
                     <h1>
                         <Link className={classes.link} to="/">
                             Drone Maintenance

@@ -10,7 +10,8 @@ const postOptions = {
 
 const getPostOptionsWithToken = (token, body) => {
     const options = { ...postOptions };
-    options.headers = {...options.headers, Authorization: 'Bearer ' + token};
+    options.headers = {...options.headers, 'Authorization': 'Bearer ' + token, 'Accept': 'application/json',
+    'Content-Type': 'application/json',};
     if (body) {
         options.body = JSON.stringify(body);
     }
@@ -20,8 +21,9 @@ const getPostOptionsWithToken = (token, body) => {
 
 const getPostOptionsWithBody = (body) => ({ ...postOptions, body: JSON.stringify(body)});
 
-async function getResource(url) {
-    const res = await fetch(`${_apiBase}${url}`);
+async function getResource(url, options = null) {
+    console.log(options);
+    const res = await fetch(`${_apiBase}${url}`, options);
     if (!res.ok) {
         throw new Error(`Could not fetch ${url}, received ${res.status}`);
     }
@@ -36,9 +38,9 @@ async function postResource(url, options) {
 const getAllDrones = () =>
     getResource(`/drones/`);
 
-const getRequestsForUser = (id, token) => {
+const getRequestsForUser = async (id, token) => {
     console.log(id);
-    return getResource(`/requests/`, getPostOptionsWithToken(token));
+    return await getResource(`/requests/`, {headers: {authorization: 'Bearer ' + token}});
 }
 
 const authenticate = async (user, auth) => {
