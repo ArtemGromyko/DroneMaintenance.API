@@ -11,7 +11,7 @@ function MainContextProvider({ children }) {
             const res = JSON.parse(atob(jwt.split('.')[1]));
             setUser({id: res.Id, name: res.name, role: res.role});
         } else {
-            setUser();
+            setUser(undefined);
         }
     },[jwt]);
 

@@ -90,17 +90,21 @@ export default function RequestsPage() {
   const { jwt, user } = useContext(MainContext);
 
   useEffect( () => {
-    console.log('privet');
-    getRequestsForUser(user.id, jwt).then((res) => setRows(res));
-    console.log(rows);
-    console.log('hello world');
+    console.log('hello');
+    console.log(user);
+    if(user) {
+      getRequestsForUser(user.id, jwt).then((res) => setRows(res));
+    } else {
+      setRows([]);
+    }
+    
   }, [user, jwt]);
 
   
 
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const deleteRequest = (id) => {
     deleteRequestForUser(id, jwt)
