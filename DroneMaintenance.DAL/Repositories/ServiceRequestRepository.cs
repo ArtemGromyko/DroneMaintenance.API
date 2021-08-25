@@ -25,10 +25,10 @@ namespace DroneMaintenance.DAL.Repositories
             await DeleteAsync(serviceRequest);
 
         public async Task<List<ServiceRequest>> GetAllServiceRequestsForClientAsync(Guid clientId) =>
-            await FindByCondition(s => s.ClientId.Equals(clientId)).ToListAsync();
+            await FindByCondition(s => s.UserId.Equals(clientId)).ToListAsync();
 
         public async Task<ServiceRequest> GetServiceRequestForClientAsync(Guid clientId, Guid id) =>
-            await FindByCondition(s => s.ClientId.Equals(clientId) && s.Id.Equals(id)).SingleOrDefaultAsync();
+            await FindByCondition(s => s.UserId.Equals(clientId) && s.Id.Equals(id)).SingleOrDefaultAsync();
 
         public async Task<List<ServiceRequest>> GetAllServiceRequestsForDroneAsync(Guid droneId) =>
             await FindByCondition(s => s.DroneId.Equals(droneId)).ToListAsync();

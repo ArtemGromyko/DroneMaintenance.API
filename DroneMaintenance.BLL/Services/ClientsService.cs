@@ -169,7 +169,7 @@ namespace DroneMaintenance.BLL.Services
             var requestEntity = await TryGetRequestForClientAsync(clientId, id);
             _mapper.Map(requestForUpdateModel, requestEntity);
             CheckRequestStatus(requestEntity.RequestStatus);
-            requestEntity.ClientId = clientId;
+            requestEntity.UserId = clientId;
 
             await _requestRepository.UpdateServiceRequestAsync(requestEntity);
 

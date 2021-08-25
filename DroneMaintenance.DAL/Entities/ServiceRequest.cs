@@ -16,8 +16,8 @@ namespace DroneMaintenance.DAL.Entities
         public RequestStatus RequestStatus { get; set; }
         public DateTime Date { get; set; }
 
-        public Guid ClientId { get; set; }
-        public Client Client { get; set; }
+        public Guid UserId { get; set; }
+        public User User { get; set; }
 
         public Guid DroneId { get; set; }
         public Drone Drone { get; set; }

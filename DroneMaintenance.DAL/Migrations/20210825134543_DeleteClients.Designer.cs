@@ -4,20 +4,50 @@ using DroneMaintenance.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DroneMaintenance.DAL.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20210825134543_DeleteClients")]
+    partial class DeleteClients
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("DroneMaintenance.DAL.Entities.Client", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Client");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cc38316e-ea63-473b-84fa-1efa00f3b6ce"),
+                            Name = "Tom"
+                        },
+                        new
+                        {
+                            Id = new Guid("5bf2d2e5-25c7-47d4-b5a0-13068ce73ab2"),
+                            Name = "John"
+                        });
+                });
 
             modelBuilder.Entity("DroneMaintenance.DAL.Entities.Contract", b =>
                 {
@@ -159,6 +189,9 @@ namespace DroneMaintenance.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("date")
@@ -181,6 +214,8 @@ namespace DroneMaintenance.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("DroneId");
 
@@ -326,6 +361,10 @@ namespace DroneMaintenance.DAL.Migrations
 
             modelBuilder.Entity("DroneMaintenance.DAL.Entities.ServiceRequest", b =>
                 {
+                    b.HasOne("DroneMaintenance.DAL.Entities.Client", null)
+                        .WithMany("ServiceRequests")
+                        .HasForeignKey("ClientId");
+
                     b.HasOne("DroneMaintenance.DAL.Entities.Drone", "Drone")
                         .WithMany("ServiceRequests")
                         .HasForeignKey("DroneId")
@@ -350,6 +389,11 @@ namespace DroneMaintenance.DAL.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DroneMaintenance.DAL.Entities.Client", b =>
+                {
+                    b.Navigation("ServiceRequests");
                 });
 
             modelBuilder.Entity("DroneMaintenance.DAL.Entities.Contract", b =>

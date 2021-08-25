@@ -86,7 +86,7 @@ namespace DroneMaintenance.BLL.Services
             switch(request)
             {
                 case RequestStatus.Recived:
-                    return "Request recived";
+                    return "Request received";
                 case RequestStatus.WorkInProgress:
                     return "Work in progress";
                 case RequestStatus.WorkFinished:
