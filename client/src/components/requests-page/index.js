@@ -16,6 +16,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import TableFooter from '@material-ui/core/TableFooter';
 import Button from '@material-ui/core/Button';
 import { getRequestsForUser } from '../../services/api-service';
+import { useHistory } from 'react-router';
 
 const columns = [
   {
@@ -74,26 +75,28 @@ export default function RequestsPage() {
   const [rows, setRows] = useState([]);
 
   const { user } = useContext(MainContext);
+  const history = useHistory();
 
   useEffect( () => {
-    console.log(user);
     if(user) {
       getRequestsForUser(user.id, user.token).then((res) => setRows(res));
     } else {
       setRows([]);
     }
-  }, [user, rows]);
+  }, [user]);
 
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const deleteRequest = (id) => {
-    deleteRequestForUser(id, user.token)
-  };
-
   const handleDelete = (id) => {
-    return deleteRequest(id);
+    deleteRequestForUser(id, user.token)
+      .then((response) => {
+        if(response.ok) {
+          var array = rows.filter((i) => i.id !== id);
+          setRows(array);
+        }
+      })
   };
 
   const handleChangePage = (event, newPage) => {
@@ -131,7 +134,7 @@ export default function RequestsPage() {
                     <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
                       <DeleteIcon />
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
+                    <IconButton onClick={() => {}} aria-label="delete">
                       <EditIcon />
                     </IconButton>
                   </TableCell>
@@ -155,7 +158,7 @@ export default function RequestsPage() {
       <TableFooter >
         <TableRow >
           <TableCell colSpan={1}>
-            <Button variant="contained" className={classes.buttonCreate}>
+            <Button variant="contained" className={classes.buttonCreate} onClick={() => history.push('/request-creating')}>
               Create
             </Button>
           </TableCell>

@@ -5,9 +5,9 @@ import WithJwt from '../with-jwt';
 import Header from '../header';
 import AuthComponent from '../auth-component';
 import MainPage from '../main-page';
-
 import './app.css';
 import RequestsPage from '../requests-page';
+import RequestForm from '../request-form';
 
 function App() {
     return (
@@ -32,6 +32,11 @@ function App() {
                 <WithJwt>
                     <Header />
                     <RequestsPage />
+                </WithJwt>
+            </Route>
+            <Route path='/request-creating'>
+                <WithJwt>
+                    <RequestForm mode='creating'/>
                 </WithJwt>
             </Route>
         </div>

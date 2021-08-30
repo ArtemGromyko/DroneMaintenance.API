@@ -25,7 +25,7 @@ namespace DroneMaintenance.API.Filters.ActionFilters
             }
 
             var claimsIdentity = context.HttpContext.User.Identity as ClaimsIdentity;
-            var idString = claimsIdentity.FindFirst("Id").Value;
+            var idString = claimsIdentity.FindFirst("id").Value;
             var id = new Guid(idString);
 
             var userEntity = await _usersService.GetUserAsync(id);
