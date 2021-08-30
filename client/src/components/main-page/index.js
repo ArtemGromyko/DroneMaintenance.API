@@ -18,14 +18,14 @@ const useStyles = makeStyles({
 });
 
 const MainPage = () => {
-    const { jwt } = useContext(MainContext);
+    const { user } = useContext(MainContext);
 
     const classes = useStyles();
 
     return (
         <Grid className={classes.root}>
             <Typography>
-                { (jwt === '') ? null : jwt }
+                { user ? user.token : null }
                 <p>Welcome to your new single-page application, built with:</p>
                 <ul>
                     <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>

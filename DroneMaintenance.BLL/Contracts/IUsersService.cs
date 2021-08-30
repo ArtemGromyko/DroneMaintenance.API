@@ -8,10 +8,10 @@ namespace DroneMaintenance.BLL.Contracts
 {
     public interface IUsersService
     {
-        Task<string> AuthenticateAsync(AuthenticationModel authenticationModel);
+        Task<UserModel> AuthenticateAsync(AuthenticationModel authenticationModel);
         Task<List<UserModel>> GetUsersAsync();
         Task<UserModel> GetUserAsync(Guid id);
-        Task<string> RegisterAsync(RegistrationModel registrationModel);
+        Task<UserModel> RegisterAsync(RegistrationModel registrationModel);
         Task UpdateToken(Guid id, string token);
     }
 }

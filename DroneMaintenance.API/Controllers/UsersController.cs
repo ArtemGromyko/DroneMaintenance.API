@@ -27,13 +27,13 @@ namespace DroneMaintenance.API.Controllers
         [HttpPost]
         public async Task<ActionResult<UserModel>> AuthenticateAsync([FromBody] AuthenticationModel model)
         {
-            var token = await _usersService.AuthenticateAsync(model);
-            if (token == null)
+            var userModel = await _usersService.AuthenticateAsync(model);
+            if (userModel == null)
             {
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
 
-            return Ok(new { Token = token });
+            return userModel;
         }
 
         [AllowAnonymous]
@@ -41,13 +41,13 @@ namespace DroneMaintenance.API.Controllers
         [HttpPost]
         public async Task<ActionResult<UserModel>> RegisterAsync([FromBody] RegistrationModel model)
         {
-            var token = await _usersService.RegisterAsync(model);
-            if (token == null)
+            var userModel = await _usersService.RegisterAsync(model);
+            if (userModel == null)
             {
                 return BadRequest(new { message = $"User with email: {model.Email} already exists" });
             }
 
-            return Ok(new { Token = token });
+            return userModel;
         }
 
         [Authorize(Roles = "admin")]

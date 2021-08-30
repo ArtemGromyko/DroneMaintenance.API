@@ -45,20 +45,6 @@ const columns = [
   },
 ];
 
-// const rows = [
-//   { id: 1, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 2, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 3, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 4, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 5, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 6, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 7, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 8, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 9, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 10, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-//   { id: 11, requestStatus: 0, serviceType: 1, date: '11.07.2021', description: 'description' },
-// ];
-
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -87,27 +73,23 @@ const useStyles = makeStyles({
 export default function RequestsPage() {
   const [rows, setRows] = useState([]);
 
-  const { jwt, user } = useContext(MainContext);
+  const { user } = useContext(MainContext);
 
   useEffect( () => {
-    console.log('hello');
     console.log(user);
     if(user) {
-      getRequestsForUser(user.id, jwt).then((res) => setRows(res));
+      getRequestsForUser(user.id, user.token).then((res) => setRows(res));
     } else {
       setRows([]);
     }
-    
-  }, [user, jwt]);
-
-  
+  }, [user, rows]);
 
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const deleteRequest = (id) => {
-    deleteRequestForUser(id, jwt)
+    deleteRequestForUser(id, user.token)
   };
 
   const handleDelete = (id) => {
@@ -156,8 +138,6 @@ export default function RequestsPage() {
 
                   {columns.map((column) => {
                     const value = row[column.id];
-                    console.log('value: ' + value);
-                    console.log('column.id: ' + column.id);
                     if (value !== undefined) {
                       return (
                         <TableCell key={column.id} align={column.align}>

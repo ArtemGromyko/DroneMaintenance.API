@@ -3,11 +3,11 @@ import { MainContext } from '../../contexts/main-context';
 import { useHistory } from "react-router-dom";
 
 function WithJwt({ children }) {
-    const { jwt } = useContext(MainContext);
+    const { user } = useContext(MainContext);
     const history = useHistory();
 
     useEffect(() => {
-        if (jwt === '' || !jwt) {
+        if (!user) {
             history.push('/login')
         }
     }, []);

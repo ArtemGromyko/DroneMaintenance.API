@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { MainContext } from '../../contexts/main-context';
 import { signOut } from '../../services/api-service';
-import { getRequestsForUser } from '../../services/api-service';
 
 const useStyles = makeStyles({
     root: {
@@ -44,15 +43,15 @@ const useStyles = makeStyles({
 });
 
 const Header = () => {
-    const { setJwt, user, jwt } = useContext(MainContext);
+    const { setUser, user} = useContext(MainContext);
     const history = useHistory();
     const classes = useStyles();
 
     const onSignOut = () => {
 
-        signOut(user.id, jwt).then((response) => {
+        signOut(user.id, user.token).then((response) => {
             if (response.ok) {
-                setJwt();
+                setUser(null);
                 history.push('/');
             }
         });

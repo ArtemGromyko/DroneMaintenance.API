@@ -16,7 +16,7 @@ const AuthComponent = ({ isSignUp }) => {
     const [password, changePassword] = useState('');
 
     const [isDisabled, changeDisabled] = useState(true);
-    const { setJwt } = useContext(MainContext);
+    const { user, setUser } = useContext(MainContext);
     const history = useHistory();
 
     function toggleDisabled() {
@@ -55,7 +55,8 @@ const AuthComponent = ({ isSignUp }) => {
                     return res.json();
                 })
                 .then((res) => {
-                    setJwt(res.token);
+                    setUser(res);
+                    console.log(user);
                     history.push('/');
                 });
         } else {
@@ -64,7 +65,8 @@ const AuthComponent = ({ isSignUp }) => {
                     return res.json();
                 })
                 .then((res) => {
-                    setJwt(res.token);
+                    setUser(res);
+                    console.log(user);
                     history.push('/');
                 });
         }

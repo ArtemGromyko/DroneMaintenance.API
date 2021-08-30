@@ -44,8 +44,6 @@ const getRequestsForUser = async (id, token) => {
 }
 
 const authenticate = async (user, auth) => {
-    console.log(getPostOptionsWithBody(user));
-    console.log(user);
     return auth ? await postResource(`/users/`, getPostOptionsWithBody(user)) :
         await postResource(`/users/registration`, getPostOptionsWithBody(user));
 };

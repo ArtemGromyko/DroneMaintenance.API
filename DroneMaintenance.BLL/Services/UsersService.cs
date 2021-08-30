@@ -53,7 +53,7 @@ namespace DroneMaintenance.BLL.Services
                 iterationCount: 10000,
                 numBytesRequested: 32));
 
-        public async Task<string> RegisterAsync(RegistrationModel registrationModel)
+        public async Task<UserModel> RegisterAsync(RegistrationModel registrationModel)
         {
             var userEntity = await _userRepository.GetUserByEmailAsync(registrationModel.Email);
             if (userEntity != null)
@@ -72,7 +72,10 @@ namespace DroneMaintenance.BLL.Services
             await _userRepository.CreateUserAsync(newUserEntity);
             var authenticationModel = _mapper.Map<AuthenticationModel>(registrationModel);
 
-            return await CreateTokenAsync(newUserEntity, authenticationModel);
+            var token = await CreateTokenAsync(newUserEntity, authenticationModel);
+            newUserEntity.Token = token;
+
+            return _mapper.Map<UserModel>(newUserEntity);
         }
 
         public async Task<string> CreateTokenAsync(User userEntity, AuthenticationModel authenticationModel)
@@ -92,7 +95,7 @@ namespace DroneMaintenance.BLL.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("Id", userEntity.Id.ToString()),
+                    new Claim("id", userEntity.Id.ToString()),
                     new Claim(ClaimTypes.Email, userEntity.Email),
                     new Claim(ClaimTypes.Role, roleEntity.Name)
                 }),
@@ -109,7 +112,7 @@ namespace DroneMaintenance.BLL.Services
             return tokenString;
         }
 
-        public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
+        public async Task<UserModel> AuthenticateAsync(AuthenticationModel authenticationModel)
         {
             var userEntity = await _userRepository.GetUserByEmailAsync(authenticationModel.Email);
             if (userEntity == null)
@@ -117,7 +120,10 @@ namespace DroneMaintenance.BLL.Services
                 return null;
             }
 
-            return await CreateTokenAsync(userEntity, authenticationModel);
+            var token = await CreateTokenAsync(userEntity, authenticationModel);
+            userEntity.Token = token;
+
+            return _mapper.Map<UserModel>(userEntity);
         }
 
         public async Task<UserModel> GetUserAsync(Guid id)
