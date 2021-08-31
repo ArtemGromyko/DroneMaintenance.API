@@ -12,6 +12,7 @@ import Select from '@material-ui/core/Select';
 import { createRequestForUser } from '../../services/api-service';
 import { MainContext } from '../../contexts/main-context';
 import { useHistory } from 'react-router';
+import { RequestsContext } from '../../contexts/requests-context';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -31,12 +32,20 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
+const serviceTypes = [
+    {value: '', label: 'None'}, 
+    {value: 0, label: 'Repair without replacement'},
+    {value: 1, label: 'Repair with replacement'},
+    {value: 2, label: 'Diagnostics'}
+]
+
 const RequestForm = ({ mode }) => {
-    const [serviceType, changeServiceType] = useState('');
-    const [description, changeDescription] = useState('');
+    const [serviceType, setServiceType] = useState('');
+    const [description, setDescription] = useState('');
     const [isDisabled, changeDisabled] = useState(true);
 
     const { user } = useContext(MainContext);
+    const { request } = useContext(RequestsContext);
     const  history = useHistory();
 
     useEffect(() => {
@@ -49,9 +58,10 @@ const RequestForm = ({ mode }) => {
 
     useEffect(() => {
         if (mode === 'editing') {
-
+            setServiceType(serviceTypes.find( (st) => st.label === request.serviceType).value);
+            setDescription(request.description);
         }
-    }, []);
+    }, [request]);
 
     const classes = useStyles();
 
@@ -74,10 +84,10 @@ const RequestForm = ({ mode }) => {
     function handleChange(event) {
         switch (event.target.name) {
             case 'description':
-                changeDescription(event.target.value);
+                setDescription(event.target.value);
                 break;
             case 'serviceType':
-                changeServiceType(event.target.value);
+                setServiceType(event.target.value);
                 console.log(event.target.value);
                 console.log(serviceType);
                 break;
@@ -113,10 +123,13 @@ const RequestForm = ({ mode }) => {
                             name="serviceType"
                             label="Service Type"
                         >
-                            <MenuItem value=''>None</MenuItem>
-                            <MenuItem value={0}>Repair without replacement</MenuItem>
-                            <MenuItem value={1}>Repair with replacement </MenuItem>
-                            <MenuItem value={2}>Diagnostics</MenuItem>
+                            {
+                                serviceTypes.map((st) => {
+                                    return (
+                                        <MenuItem value={st.value}>{st.label}</MenuItem>
+                                    )
+                                })
+                            }
                         </Select>
                     </FormControl>
                     <TextField name='description' label='Description'

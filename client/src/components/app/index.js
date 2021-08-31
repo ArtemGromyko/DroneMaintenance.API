@@ -8,6 +8,7 @@ import MainPage from '../main-page';
 import './app.css';
 import RequestsPage from '../requests-page';
 import RequestForm from '../request-form';
+import { RequestsContextProvider } from '../../contexts/requests-context';
 
 function App() {
     return (
@@ -28,22 +29,24 @@ function App() {
                     <LoggedComponent />
                 </WithJwt>
             </Route>
-            <Route path='/requests'>
-                <WithJwt>
-                    <Header />
-                    <RequestsPage />
-                </WithJwt>
-            </Route>
-            <Route path='/request-creating'>
-                <WithJwt>
-                    <RequestForm mode='creating'/>
-                </WithJwt>
-            </Route>
-            <Route path='/request-editing'>
-                <WithJwt>
-                    <RequestForm mode='editing'/>
-                </WithJwt>
-            </Route>
+            <RequestsContextProvider>
+                <Route path='/requests'>
+                    <WithJwt>
+                        <Header />
+                        <RequestsPage />
+                    </WithJwt>
+                </Route>
+                <Route path='/request-creating'>
+                    <WithJwt>
+                        <RequestForm mode='creating' />
+                    </WithJwt>
+                </Route>
+                <Route path='/request-editing'>
+                    <WithJwt>
+                        <RequestForm mode='editing' />
+                    </WithJwt>
+                </Route>
+            </RequestsContextProvider>
         </div>
     );
 }

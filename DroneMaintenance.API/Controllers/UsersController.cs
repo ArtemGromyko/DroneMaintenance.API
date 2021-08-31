@@ -79,7 +79,7 @@ namespace DroneMaintenance.API.Controllers
         }
 
 
-        [HttpGet("{userId/requests/{id}}")]
+        [HttpGet("{userId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> GetServiceRequestForUserAsync(Guid userId, Guid id)
         {
             throw new NotImplementedException();

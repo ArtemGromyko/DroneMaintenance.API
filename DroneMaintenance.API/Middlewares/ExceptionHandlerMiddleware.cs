@@ -1,7 +1,6 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.BLL.Exceptions;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Net;
 using System.Threading.Tasks;
 

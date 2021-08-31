@@ -17,6 +17,7 @@ import TableFooter from '@material-ui/core/TableFooter';
 import Button from '@material-ui/core/Button';
 import { getRequestsForUser } from '../../services/api-service';
 import { useHistory } from 'react-router';
+import { RequestsContext } from '../../contexts/requests-context';
 
 const columns = [
   {
@@ -76,9 +77,10 @@ export default function RequestsPage() {
 
   const { user } = useContext(MainContext);
   const history = useHistory();
+  const { setRequest } = useContext(RequestsContext);
 
-  useEffect( () => {
-    if(user) {
+  useEffect(() => {
+    if (user) {
       getRequestsForUser(user.id, user.token).then((res) => setRows(res));
     } else {
       setRows([]);
@@ -92,12 +94,17 @@ export default function RequestsPage() {
   const handleDelete = (id) => {
     deleteRequestForUser(id, user.token)
       .then((response) => {
-        if(response.ok) {
+        if (response.ok) {
           var array = rows.filter((i) => i.id !== id);
           setRows(array);
         }
       })
   };
+
+  const handleEdit = (id) => {
+    setRequest(rows.find((r) => r.id === id));
+    history.push('/request-editing');
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -134,7 +141,7 @@ export default function RequestsPage() {
                     <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
                       <DeleteIcon />
                     </IconButton>
-                    <IconButton onClick={() => {history.push('/request-editing')}} aria-label="delete">
+                    <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
                       <EditIcon />
                     </IconButton>
                   </TableCell>
