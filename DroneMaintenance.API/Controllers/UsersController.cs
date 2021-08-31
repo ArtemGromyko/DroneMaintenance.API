@@ -1,6 +1,8 @@
 ﻿using DroneMaintenance.API.Filters.ActionFilters;
 using DroneMaintenance.BLL.Contracts;
+using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.RequestModels.User;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -74,6 +76,39 @@ namespace DroneMaintenance.API.Controllers
             await _usersService.UpdateToken(id, null);
 
             return Ok();
+        }
+
+
+        [HttpGet("{userId/requests/{id}}")]
+        public async Task<ActionResult<ServiceRequestModel>> GetServiceRequestForUserAsync(Guid userId, Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("{userId}/requests")]
+        public async Task<ActionResult<ServiceRequestModel>> GetServiceRequestsForUserAsync(Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{userId}/requests")]
+        public async Task<ActionResult<ServiceRequestModel>> CreateServiceRequestForUserAsync(Guid userId,
+        [FromBody] ServiceRequestForCreationModel request)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("{userId}/requests/{id}")]
+        public async Task<ActionResult<ServiceRequestModel>> UpdateServiceRequestAsync(Guid userId, Guid id,
+        [FromBody] ServiceRequestForUpdateModel request)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("{userId}/requests/{id}")]
+        public async Task<ActionResult<ServiceRequestModel>> DeleteServiceRequestModel(Guid userId, Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
