@@ -134,7 +134,7 @@ export default function RequestsPage() {
                     <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
                       <DeleteIcon />
                     </IconButton>
-                    <IconButton onClick={() => {}} aria-label="delete">
+                    <IconButton onClick={() => {history.push('/request-editing')}} aria-label="delete">
                       <EditIcon />
                     </IconButton>
                   </TableCell>

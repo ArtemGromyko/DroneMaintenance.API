@@ -147,7 +147,7 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task<ServiceRequestModel> CreateRequestForClientAsyn(Guid clientId, ServiceRequestForCreationModel requestForCreationModel)
         {
-            await CheckClientExistence(clientId);
+            /*await CheckClientExistence(clientId);
 
             var droneEntity = await _droneRepository.GetDroneByIdAsync(requestForCreationModel.DroneId);
             CheckEntityExistence(requestForCreationModel.DroneId, droneEntity, nameof(Drone));
@@ -156,7 +156,9 @@ namespace DroneMaintenance.BLL.Services
             var requestEntity = _mapper.Map<ServiceRequest>(requestForCreationModel);
             await _requestRepository.CreateServiceRequestAsync(requestEntity);
 
-            return _mapper.Map<ServiceRequestModel>(requestEntity);
+            return _mapper.Map<ServiceRequestModel>(requestEntity);*/
+
+            throw new NotImplementedException();
         }
 
         public async Task<ServiceRequestModel> UpdateRequestForClientAsync(Guid clientId, Guid id, ServiceRequestForUpdateModel requestForUpdateModel)

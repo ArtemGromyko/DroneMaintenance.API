@@ -64,4 +64,24 @@ const deleteRequestForUser = async (id, token) => {
     return await fetch(`${_apiBase}/requests/${id}`, deleteOptions);
 }
 
-export { getAllDrones, authenticate, signOut, getRequestsForUser, deleteRequestForUser };
+const createRequestForUser = async (id, token, request) => {
+
+    request.userId = id;
+    request.droneId = '9fffa88b-91c5-42a6-8692-1fd8701fb0e4';
+
+    console.log(request);
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(request)
+    };
+
+    return await fetch(`${_apiBase}/requests/`, options);
+}
+
+export { getAllDrones, authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser };

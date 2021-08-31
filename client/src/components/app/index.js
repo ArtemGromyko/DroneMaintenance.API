@@ -39,6 +39,11 @@ function App() {
                     <RequestForm mode='creating'/>
                 </WithJwt>
             </Route>
+            <Route path='/request-editing'>
+                <WithJwt>
+                    <RequestForm mode='editing'/>
+                </WithJwt>
+            </Route>
         </div>
     );
 }
