@@ -66,6 +66,7 @@ namespace DroneMaintenance.BLL.Services
         public async Task<ServiceRequestModel> UpdateRequestAsync(Guid id, ServiceRequestForUpdateModel requestForUpdateModel)
         {
             var requestEntity = await TryGetRequestByIdAsync(id);
+            _mapper.Map(requestForUpdateModel, requestEntity);
 
             await _requestRepository.UpdateServiceRequestAsync(requestEntity);
 

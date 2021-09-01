@@ -103,7 +103,7 @@ namespace DroneMaintenance.BLL.Services
                 case ServiceType.Diagnostics:
                     return "Diagnostics";
                 case ServiceType.RepairWithoutReplacement:
-                    return "Repair Without Replacement";
+                    return "Repair without replacement";
                 case ServiceType.RepairWithReplacement:
                     return "Repair with replacement";
                 default:

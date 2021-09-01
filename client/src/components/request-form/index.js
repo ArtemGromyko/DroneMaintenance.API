@@ -9,7 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { createRequestForUser } from '../../services/api-service';
+import { createRequestForUser, updateRequestForUser } from '../../services/api-service';
 import { MainContext } from '../../contexts/main-context';
 import { useHistory } from 'react-router';
 import { RequestsContext } from '../../contexts/requests-context';
@@ -95,16 +95,26 @@ const RequestForm = ({ mode }) => {
     }
 
     async function handleCreate() {
-        const request = {
+        const createdRequest = {
             serviceType,
             description
         };
 
-        return await createRequestForUser(user.id, user.token, request)
+        console.log('handleCreate()');
+        console.log(serviceType);
+        console.log(description);
+        console.log(createdRequest);
+        return await createRequestForUser(user.id, user.token, createdRequest);
     }
 
     async function handleUpdate() {
-
+        const updatedRequest = {
+            serviceType,
+            description
+        };
+        console.log('handleUpdate()');
+        console.log(updatedRequest);
+        return await updateRequestForUser(user.id, user.token, request.id, updatedRequest);
     }
 
     return (

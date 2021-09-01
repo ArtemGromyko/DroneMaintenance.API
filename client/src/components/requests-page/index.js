@@ -82,6 +82,7 @@ export default function RequestsPage() {
   useEffect(() => {
     if (user) {
       getRequestsForUser(user.id, user.token).then((res) => setRows(res));
+      console.log(rows);
     } else {
       setRows([]);
     }
