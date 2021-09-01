@@ -111,7 +111,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ClientModel>> UpdateClientAsync(Guid id, [FromBody] ClientForUpdateModel client)
+        public async Task<ActionResult<ClientModel>> UpdateClientAsync(Guid id, [FromBody] CommentForUpdateModel client)
         {
             var clientModel = await _clientsService.UpdateClientAsync(id, client);
 
@@ -133,7 +133,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ClientModel>> PartiallyUpdateClientAsync(Guid id, [FromBody] JsonPatchDocument<ClientForUpdateModel> patchDoc)
+        public async Task<ActionResult<ClientModel>> PartiallyUpdateClientAsync(Guid id, [FromBody] JsonPatchDocument<CommentForUpdateModel> patchDoc)
         {
             var (clientToPatch, clientEntity) = await _clientsService.GetClientToPatch(id);
 

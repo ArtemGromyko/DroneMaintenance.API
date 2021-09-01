@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DroneMaintenance.Models.RequestModels.Comment
 {
-    class CommentForUpdateModel
+    public class CommentForUpdateModel
     {
         public string Header { get; set; }
         public string Text { get; set; }
