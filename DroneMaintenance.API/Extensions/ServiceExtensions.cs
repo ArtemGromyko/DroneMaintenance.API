@@ -48,6 +48,7 @@ namespace DroneMaintenance.API.Extensions
             services.AddScoped<IContractSparePartRepository, ContractSparePartRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
         }
 
         public static void ConfigureServices(this IServiceCollection services)
@@ -58,6 +59,7 @@ namespace DroneMaintenance.API.Extensions
             services.AddScoped<ISparePartsService, SparePartsService>();
             services.AddScoped<IContractsService, ContractsService>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<ICommentsService, CommentsService>();
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)

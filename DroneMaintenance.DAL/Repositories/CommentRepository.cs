@@ -12,10 +12,10 @@ namespace DroneMaintenance.DAL.Repositories
         public CommentRepository(RepositoryContext repositoryContext) : base(repositoryContext) {}
 
         public async Task<List<Comment>> GetAllCommentsAsync() =>
-            await FindAll().ToListAsync();
+            await FindAll().Include(c => c.User).ToListAsync();
 
         public async Task<Comment> GetCommentByIdAsync(Guid id) =>
-            await FindByCondition(c => c.Id.Equals(id)).SingleOrDefaultAsync();
+            await FindByCondition(c => c.Id.Equals(id)).Include(c => c.User).SingleOrDefaultAsync();
 
         public async Task UpdateCommentAsync(Comment comment) =>
             await UpdateAsync(comment);

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DroneMaintenance.Models.RequestModels.Client
+﻿namespace DroneMaintenance.Models.RequestModels.Client
 {
-    class ClientForUpdateModel
+    public class ClientForUpdateModel : ClientForManipulationModel
     {
     }
 }

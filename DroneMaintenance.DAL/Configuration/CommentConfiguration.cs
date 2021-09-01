@@ -15,16 +15,16 @@ namespace DroneMaintenance.DAL.Configuration
             (
                 new Comment
                 {
-                    Id = new Guid("6b147a66-d62e-4252-9add-6cc17cee5d3b"),
+                    Id = new Guid("75518431-3035-4a5d-8f91-d8a6e8f8af47"),
                     Header = "Header1",
                     Text = "some text some text some text  some text  some text  some text  some text  some text  some text" +
                     " some text  some text  some text  some text  some text  some text  some text  some text  some text  some text" +
                     " some text  some text  some text  some text  some text  some text  some text  some text  some text  some text",
-                    UserId = new Guid("19dbd59c-cb4c-4f03-8703-08d96c7c875f")
+                    UserId = new Guid("85d2dad8-5ad5-4ad7-ab42-2a883cf0846a")
                 },
                 new Comment
                 {
-                    Id = new Guid("005bc605-f6b6-42db-a24d-ca2884d7a68e"),
+                    Id = new Guid("601ec7d3-b5c9-43c8-8adb-63fdc67bb1bd"),
                     Header = "Header2",
                     Text = "some text some text some text  some text  some text  some text  some text  some text  some text" +
                     " some text  some text  some text  some text  some text  some text  some text  some text  some text  some text" +
@@ -33,7 +33,7 @@ namespace DroneMaintenance.DAL.Configuration
                 },
                 new Comment
                 {
-                    Id = new Guid("d975dfe7-c50a-4c62-aaa9-b2897c0fd330"),
+                    Id = new Guid("2e296f23-9a12-4991-ad3a-d5ea454d64db"),
                     Header = "Header3",
                     Text = "some text some text some text  some text  some text  some text  some text  some text  some text" +
                     " some text  some text  some text  some text  some text  some text  some text  some text  some text  some text" +

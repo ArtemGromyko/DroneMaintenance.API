@@ -1,5 +1,6 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.Models.RequestModels.Client;
+using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.Client;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
@@ -111,7 +112,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ClientModel>> UpdateClientAsync(Guid id, [FromBody] CommentForUpdateModel client)
+        public async Task<ActionResult<ClientModel>> UpdateClientAsync(Guid id, [FromBody] ClientForUpdateModel client)
         {
             var clientModel = await _clientsService.UpdateClientAsync(id, client);
 
@@ -133,7 +134,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ClientModel>> PartiallyUpdateClientAsync(Guid id, [FromBody] JsonPatchDocument<CommentForUpdateModel> patchDoc)
+        public async Task<ActionResult<ClientModel>> PartiallyUpdateClientAsync(Guid id, [FromBody] JsonPatchDocument<ClientForUpdateModel> patchDoc)
         {
             var (clientToPatch, clientEntity) = await _clientsService.GetClientToPatch(id);
 

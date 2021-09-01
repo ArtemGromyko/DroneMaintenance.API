@@ -2,7 +2,7 @@
 
 namespace DroneMaintenance.Models.ResponseModels.Comment
 {
-    public class Comment
+    public class CommentModel
     {
         public Guid Id { get; set; }
         public string Header { get; set;  }

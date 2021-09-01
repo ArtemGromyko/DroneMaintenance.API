@@ -31,17 +31,17 @@ namespace DroneMaintenance.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Comments",
                 columns: new[] { "Id", "Header", "Text", "UserId" },
-                values: new object[] { new Guid("6b147a66-d62e-4252-9add-6cc17cee5d3b"), "Header1", "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text", new Guid("19dbd59c-cb4c-4f03-8703-08d96c7c875f") });
+                values: new object[] { new Guid("75518431-3035-4a5d-8f91-d8a6e8f8af47"), "Header1", "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text", new Guid("85d2dad8-5ad5-4ad7-ab42-2a883cf0846a") });
 
             migrationBuilder.InsertData(
                 table: "Comments",
                 columns: new[] { "Id", "Header", "Text", "UserId" },
-                values: new object[] { new Guid("005bc605-f6b6-42db-a24d-ca2884d7a68e"), "Header2", "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text", new Guid("85d2dad8-5ad5-4ad7-ab42-2a883cf0846a") });
+                values: new object[] { new Guid("601ec7d3-b5c9-43c8-8adb-63fdc67bb1bd"), "Header2", "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text", new Guid("85d2dad8-5ad5-4ad7-ab42-2a883cf0846a") });
 
             migrationBuilder.InsertData(
                 table: "Comments",
                 columns: new[] { "Id", "Header", "Text", "UserId" },
-                values: new object[] { new Guid("d975dfe7-c50a-4c62-aaa9-b2897c0fd330"), "Header3", "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text", new Guid("bf62c2cd-aa17-47ea-b575-f8d769966fb9") });
+                values: new object[] { new Guid("2e296f23-9a12-4991-ad3a-d5ea454d64db"), "Header3", "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text", new Guid("bf62c2cd-aa17-47ea-b575-f8d769966fb9") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",

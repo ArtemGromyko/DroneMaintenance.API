@@ -38,29 +38,40 @@ namespace DroneMaintenance.BLL.Services
             CheckEntityExistence(id, userEntity, nameof(User));
 
             var commentModel = _mapper.Map<CommentModel>(commentEntity);
-            commentModel.UserName = userEntity.Name;
 
             return commentModel;
         }
 
-        public Task<List<CommentModel>> GetCommentsAsync()
+        public async Task<List<CommentModel>> GetCommentsAsync()
         {
-            throw new NotImplementedException();
+            var commentEntities = await _commentRepository.GetAllCommentsAsync();
+            var commentModels = _mapper.Map<List<CommentModel>>(commentEntities);  
+
+            return commentModels;
         }
 
-        public Task<CommentModel> UpdateCommentAsync(Guid id, CommentForUpdateModel commentForUpdateModel)
+        public async Task<CommentModel> UpdateCommentAsync(Guid id, CommentForUpdateModel commentForUpdateModel)
         {
-            throw new NotImplementedException();
+            var commentEntity = await TryGetCommentEntityByIdAsync(id);
+
+            var commentModel = _mapper.Map<CommentModel>(commentEntity);
+
+            return commentModel;
         }
 
-        public Task<CommentModel> CreateCommentAsync(CommentForCreationModel commentForCreationModel)
+        public async Task<CommentModel> CreateCommentAsync(CommentForCreationModel commentForCreationModel)
         {
-            throw new NotImplementedException();
+            var commentEntity = _mapper.Map<Comment>(commentForCreationModel);
+            await _commentRepository.CreateCommentAsync(commentEntity);
+
+            return _mapper.Map<CommentModel>(commentEntity);
         }
 
-        public Task DeleteCommentAsync(Guid id)
+        public async Task DeleteCommentAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var commentEntity = await TryGetCommentEntityByIdAsync(id);
+
+            await _commentRepository.DeleteCommentAsync(commentEntity);
         }
     }
 }

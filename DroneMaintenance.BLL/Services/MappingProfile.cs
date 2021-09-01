@@ -30,11 +30,12 @@ namespace DroneMaintenance.BLL.Services
             CreateMapsForSparePart();
             CreateMapsForContractSparePart();
             CreateMapsForUser();
+            CreateMapsForComments();
         }
 
         private void CreateMapsForComments()
         {
-            CreateMap<Comment, CommentModel>();
+            CreateMap<Comment, CommentModel>().ForMember(c => c.UserName, x => x.MapFrom(cm => cm.User.Name));
             CreateMap<CommentForCreationModel, Comment>();
             CreateMap<CommentForUpdateModel, Comment>();
         }
