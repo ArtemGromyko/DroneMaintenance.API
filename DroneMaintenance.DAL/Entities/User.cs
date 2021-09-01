@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DroneMaintenance.DAL.Entities
@@ -15,6 +16,10 @@ namespace DroneMaintenance.DAL.Entities
         [Required]
         public string Salt { get; set; }
         public string Token {  get; set; }
+
         public Guid RoleId { get; set; }
+        public Role Role { get; set; }
+
+        public List<Comment> Comments { get; set; }
     }
 }

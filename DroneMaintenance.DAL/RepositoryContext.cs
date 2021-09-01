@@ -16,6 +16,7 @@ namespace DroneMaintenance.DAL
         public DbSet<ContractSparePart> ContractSpareParts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Comment> Comments { get; set; }
  
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +29,7 @@ namespace DroneMaintenance.DAL
             modelBuilder.ApplyConfiguration(new ContractSparePartConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new CommentConfiguration());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

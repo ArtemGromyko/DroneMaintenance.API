@@ -9,6 +9,7 @@ import './app.css';
 import RequestsPage from '../requests-page';
 import RequestForm from '../request-form';
 import { RequestsContextProvider } from '../../contexts/requests-context';
+import CommentsPage from '../comments-page';
 
 function App() {
     return (
@@ -44,6 +45,17 @@ function App() {
                 <Route path='/request-editing'>
                     <WithJwt>
                         <RequestForm mode='editing' />
+                    </WithJwt>
+                </Route>
+                <Route path='/request-editing'>
+                    <WithJwt>
+                        <RequestForm mode='editing' />
+                    </WithJwt>
+                </Route>
+                <Route path='/comments'>
+                    <WithJwt>
+                        <Header />
+                        <CommentsPage />
                     </WithJwt>
                 </Route>
             </RequestsContextProvider>
