@@ -47,11 +47,6 @@ function App() {
                         <RequestForm mode='editing' />
                     </WithJwt>
                 </Route>
-                <Route path='/request-editing'>
-                    <WithJwt>
-                        <RequestForm mode='editing' />
-                    </WithJwt>
-                </Route>
                 <Route path='/comments'>
                     <WithJwt>
                         <Header />
