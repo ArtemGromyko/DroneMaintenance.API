@@ -74,10 +74,13 @@ const useStyles = makeStyles({
 
 export default function RequestsPage() {
   const [rows, setRows] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const { user } = useContext(MainContext);
   const history = useHistory();
   const { setRequest } = useContext(RequestsContext);
+  const classes = useStyles();
 
   useEffect(() => {
     if (user) {
@@ -87,10 +90,6 @@ export default function RequestsPage() {
       setRows([]);
     }
   }, [user]);
-
-  const classes = useStyles();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleDelete = (id) => {
     deleteRequestForUser(id, user.token)

@@ -103,5 +103,8 @@ const updateRequestForUser = async (id, token, requestId, updatedRequest) => {
     return await fetch(`${_apiBase}/requests/${requestId}`, options);
 }
 
+const getAllComments = async (token) =>
+    await getResource('/comments/', {headers: {authorization: 'Bearer ' + token}});
 
-export { getAllDrones, authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser };
+export { getAllDrones, 
+    authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser, getAllComments };
