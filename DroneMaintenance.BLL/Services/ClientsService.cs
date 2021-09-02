@@ -53,7 +53,7 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task<ServiceRequest> TryGetRequestForClientAsync(Guid clientId, Guid id)
         {
-            var requestEntity = await _requestRepository.GetServiceRequestForClientAsync(clientId, id);
+            var requestEntity = await _requestRepository.GetServiceRequestForUserAsync(clientId, id);
             CheckEntityExistence(clientId, id, requestEntity, nameof(ServiceRequest), nameof(Client));
 
             return requestEntity;
@@ -121,7 +121,7 @@ namespace DroneMaintenance.BLL.Services
         {
             await CheckClientExistence(clientId);
 
-            var requestEntities = await _requestRepository.GetAllServiceRequestsForClientAsync(clientId);
+            var requestEntities = await _requestRepository.GetAllServiceRequestsForUserAsync(clientId);
 
             return _mapper.Map<List<ServiceRequestModel>>(requestEntities);
         }

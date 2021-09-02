@@ -2,7 +2,9 @@
 using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
+using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.RequestModels.User;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.User;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
@@ -22,17 +24,19 @@ namespace DroneMaintenance.BLL.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IServiceRequestRepository _requestRepository;
         private readonly IConfiguration _configuration;
 
-        public UsersService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration, 
-        IMapper mapper)
+        public UsersService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration,
+        IMapper mapper, IServiceRequestRepository requestRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _configuration = configuration;
             _mapper = mapper;
+            _requestRepository = requestRepository;
         }
-        
+
         byte[] GenerateSalt()
         {
             var salt = new byte[16];
@@ -148,6 +152,60 @@ namespace DroneMaintenance.BLL.Services
 
             userEntity.Token = token;
             await _userRepository.UpdateUserAsync(userEntity);
+        }
+
+        public async Task<ServiceRequest> TryGetServiceRequestEntityForUserAsync(Guid userId, Guid id)
+        {
+            var userEntity = await _userRepository.GetUserByIdAsync(userId);
+            CheckEntityExistence(id, userEntity, nameof(User));
+
+            var requestEntity = await _requestRepository.GetServiceRequestForUserAsync(userId, id);
+            CheckEntityExistence(userId, id, requestEntity, nameof(ServiceRequest), nameof(User));
+
+            return requestEntity;
+        }
+
+        public async Task<ServiceRequestModel> GetServiceRequestForUserAsync(Guid userId, Guid id)
+        {
+            var requestEntity = await TryGetServiceRequestEntityForUserAsync(userId, id);
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
+        }
+
+        public async Task<List<ServiceRequestModel>> GetServiceRequestsForUserAsync(Guid userId)
+        {
+            var requestEntities = await _requestRepository.GetAllServiceRequestsForUserAsync(userId);
+
+            return _mapper.Map<List<ServiceRequestModel>>(requestEntities);
+        }
+
+        public async Task<ServiceRequestModel> CreateServiceRequestForUserAsync(Guid userId, 
+        ServiceRequestForCreationModel requestForCreationModel)
+        {
+            var requestEntity = _mapper.Map<ServiceRequest>(requestForCreationModel);
+            requestEntity.UserId = userId;
+
+            await _requestRepository.CreateServiceRequestAsync(requestEntity);
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
+        }
+
+        public async Task<ServiceRequestModel> UpdateServiceRequestForUserAsync(Guid userId, Guid id, 
+        ServiceRequestForUpdateModel requestForUpdateModel)
+        {
+            var requestEntity = await TryGetServiceRequestEntityForUserAsync(userId, id);
+            _mapper.Map(requestForUpdateModel, requestEntity);
+
+            await _requestRepository.UpdateServiceRequestAsync(requestEntity);
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
+        }
+
+        public async Task DeleteServiceRequestForUserAsync(Guid userId, Guid id)
+        {
+            var requestEntity = await TryGetServiceRequestEntityForUserAsync(userId, id);
+
+            await _requestRepository.DeleteServiceRequestAsync(requestEntity);
         }
     }
 }

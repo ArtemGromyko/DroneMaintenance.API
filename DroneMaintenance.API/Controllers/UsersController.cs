@@ -78,37 +78,30 @@ namespace DroneMaintenance.API.Controllers
             return Ok();
         }
 
-
         [HttpGet("{userId}/requests/{id}")]
-        public async Task<ActionResult<ServiceRequestModel>> GetServiceRequestForUserAsync(Guid userId, Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<ActionResult<ServiceRequestModel>> GetServiceRequestForUserAsync(Guid userId, Guid id) =>
+            await _usersService.GetServiceRequestForUserAsync(userId, id);
 
         [HttpGet("{userId}/requests")]
-        public async Task<ActionResult<ServiceRequestModel>> GetServiceRequestsForUserAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<ActionResult<IEnumerable<ServiceRequestModel>>> GetServiceRequestsForUserAsync(Guid userId) =>
+            await _usersService.GetServiceRequestsForUserAsync(userId);
 
         [HttpPost("{userId}/requests")]
         public async Task<ActionResult<ServiceRequestModel>> CreateServiceRequestForUserAsync(Guid userId,
-        [FromBody] ServiceRequestForCreationModel request)
-        {
-            throw new NotImplementedException();
-        }
+        [FromBody] ServiceRequestForCreationModel request) =>
+            await _usersService.CreateServiceRequestForUserAsync(userId, request);
 
         [HttpPut("{userId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> UpdateServiceRequestAsync(Guid userId, Guid id,
-        [FromBody] ServiceRequestForUpdateModel request)
-        {
-            throw new NotImplementedException();
-        }
+        [FromBody] ServiceRequestForUpdateModel request) =>
+            await _usersService.UpdateServiceRequestForUserAsync(userId, id, request);
 
         [HttpDelete("{userId}/requests/{id}")]
         public async Task<ActionResult<ServiceRequestModel>> DeleteServiceRequestModel(Guid userId, Guid id)
         {
-            throw new NotImplementedException();
+            await _usersService.DeleteServiceRequestForUserAsync(userId, id);
+
+            return NoContent();
         }
     }
 }
