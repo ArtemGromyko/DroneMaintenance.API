@@ -10,6 +10,7 @@ import RequestsPage from '../requests-page';
 import RequestForm from '../request-form';
 import { RequestsContextProvider } from '../../contexts/requests-context';
 import CommentsPage from '../comments-page';
+import DronesPage from '../drones-page';
 
 function App() {
     return (
@@ -51,6 +52,12 @@ function App() {
                     <WithJwt>
                         <Header />
                         <CommentsPage />
+                    </WithJwt>
+                </Route>
+                <Route path='/drones'>
+                    <WithJwt>
+                        <Header />
+                        <DronesPage />
                     </WithJwt>
                 </Route>
             </RequestsContextProvider>

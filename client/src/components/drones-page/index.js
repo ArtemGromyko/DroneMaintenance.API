@@ -11,12 +11,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import { MainContext } from '../../contexts/main-context';
 import { RequestsContext } from '../../contexts/requests-context';
 import { getAllComments } from '../../services/api-service';
-import { useHistory } from 'react-router';
 import { Grid } from '@material-ui/core';
+import { getAllDrones } from '../../services/api-service';
 
 const useStyles = makeStyles({
     root: {
-        width: '60%',
+        width: '30%',
         margin: '0 auto'
     },
     card: {
@@ -36,21 +36,21 @@ const useStyles = makeStyles({
     },
 });
 
-const CommentsPage = () => {
+const DronesPage = () => {
     const [rows, setRows] = useState([]);
 
     const { user } = useContext(MainContext);
-    const history = useHistory();
     const { setRequest } = useContext(RequestsContext);
     const classes = useStyles();
 
     useEffect(() => {
         if (user) {
-            getAllComments(user.token).then((res) => setRows(res));
+            getAllDrones(user.token).then((res) => setRows(res));
         } else {
             setRows([]);
         }
     }, [user]);
+
 
     return (
         <Grid className={classes.root}>
@@ -59,22 +59,13 @@ const CommentsPage = () => {
                     <Card key={row.id} className={classes.card} variant="outlined">
                         <CardContent>
                             <Typography variant="h5" component="h2">
-                                {row.header}
+                                Model: {row.model}
+
                             </Typography>
                             <Typography variant="body2" component="p">
-                                {row.text}
+                                Manufacturer: {row.manufacturer}
                             </Typography>
                         </CardContent>
-                        {user?.id === row.userId ? (
-                            <CardActions>
-                                <IconButton>
-                                    <DeleteIcon />
-                                </IconButton>
-                                <IconButton>
-                                    <EditIcon />
-                                </IconButton>
-                            </CardActions>
-                        ) : (null)}
                     </Card>
                 );
             })}
@@ -82,4 +73,4 @@ const CommentsPage = () => {
     );
 }
 
-export default CommentsPage;
+export default DronesPage;

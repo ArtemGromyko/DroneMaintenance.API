@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
 {
-    //[Authorize(Roles = "admin")]
+    [Authorize]
     [Produces("application/json")]
     [Route("api/drones")]
     [ApiController]

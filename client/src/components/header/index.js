@@ -43,7 +43,7 @@ const useStyles = makeStyles({
 });
 
 const Header = () => {
-    const { setUser, user} = useContext(MainContext);
+    const { setUser, user } = useContext(MainContext);
     const history = useHistory();
     const classes = useStyles();
 
@@ -69,6 +69,11 @@ const Header = () => {
 
                     {!user ? (null) : (
                         <>
+                            <h4>
+                                <Link className={classes.link} to="/drones">
+                                    Drones
+                                </Link>
+                            </h4>
                             <h4>
                                 <Link className={classes.link} to="/requests">
                                     Requests

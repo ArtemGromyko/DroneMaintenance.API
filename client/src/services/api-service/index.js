@@ -35,9 +35,6 @@ async function postResource(url, options) {
     return await fetch(`${_apiBase}${url}`, options);
 }
 
-const getAllDrones = () =>
-    getResource(`/drones/`);
-
 const getRequestsForUser = async (id, token) => {
     console.log(id);
     return await getResource(`/requests/`, {headers: {authorization: 'Bearer ' + token}});
@@ -105,6 +102,9 @@ const updateRequestForUser = async (id, token, requestId, updatedRequest) => {
 
 const getAllComments = async (token) =>
     await getResource('/comments/', {headers: {authorization: 'Bearer ' + token}});
+
+const getAllDrones = async (token) =>
+    await getResource('/drones/', {headers: {authorization: 'Bearer ' + token}});
 
 export { getAllDrones, 
     authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser, getAllComments };
