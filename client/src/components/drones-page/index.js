@@ -60,7 +60,6 @@ const DronesPage = () => {
                         <CardContent>
                             <Typography variant="h5" component="h2">
                                 Model: {row.model}
-
                             </Typography>
                             <Typography variant="body2" component="p">
                                 Manufacturer: {row.manufacturer}

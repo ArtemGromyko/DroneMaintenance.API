@@ -34,6 +34,16 @@ const useStyles = makeStyles({
     pos: {
         marginBottom: 12,
     },
+    createCommentButton: {
+        background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+        color: 'white',
+    },
+    buttons: {
+        marginTop: '1rem',
+    }
 });
 
 const CommentsPage = () => {
@@ -54,10 +64,37 @@ const CommentsPage = () => {
 
     return (
         <Grid className={classes.root}>
+            <Grid className={classes.buttons} direction='row' container alignItems='center' justifyContent='space-between'>
+                <Button className={classes.createCommentButton}>write a comment</Button>
+                <Grid>
+                <Button variant="outlined" color="primary">
+                    positive
+                </Button>
+                <Button variant="outlined" color="secondary">
+                    negative
+                </Button>
+                <Button variant="outlined" disabled>
+                    all
+                </Button>
+                <Button variant="outlined" color="primary" href="#outlined-buttons">
+                    mine
+                </Button>
+                </Grid>
+                
+            </Grid>
+
             {rows.map((row) => {
                 return (
                     <Card key={row.id} className={classes.card} variant="outlined">
                         <CardContent>
+                            <Grid direction='row' container alignItems='center' justifyContent='space-between'>
+                                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                    {row.userName}
+                                </Typography>
+                                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                    {row.date}
+                                </Typography>
+                            </Grid>
                             <Typography variant="h5" component="h2">
                                 {row.header}
                             </Typography>
