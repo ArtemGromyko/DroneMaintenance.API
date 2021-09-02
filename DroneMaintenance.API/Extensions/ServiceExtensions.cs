@@ -19,8 +19,6 @@ namespace DroneMaintenance.API.Extensions
 {
     public static class ServiceExtensions
     {
-
-
         public static void ConfigureCors(this IServiceCollection services) =>
             services.AddCors(options =>
             {
@@ -40,7 +38,6 @@ namespace DroneMaintenance.API.Extensions
 
         public static void ConfigureRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IDroneRepository, DroneRepository>();
             services.AddScoped<IServiceRequestRepository, ServiceRequestRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
@@ -53,7 +50,6 @@ namespace DroneMaintenance.API.Extensions
 
         public static void ConfigureServices(this IServiceCollection services)
         {
-            services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IDronesService, DronesService>();
             services.AddScoped<IRequestsService, RequestsService>();
             services.AddScoped<ISparePartsService, SparePartsService>();

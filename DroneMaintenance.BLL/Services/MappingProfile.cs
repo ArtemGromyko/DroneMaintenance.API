@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DroneMaintenance.DAL.Entities;
-using DroneMaintenance.Models.RequestModels.Client;
 using DroneMaintenance.Models.RequestModels.Comment;
 using DroneMaintenance.Models.RequestModels.Contract;
 using DroneMaintenance.Models.RequestModels.ContractSparePart;
@@ -8,7 +7,6 @@ using DroneMaintenance.Models.RequestModels.Drone;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.RequestModels.SparePart;
 using DroneMaintenance.Models.RequestModels.User;
-using DroneMaintenance.Models.ResponseModels.Client;
 using DroneMaintenance.Models.ResponseModels.Comment;
 using DroneMaintenance.Models.ResponseModels.Contract;
 using DroneMaintenance.Models.ResponseModels.ContractSparePart;
@@ -24,7 +22,6 @@ namespace DroneMaintenance.BLL.Services
         public MappingProfile()
         {
             CreateMapsForServiceRequest();
-            CreateMapsForClient();
             CreateMapsForDrone();
             CreateMapsForContract();
             CreateMapsForSparePart();
@@ -75,13 +72,6 @@ namespace DroneMaintenance.BLL.Services
                 .ForMember(srm => srm.ServiceType, opts => opts.MapFrom(x => GetServiceTypes(x.ServiceType)));
             CreateMap<ServiceRequestForCreationModel, ServiceRequest>();
             CreateMap<ServiceRequestForUpdateModel, ServiceRequest>().ReverseMap();
-        }
-
-        private void CreateMapsForClient()
-        {
-            CreateMap<Client, ClientModel>();
-            CreateMap<ClientForCreationModel, Client>();
-            CreateMap<CommentForUpdateModel, Client>().ReverseMap();
         }
 
         private void CreateMapsForDrone()
