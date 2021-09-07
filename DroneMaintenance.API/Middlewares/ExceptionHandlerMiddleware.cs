@@ -16,7 +16,7 @@ namespace DroneMaintenance.API.Middlewares
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context, ILoggerManager logger)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {

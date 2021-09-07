@@ -3,3 +3,4 @@ logs
 internal_logs
 New folder
 .dockerignore
+Dockerfile
