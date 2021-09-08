@@ -14,19 +14,21 @@ namespace DroneMaintenance
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureCors();
             services.ConfigureLoggerService();
-            services.ConfigureSqlContext(Configuration);
+            services.ConfigureSqlContext(Configuration, Environment);
             services.ConfigureRepositories();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.ConfigureServices();
@@ -37,9 +39,9 @@ namespace DroneMaintenance
             services.ConfigureAuthentication(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }

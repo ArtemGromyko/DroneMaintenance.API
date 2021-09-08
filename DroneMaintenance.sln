@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DroneMaintenance.Models", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DroneMaintenance.BLL", "DroneMaintenance.BLL\DroneMaintenance.BLL.csproj", "{7BF90686-8EAD-431B-9008-A53D40F33EBB}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E072C6E4-FD74-4FCB-B1DC-CA79123C073E}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0B3366FD-7A6E-47FF-9AFA-373979FD7599}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{7BF90686-8EAD-431B-9008-A53D40F33EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BF90686-8EAD-431B-9008-A53D40F33EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BF90686-8EAD-431B-9008-A53D40F33EBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E072C6E4-FD74-4FCB-B1DC-CA79123C073E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E072C6E4-FD74-4FCB-B1DC-CA79123C073E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E072C6E4-FD74-4FCB-B1DC-CA79123C073E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E072C6E4-FD74-4FCB-B1DC-CA79123C073E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B3366FD-7A6E-47FF-9AFA-373979FD7599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B3366FD-7A6E-47FF-9AFA-373979FD7599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B3366FD-7A6E-47FF-9AFA-373979FD7599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B3366FD-7A6E-47FF-9AFA-373979FD7599}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

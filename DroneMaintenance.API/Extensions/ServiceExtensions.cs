@@ -4,9 +4,11 @@ using DroneMaintenance.DAL;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
@@ -32,9 +34,17 @@ namespace DroneMaintenance.API.Extensions
         public static void ConfigureLoggerService(this IServiceCollection services) =>
             services.AddScoped<ILoggerManager, LoggerManager>();
 
-        public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
+        public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
+        {
+            var connectionString = "sqlConnection";
+            if(env.IsEnvironment("Docker"))
+            {
+                connectionString = connectionString.Insert(0, "docker");
+            }
+
             services.AddDbContext<RepositoryContext>(opts =>
-                opts.UseSqlServer(configuration.GetConnectionString("dockerSqlConnection")));
+                opts.UseSqlServer(configuration.GetConnectionString(connectionString)));
+        }
 
         public static void ConfigureRepositories(this IServiceCollection services)
         {

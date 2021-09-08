@@ -57,6 +57,40 @@ const Header = () => {
         });
     }
 
+    function authorize() {
+        if (user) {
+            if (user.role === 'user') {
+                return (
+                    <>
+                        <h4>
+                            <Link className={classes.link} to="/drones">
+                                Drones
+                            </Link>
+                        </h4>
+                        <h4>
+                            <Link className={classes.link} to="/requests">
+                                Requests
+                            </Link>
+                        </h4>
+                        <h4>
+                            <Link className={classes.link} to="/comments">
+                                Comments
+                            </Link>
+                        </h4>
+                    </>
+                );
+            } else if (user.role === 'admin') {
+                return (
+                    <>
+                        <h4>admin</h4>
+                    </>
+                )
+            }
+        } else {
+            return null;
+        }
+    }
+
     return (
         <Card variant='outlined'>
             <Typography>
@@ -67,25 +101,7 @@ const Header = () => {
                         </Link>
                     </h1>
 
-                    {!user ? (null) : (
-                        <>
-                            <h4>
-                                <Link className={classes.link} to="/drones">
-                                    Drones
-                                </Link>
-                            </h4>
-                            <h4>
-                                <Link className={classes.link} to="/requests">
-                                    Requests
-                                </Link>
-                            </h4>
-                            <h4>
-                                <Link className={classes.link} to="/comments">
-                                    Comments
-                                </Link>
-                            </h4>
-                        </>
-                    )}
+                    {authorize()}
 
                     {!user ? (
                         <Button className={classes.buttonIn} onClick={() => history.push('/login')}>Sign in</Button>

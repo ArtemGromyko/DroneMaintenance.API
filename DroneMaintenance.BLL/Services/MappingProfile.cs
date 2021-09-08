@@ -39,7 +39,7 @@ namespace DroneMaintenance.BLL.Services
 
         private void CreateMapsForUser()
         {
-            CreateMap<User, UserModel>();
+            CreateMap<User, UserModel>().ForMember(u => u.Role, um => um.MapFrom(um => um.Role.Name));
             CreateMap<RegistrationModel, User>();
             CreateMap<RegistrationModel, AuthenticationModel>();
         }

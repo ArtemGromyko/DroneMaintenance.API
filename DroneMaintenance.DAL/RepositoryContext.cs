@@ -8,7 +8,7 @@ namespace DroneMaintenance.DAL
     {
         public RepositoryContext(DbContextOptions<RepositoryContext> options) : base(options)
         {
-            Database.EnsureCreated();
+
         }
         public DbSet<Drone> Drones { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
