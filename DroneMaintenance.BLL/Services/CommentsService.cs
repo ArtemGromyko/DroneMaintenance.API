@@ -53,7 +53,6 @@ namespace DroneMaintenance.BLL.Services
         public async Task<CommentModel> UpdateCommentAsync(Guid id, CommentForUpdateModel commentForUpdateModel)
         {
             var commentEntity = await TryGetCommentEntityByIdAsync(id);
-
             var commentModel = _mapper.Map<CommentModel>(commentEntity);
 
             return commentModel;

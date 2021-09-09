@@ -10,5 +10,6 @@ namespace DroneMaintenance.Models.ResponseModels.Comment
         public DateTime Date { get; set;  }
         public Guid UserId { get; set; }    
         public string UserName {  get; set; }
+        public string UserRole { get; set; }
     }
 }

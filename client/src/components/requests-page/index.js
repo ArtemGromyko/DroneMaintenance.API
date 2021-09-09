@@ -18,11 +18,12 @@ import Button from '@material-ui/core/Button';
 import { getRequestsForUser } from '../../services/api-service';
 import { useHistory } from 'react-router';
 import { RequestsContext } from '../../contexts/requests-context';
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
 
 const columns = [
   {
     id: 'delete',
-    label: 'Action',
+    label: 'Actions',
   },
   {
     id: 'requestStatus',
@@ -143,6 +144,9 @@ export default function RequestsPage() {
                     </IconButton>
                     <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
                       <EditIcon />
+                    </IconButton>
+                    <IconButton>
+                      <NoteAddIcon />
                     </IconButton>
                   </TableCell>
 

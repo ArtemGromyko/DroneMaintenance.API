@@ -32,14 +32,17 @@ namespace DroneMaintenance.BLL.Services
 
         private void CreateMapsForComments()
         {
-            CreateMap<Comment, CommentModel>().ForMember(c => c.UserName, x => x.MapFrom(cm => cm.User.Name));
+            CreateMap<Comment, CommentModel>()
+                .ForMember(cm => cm.UserName, x => x.MapFrom(c => c.User.Name))
+                .ForMember(cm => cm.UserRole, x => x.MapFrom(c => c.User.Role.Name));
             CreateMap<CommentForCreationModel, Comment>();
             CreateMap<CommentForUpdateModel, Comment>();
         }
 
         private void CreateMapsForUser()
         {
-            CreateMap<User, UserModel>().ForMember(u => u.Role, um => um.MapFrom(um => um.Role.Name));
+            CreateMap<User, UserModel>()
+                .ForMember(u => u.Role, um => um.MapFrom(um => um.Role.Name));
             CreateMap<RegistrationModel, User>();
             CreateMap<RegistrationModel, AuthenticationModel>();
         }

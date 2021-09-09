@@ -28,8 +28,12 @@ const useStyles = makeStyles({
         margin: '0 2px',
         transform: 'scale(0.8)',
     },
-    title: {
+    titleUser: {
         fontSize: 14,
+    },
+    titleAdmin: {
+        fontSize: 14,
+        color: '#2196F3'
     },
     pos: {
         marginBottom: 12,
@@ -67,20 +71,19 @@ const CommentsPage = () => {
             <Grid className={classes.buttons} direction='row' container alignItems='center' justifyContent='space-between'>
                 <Button className={classes.createCommentButton}>write a comment</Button>
                 <Grid>
-                <Button variant="outlined" color="primary">
-                    positive
-                </Button>
-                <Button variant="outlined" color="secondary">
-                    negative
-                </Button>
-                <Button variant="outlined" disabled>
-                    all
-                </Button>
-                <Button variant="outlined" color="primary" href="#outlined-buttons">
-                    mine
-                </Button>
+                    <Button variant="outlined" color="primary">
+                        positive
+                    </Button>
+                    <Button variant="outlined" color="secondary">
+                        negative
+                    </Button>
+                    <Button variant="outlined" disabled>
+                        all
+                    </Button>
+                    <Button variant="outlined" color="primary" href="#outlined-buttons">
+                        mine
+                    </Button>
                 </Grid>
-                
             </Grid>
 
             {rows.map((row) => {
@@ -88,21 +91,27 @@ const CommentsPage = () => {
                     <Card key={row.id} className={classes.card} variant="outlined">
                         <CardContent>
                             <Grid direction='row' container alignItems='center' justifyContent='space-between'>
-                                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                    {row.userName}
-                                </Typography>
-                                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                {row.userRole === 'user' ? (
+                                    <Typography className={classes.titleUser} color='textSecondary' gutterBottom>
+                                        {row.userName}
+                                    </Typography>
+                                ) : (
+                                    <Typography className={classes.titleAdmin} color='primary' gutterBottom>
+                                        {row.userName} (admin)
+                                    </Typography>
+                                )}
+                                <Typography className={classes.title} color='textSecondary' gutterBottom>
                                     {row.date}
                                 </Typography>
                             </Grid>
-                            <Typography variant="h5" component="h2">
+                            <Typography variant='h5' component='h2'>
                                 {row.header}
                             </Typography>
-                            <Typography variant="body2" component="p">
+                            <Typography variant='body2' component='p'>
                                 {row.text}
                             </Typography>
                         </CardContent>
-                        {user?.id === row.userId ? (
+                        {user?.id === row.userId || user?.role === 'admin' ? (
                             <CardActions>
                                 <IconButton>
                                     <DeleteIcon />

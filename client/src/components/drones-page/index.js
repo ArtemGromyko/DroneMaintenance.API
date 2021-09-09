@@ -17,7 +17,8 @@ import { getAllDrones } from '../../services/api-service';
 const useStyles = makeStyles({
     root: {
         width: '30%',
-        margin: '0 auto'
+        margin: '0 auto',
+        marginTop: '1rem'
     },
     card: {
         minWidth: 275,
@@ -34,6 +35,13 @@ const useStyles = makeStyles({
     pos: {
         marginBottom: 12,
     },
+    addButton: {
+        background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+        color: 'white',
+    }
 });
 
 const DronesPage = () => {
@@ -54,20 +62,36 @@ const DronesPage = () => {
 
     return (
         <Grid className={classes.root}>
-            {rows.map((row) => {
-                return (
-                    <Card key={row.id} className={classes.card} variant="outlined">
-                        <CardContent>
-                            <Typography variant="h5" component="h2">
-                                Model: {row.model}
-                            </Typography>
-                            <Typography variant="body2" component="p">
-                                Manufacturer: {row.manufacturer}
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                );
-            })}
+            <Grid direction='row' container alignItems='center' justifyContent='space-between'>
+                <Typography variant='h5'>Here you can see maintained drones.</Typography>
+                <Button className={classes.addButton}>Add</Button>
+            </Grid>
+            <Grid className={classes.cards}>
+                {rows.map((row) => {
+                    return (
+                        <Card key={row.id} className={classes.card} variant='outlined'>
+                            <CardContent>
+                                <Typography variant='h5' component='h2'>
+                                    Model: {row.model}
+                                </Typography>
+                                <Typography variant='body2' component='p'>
+                                    Manufacturer: {row.manufacturer}
+                                </Typography>
+                            </CardContent>
+                            {user?.role === 'admin' ? (
+                                <CardActions>
+                                    <IconButton>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                    <IconButton>
+                                        <EditIcon />
+                                    </IconButton>
+                                </CardActions>
+                            ) : null}
+                        </Card>
+                    );
+                })}
+            </Grid>
         </Grid>
     );
 }

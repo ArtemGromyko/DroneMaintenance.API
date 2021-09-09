@@ -100,10 +100,6 @@ const RequestForm = ({ mode }) => {
             description
         };
 
-        console.log('handleCreate()');
-        console.log(serviceType);
-        console.log(description);
-        console.log(createdRequest);
         return await createRequestForUser(user.id, user.token, createdRequest);
     }
 

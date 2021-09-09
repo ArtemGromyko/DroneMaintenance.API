@@ -39,7 +39,11 @@ const useStyles = makeStyles({
         height: 48,
         padding: '0 30px',
         margin: 8,
-    }
+    },
+    admin: {
+        marginTop: 0,
+        color: "#2196F3"
+    },
 });
 
 const Header = () => {
@@ -62,6 +66,11 @@ const Header = () => {
             if (user.role === 'user') {
                 return (
                     <>
+                        <h1>
+                            <Link className={classes.link} to="/">
+                                Drone Maintenance
+                            </Link>
+                        </h1>
                         <h4>
                             <Link className={classes.link} to="/drones">
                                 Drones
@@ -82,12 +91,51 @@ const Header = () => {
             } else if (user.role === 'admin') {
                 return (
                     <>
-                        <h4>admin</h4>
+                        <div>
+                            <h1 style={{marginBottom: 0}}>
+                                <Link className={classes.link} to="/">
+                                    Drone Maintenance
+                                </Link>
+                            </h1>
+                            <p className={classes.admin}>admin</p>
+                        </div>
+
+                        <h4>
+                            <Link className={classes.link} to="/drones">
+                                Drones
+                            </Link>
+                        </h4>
+                        <h4>
+                            <Link className={classes.link} to="/requests">
+                                Requests
+                            </Link>
+                        </h4>
+                        <h4>
+                            <Link className={classes.link} to="/comments">
+                                Comments
+                            </Link>
+                        </h4>
+                        <h4>
+                            <Link className={classes.link} to="/comments">
+                                Contracts
+                            </Link>
+                        </h4>
+                        <h4>
+                            <Link className={classes.link} to="/comments">
+                                Users
+                            </Link>
+                        </h4>
                     </>
                 )
             }
         } else {
-            return null;
+            return (
+                <h1>
+                    <Link className={classes.link} to="/">
+                        Drone Maintenance
+                    </Link>
+                </h1>
+            );
         }
     }
 
@@ -95,11 +143,7 @@ const Header = () => {
         <Card variant='outlined'>
             <Typography>
                 <Grid className={classes.root} direction='row' container alignItems='center' justifyContent='space-between'>
-                    <h1>
-                        <Link className={classes.link} to="/">
-                            Drone Maintenance
-                        </Link>
-                    </h1>
+
 
                     {authorize()}
 

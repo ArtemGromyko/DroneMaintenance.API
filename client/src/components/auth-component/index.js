@@ -56,7 +56,6 @@ const AuthComponent = ({ isSignUp }) => {
                 })
                 .then((res) => {
                     setUser(res);
-                    console.log(user);
                     history.push('/');
                 });
         } else {
@@ -66,7 +65,6 @@ const AuthComponent = ({ isSignUp }) => {
                 })
                 .then((res) => {
                     setUser(res);
-                    console.log(user);
                     history.push('/');
                 });
         }
