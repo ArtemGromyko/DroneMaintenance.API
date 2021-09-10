@@ -19,6 +19,9 @@ import { getRequestsForUser } from '../../services/api-service';
 import { useHistory } from 'react-router';
 import { RequestsContext } from '../../contexts/requests-context';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import { Modal } from '@material-ui/core';
+import CheckIcon from '@material-ui/icons/Check';
+import Notification from '../notification';
 
 const columns = [
   {
@@ -48,7 +51,7 @@ const columns = [
   },
 ];
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     margin: '0 auto'
@@ -70,18 +73,48 @@ const useStyles = makeStyles({
   },
   pagination: {
     marginLeft: 'auto'
-  }
-});
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 
 export default function RequestsPage() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [open, setOpen] = React.useState(false);
 
   const { user } = useContext(MainContext);
   const history = useHistory();
   const { setRequest } = useContext(RequestsContext);
   const classes = useStyles();
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const body = (
+    <div className={classes.paper}>
+      <CheckIcon style={{ color: 'green' }} />
+      <h2>Contract created successfully</h2>
+      <p>
+        You can find it on the contracts page.
+      </p>
+    </div>
+  );
 
   useEffect(() => {
     if (user) {
@@ -116,8 +149,25 @@ export default function RequestsPage() {
     setPage(0);
   };
 
+  const handleContractCreate = (serviceType) => {
+    if(serviceType === 'Repair with replacement') {
+      //code for adding spare parts
+    } else {
+      
+    }
+  }
+
   return (
     <Paper className={classes.root}>
+      <Modal
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        {body}
+      </Modal>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -145,7 +195,7 @@ export default function RequestsPage() {
                     <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
                       <EditIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={handleOpen}>
                       <NoteAddIcon />
                     </IconButton>
                   </TableCell>
