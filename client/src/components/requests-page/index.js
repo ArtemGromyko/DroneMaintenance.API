@@ -146,6 +146,7 @@ export default function RequestsPage() {
     if (serviceType != 'Repair with replacement') {
       setOpenSuccess(true);
     } else {
+      history.push('/contract-form');
       setOpenFail(true);
     }
 
@@ -214,7 +215,8 @@ export default function RequestsPage() {
                     <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
                       <EditIcon />
                     </IconButton>
-                    {user?.role === 'admin' ? (<IconButton onClick={() => handleOpen(row.serviceType)}>
+                    {user?.role === 'admin' ? 
+                    (<IconButton onClick={() => handleOpen(row.serviceType)}>
                       <NoteAddIcon />
                     </IconButton>) : null}
                   </TableCell>
