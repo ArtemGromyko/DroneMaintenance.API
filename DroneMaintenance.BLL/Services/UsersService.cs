@@ -125,6 +125,11 @@ namespace DroneMaintenance.BLL.Services
             }
 
             var token = await CreateTokenAsync(userEntity, authenticationModel);
+            if(token == null)
+            {
+                return null;
+            }
+
             userEntity.Token = token;
 
             return _mapper.Map<UserModel>(userEntity);

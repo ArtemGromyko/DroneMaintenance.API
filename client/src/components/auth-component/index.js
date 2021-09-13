@@ -52,7 +52,9 @@ const AuthComponent = ({ isSignUp }) => {
         if (isSignUp) {
             authenticate({ email, name, password }, false)
                 .then((res) => {
-                    return res.json();
+                    if (res.ok) {
+                        return res.json();
+                    }
                 })
                 .then((res) => {
                     setUser(res);
@@ -61,9 +63,12 @@ const AuthComponent = ({ isSignUp }) => {
         } else {
             authenticate({ email, password }, true)
                 .then((res) => {
-                    return res.json();
+                    if(res.ok) {
+                        return res.json();
+                    }
                 })
                 .then((res) => {
+                    console.log(res);
                     setUser(res);
                     history.push('/');
                 });

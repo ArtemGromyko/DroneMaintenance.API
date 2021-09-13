@@ -107,4 +107,5 @@ const getAllDrones = async (token) =>
     await getResource('/drones/', {headers: {authorization: 'Bearer ' + token}});
 
 export { getAllDrones, 
-    authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser, getAllComments };
+    authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser, getAllComments,
+    _apiBase, postOptions,  getPostOptionsWithToken, getPostOptionsWithBody, getResource};

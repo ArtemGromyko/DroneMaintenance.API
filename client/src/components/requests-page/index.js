@@ -22,6 +22,7 @@ import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import { Modal } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import Notification from '../notification';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const columns = [
   {
@@ -91,30 +92,13 @@ export default function RequestsPage() {
   const [rows, setRows] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [open, setOpen] = React.useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openFail, setOpenFail] = useState(false);
 
   const { user } = useContext(MainContext);
   const history = useHistory();
   const { setRequest } = useContext(RequestsContext);
   const classes = useStyles();
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const body = (
-    <div className={classes.paper}>
-      <CheckIcon style={{ color: 'green' }} />
-      <h2>Contract created successfully</h2>
-      <p>
-        You can find it on the contracts page.
-      </p>
-    </div>
-  );
 
   useEffect(() => {
     if (user) {
@@ -149,24 +133,59 @@ export default function RequestsPage() {
     setPage(0);
   };
 
-  const handleContractCreate = (serviceType) => {
-    if(serviceType === 'Repair with replacement') {
-      //code for adding spare parts
+  const handleCloseSuccess = () => {
+    setOpenSuccess(false);
+  };
+
+
+  const handleCloseFail = () => {
+    setOpenFail(false);
+  };
+
+  const handleOpen = (serviceType) => {
+    if (serviceType != 'Repair with replacement') {
+      setOpenSuccess(true);
     } else {
-      
+      setOpenFail(true);
     }
+
   }
+
+  const successBody = (
+    <div className={classes.paper}>
+      <CheckIcon style={{ color: 'green' }} />
+      <h2>Contract created successfully</h2>
+      <p>
+        You can find it on the contracts page.
+      </p>
+    </div>
+  );
+
+  const failBody = (
+    <div className={classes.paper}>
+      <ClearIcon style={{ color: 'red' }} />
+      <h2>Contract not created</h2>
+      <p>
+        Something went wrong
+      </p>
+    </div>
+  );
 
   return (
     <Paper className={classes.root}>
       <Modal
         className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        open={openSuccess}
+        onClose={handleCloseSuccess}
       >
-        {body}
+        {successBody}
+      </Modal>
+      <Modal
+        className={classes.modal}
+        open={openFail}
+        onClose={handleCloseFail}
+      >
+        {failBody}
       </Modal>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
@@ -195,9 +214,9 @@ export default function RequestsPage() {
                     <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
                       <EditIcon />
                     </IconButton>
-                    <IconButton onClick={handleOpen}>
+                    {user?.role === 'admin' ? (<IconButton onClick={() => handleOpen(row.serviceType)}>
                       <NoteAddIcon />
-                    </IconButton>
+                    </IconButton>) : null}
                   </TableCell>
 
                   {columns.map((column) => {

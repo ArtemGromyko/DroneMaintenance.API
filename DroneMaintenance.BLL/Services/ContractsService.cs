@@ -19,38 +19,27 @@ namespace DroneMaintenance.BLL.Services
         private readonly IContractRepository _contractRepository;
         private readonly IServiceRequestRepository _requestRepository;
         private readonly IContractSparePartRepository _contractPartRepository;
+        private readonly ISparePartRepository _partRepository;
         private readonly ISparePartsService _partsService;
 
         public ContractsService(IContractRepository contractRepository, IServiceRequestRepository requestRepository, IMapper mapper,
-        IContractSparePartRepository contractPartRepository, ISparePartsService partsService)
+        IContractSparePartRepository contractPartRepository, ISparePartsService partsService, ISparePartRepository partRepository)
         {
             _contractRepository = contractRepository;
             _requestRepository = requestRepository;
             _mapper = mapper;
             _contractPartRepository = contractPartRepository;
             _partsService = partsService;
+            _partRepository = partRepository;
         }
 
         public async Task<ContractSparePart> TryGetContractSparePartByIdAsync(Guid contractId, Guid partId)
         {
             var conntractPartEntity = await _contractPartRepository.GetContractSparePartByContractIdAndPartId(contractId, partId);
-            if(conntractPartEntity == null)
-            {
-                throw new ForbiddenActionException($"{nameof(ContractSparePart)} with contractId: {contractId} and partId: {partId} " +
-                    $"doesn't exist in the database.");
-            }
+            CheckEntityExistence(contractId, partId, conntractPartEntity, nameof(ContractSparePart));
 
             return conntractPartEntity;
-        }
-        
-        public void CheckRequestStatus(RequestStatus status)
-        {
-            if (status == RequestStatus.WorkFinished)
-            {
-                throw new ForbiddenActionException("Unnable to create a contract for the request " +
-                    "with staus equal RequestStatus.WorkFinished");
-            }
-        }
+        }       
 
         public async Task SetWorkInProgressStatus(ServiceRequest request)
         {
@@ -92,11 +81,15 @@ namespace DroneMaintenance.BLL.Services
         {
             var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(contractForCreationModel.ServiceRequestId);
             CheckEntityExistence(requestEntity.Id, requestEntity, nameof(ServiceRequest));
-            CheckRequestStatus(requestEntity.RequestStatus);
+            if (requestEntity.RequestStatus == RequestStatus.WorkFinished)
+            {
+                throw new ForbiddenActionException("Unnable to create a contract for the request " +
+                    "with staus equal \"Work Finished\"");
+            }
+
             await SetWorkInProgressStatus(requestEntity);
 
             var contrctEntity = _mapper.Map<Contract>(contractForCreationModel);
-
             await _contractRepository.CreateContractAsync(contrctEntity);
 
             return _mapper.Map<ContractModel>(contrctEntity);
@@ -108,11 +101,15 @@ namespace DroneMaintenance.BLL.Services
 
             var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(contractEntity.ServiceRequestId);
             CheckEntityExistence(requestEntity.Id, requestEntity, nameof(ServiceRequest));
+            if (requestEntity.RequestStatus != RequestStatus.WorkFinished)
+            {
+                throw new ForbiddenActionException("Unable to delete contract for request with status not equal to \"Work finished\"");
+            }
 
             await _contractRepository.DeleteContractAsync(contractEntity);
 
             var contract = await _contractRepository.CheckContractExistenceForRequestAsync(contractEntity.ServiceRequestId);
-            if(contract == null && requestEntity.RequestStatus != RequestStatus.WorkFinished)
+            if (contract == null && requestEntity.RequestStatus != RequestStatus.WorkFinished)
             {
                 requestEntity.RequestStatus = RequestStatus.WorkFinished;
                 await _requestRepository.UpdateServiceRequestAsync(requestEntity);
@@ -125,10 +122,12 @@ namespace DroneMaintenance.BLL.Services
 
             var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(contractEntity.ServiceRequestId);
             CheckEntityExistence(contractEntity.ServiceRequestId, requestEntity, nameof(ServiceRequest));
-            CheckRequestStatus(requestEntity.RequestStatus);
+            if(requestEntity.RequestStatus == RequestStatus.WorkFinished)
+            {
+                throw new ForbiddenActionException("Unable to update contract for request with status equal to \"Work finished\"");
+            }    
 
             _mapper.Map(contractForUpdateModel, contractEntity);
-
             await _contractRepository.UpdateContractAsync(contractEntity);
 
             return _mapper.Map<ContractModel>(contractEntity);
@@ -153,12 +152,15 @@ namespace DroneMaintenance.BLL.Services
             return _mapper.Map<List<ContractSparePartModel>>(contractSparePartEntities);
         }
 
-        public async Task<ContractSparePartModel> CreateSparePartForContractAsync(Guid contractId, ContractSparePartForCreationModel contractPartForCreationModel)
+        public async Task<ContractSparePartModel> CreateSparePartForContractAsync(Guid contractId, 
+        ContractSparePartForCreationModel contractPartForCreationModel)
         {
             await CheckContractExistenceAsync(contractId);
             await _partsService.CheckSparePartExistenceAsync(contractPartForCreationModel.SparePartId);
 
-            var contractSparePartEntity = await _contractPartRepository.GetContractSparePartByContractIdAndPartId(contractId, contractPartForCreationModel.SparePartId);
+            var contractSparePartEntity = await _contractPartRepository
+                .GetContractSparePartByContractIdAndPartId(contractId, contractPartForCreationModel.SparePartId);
+
             if(contractSparePartEntity != null)
             {
                 throw new ForbiddenActionException("Unnable to add an already added spare part.");

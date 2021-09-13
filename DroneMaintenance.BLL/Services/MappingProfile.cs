@@ -49,7 +49,8 @@ namespace DroneMaintenance.BLL.Services
 
         private void CreateMapsForContractSparePart()
         {
-            CreateMap<ContractSparePart, ContractSparePartModel>();
+            CreateMap<ContractSparePart, ContractSparePartModel>()
+                .ForMember(cspm => cspm.SparePartName, x => x.MapFrom(csp => csp.SparePart.Name));
             CreateMap<ContractSparePartForCreationModel, ContractSparePart>();
             CreateMap<ContractSparePartForUpdateModel, ContractSparePart>();
         }
