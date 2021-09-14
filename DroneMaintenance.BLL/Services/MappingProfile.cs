@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DroneMaintenance.DAL.Entities;
+using DroneMaintenance.DTO;
 using DroneMaintenance.Models.RequestModels.Comment;
 using DroneMaintenance.Models.RequestModels.Contract;
 using DroneMaintenance.Models.RequestModels.ContractSparePart;
@@ -53,6 +54,7 @@ namespace DroneMaintenance.BLL.Services
                 .ForMember(cspm => cspm.SparePartName, x => x.MapFrom(csp => csp.SparePart.Name));
             CreateMap<ContractSparePartForCreationModel, ContractSparePart>();
             CreateMap<ContractSparePartForUpdateModel, ContractSparePart>();
+            CreateMap<SparePart, SparePartDto>().ReverseMap();
         }
 
         private void CreateMapsForContract()
@@ -95,6 +97,8 @@ namespace DroneMaintenance.BLL.Services
                     return "Work in progress";
                 case RequestStatus.WorkFinished:
                     return "Work finished";
+                case RequestStatus.SparePartsOnTheWay:
+                    return "Spare parts on the way";
                 default:
                     return "Wrong status";
             }

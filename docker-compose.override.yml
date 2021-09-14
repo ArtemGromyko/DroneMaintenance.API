@@ -3,7 +3,7 @@ version: '3.4'
 services:
   dronemaintenance.api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Test
+      - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "80"

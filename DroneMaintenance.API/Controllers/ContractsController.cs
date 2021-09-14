@@ -58,7 +58,7 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ContractModel>> DeleteContractAsync(Guid id)
+        public async Task<ActionResult> DeleteContractAsync(Guid id)
         {
             await _contractsService.DeleteContractAsync(id);
 
@@ -106,12 +106,12 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost("{contractId}/parts")]
-        public async Task<ActionResult<ContractSparePartModel>> AddPartForContractAsync(Guid contractId, 
+        public async Task<ActionResult> AddPartForContractAsync(Guid contractId, 
         [FromBody]ContractSparePartForCreationModel contractPartForCreationModel)
         {
-            var contractPartModel = await _contractsService.CreateSparePartForContractAsync(contractId, contractPartForCreationModel);
+            await _contractsService.AddSparePartForContractAsync(contractId, contractPartForCreationModel);
 
-            return contractPartModel;
+            return Ok();
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -132,11 +132,12 @@ namespace DroneMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{contractId}/parts/{partId}")]
-        public async Task<ActionResult<ContractSparePartModel>> DeletePartForContractAsync(Guid contractId, Guid partId)
+        public async Task<ActionResult> DeletePartForContractAsync(Guid contractId, Guid partId)
         {
             await _contractsService.DeleteSparePartForContractAsync(contractId, partId);
 
             return NoContent();
         }
+
     }
 }

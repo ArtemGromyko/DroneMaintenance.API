@@ -3,6 +3,7 @@ using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.BLL.Exceptions;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
+using DroneMaintenance.DTO;
 using DroneMaintenance.Models.RequestModels.Contract;
 using DroneMaintenance.Models.RequestModels.ContractSparePart;
 using DroneMaintenance.Models.ResponseModels.Contract;
@@ -21,9 +22,11 @@ namespace DroneMaintenance.BLL.Services
         private readonly IContractSparePartRepository _contractPartRepository;
         private readonly ISparePartRepository _partRepository;
         private readonly ISparePartsService _partsService;
+        private readonly IOrderSparePartService _orderSparePartService;
 
         public ContractsService(IContractRepository contractRepository, IServiceRequestRepository requestRepository, IMapper mapper,
-        IContractSparePartRepository contractPartRepository, ISparePartsService partsService, ISparePartRepository partRepository)
+        IContractSparePartRepository contractPartRepository, ISparePartsService partsService, 
+        ISparePartRepository partRepository, IOrderSparePartService orderSparePartService)
         {
             _contractRepository = contractRepository;
             _requestRepository = requestRepository;
@@ -31,6 +34,7 @@ namespace DroneMaintenance.BLL.Services
             _contractPartRepository = contractPartRepository;
             _partsService = partsService;
             _partRepository = partRepository;
+            _orderSparePartService = orderSparePartService;
         }
 
         public async Task<ContractSparePart> TryGetContractSparePartByIdAsync(Guid contractId, Guid partId)
@@ -152,11 +156,13 @@ namespace DroneMaintenance.BLL.Services
             return _mapper.Map<List<ContractSparePartModel>>(contractSparePartEntities);
         }
 
-        public async Task<ContractSparePartModel> CreateSparePartForContractAsync(Guid contractId, 
+        public async Task AddSparePartForContractAsync(Guid contractId, 
         ContractSparePartForCreationModel contractPartForCreationModel)
         {
-            await CheckContractExistenceAsync(contractId);
-            await _partsService.CheckSparePartExistenceAsync(contractPartForCreationModel.SparePartId);
+            var contractEntity = await TryGetContractEntityByIdAsync(contractId);
+            var sparePartEntity = await _partsService.TryGetSparePartEntityByIdAsync(contractPartForCreationModel.SparePartId);
+            var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(contractEntity.ServiceRequestId);
+            CheckEntityExistence(contractEntity.ServiceRequestId, requestEntity, nameof(ServiceRequest));
 
             var contractSparePartEntity = await _contractPartRepository
                 .GetContractSparePartByContractIdAndPartId(contractId, contractPartForCreationModel.SparePartId);
@@ -167,12 +173,14 @@ namespace DroneMaintenance.BLL.Services
             }
 
             contractPartForCreationModel.ContractId = contractId;
-    
             var contractPartEntity = _mapper.Map<ContractSparePart>(contractPartForCreationModel);
+            await _contractPartRepository.CreateContractSparePartAsync(contractPartEntity);
 
-            await _contractPartRepository.UpdateContractSparePartAsync(contractPartEntity);
+            var sparePartDto = _mapper.Map<SparePartDto>(sparePartEntity);
+            _orderSparePartService.PostSparePartOrder(sparePartDto);
 
-            return _mapper.Map<ContractSparePartModel>(contractPartEntity);
+            requestEntity.RequestStatus = RequestStatus.SparePartsOnTheWay;
+            await _requestRepository.UpdateServiceRequestAsync(requestEntity);
         }
 
         public async Task DeleteSparePartForContractAsync(Guid contractId, Guid partId)

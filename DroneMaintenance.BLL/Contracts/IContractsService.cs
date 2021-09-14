@@ -24,7 +24,7 @@ namespace DroneMaintenance.BLL.Contracts
         Task<ContractModel> UpdateContractAsync(Guid id, ContractForUpdateModel contractForUpdateModel);
         Task<ContractSparePartModel> GetSparePartForContractAsync(Guid contractId, Guid partId);
         Task<List<ContractSparePartModel>> GetSparePartsForContractAsync(Guid contractId);
-        Task<ContractSparePartModel> CreateSparePartForContractAsync(Guid contractId, ContractSparePartForCreationModel contractPartForCreationModel);
+        Task AddSparePartForContractAsync(Guid contractId, ContractSparePartForCreationModel contractPartForCreationModel);
         Task DeleteSparePartForContractAsync(Guid contractId, Guid partId);
         Task<ContractSparePartModel> UpdateSparePartForContractAsync(Guid contractId, Guid partId, ContractSparePartForUpdateModel contractPartForUpdateModel);
     }

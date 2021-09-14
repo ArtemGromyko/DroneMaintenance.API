@@ -4,6 +4,7 @@
     {
         Recived,
         WorkInProgress,
-        WorkFinished
+        WorkFinished,
+        SparePartsOnTheWay
     }
 }

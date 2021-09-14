@@ -39,7 +39,7 @@ namespace DroneMaintenance.API.Extensions
             var connectionString = "sqlConnection";
             if(env.IsEnvironment("Docker"))
             {
-                connectionString = connectionString.Insert(0, "docker");
+                connectionString = "dockerSqlConnection";
             }
 
             services.AddDbContext<RepositoryContext>(opts =>
@@ -66,6 +66,7 @@ namespace DroneMaintenance.API.Extensions
             services.AddScoped<IContractsService, ContractsService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ICommentsService, CommentsService>();
+            services.AddScoped<IOrderSparePartService, OrderSparePartService>();
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)

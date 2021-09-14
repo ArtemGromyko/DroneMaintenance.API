@@ -7,11 +7,14 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.3" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DroneMaintenance.DAL\DroneMaintenance.DAL.csproj" />
+    <ProjectReference Include="..\DroneMaintenance.DTO\DroneMaintenance.DTO.csproj" />
     <ProjectReference Include="..\DroneMaintenance.Models\DroneMaintenance.Models.csproj" />
   </ItemGroup>
 
