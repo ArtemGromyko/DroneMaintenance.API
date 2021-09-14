@@ -2,7 +2,9 @@
 using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
+using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.RequestModels.User;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.User;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
@@ -22,17 +24,19 @@ namespace DroneMaintenance.BLL.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IServiceRequestRepository _requestRepository;
         private readonly IConfiguration _configuration;
 
-        public UsersService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration, 
-        IMapper mapper)
+        public UsersService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration,
+        IMapper mapper, IServiceRequestRepository requestRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _configuration = configuration;
             _mapper = mapper;
+            _requestRepository = requestRepository;
         }
-        
+
         byte[] GenerateSalt()
         {
             var salt = new byte[16];
@@ -53,7 +57,7 @@ namespace DroneMaintenance.BLL.Services
                 iterationCount: 10000,
                 numBytesRequested: 32));
 
-        public async Task<string> RegisterAsync(RegistrationModel registrationModel)
+        public async Task<UserModel> RegisterAsync(RegistrationModel registrationModel)
         {
             var userEntity = await _userRepository.GetUserByEmailAsync(registrationModel.Email);
             if (userEntity != null)
@@ -72,7 +76,10 @@ namespace DroneMaintenance.BLL.Services
             await _userRepository.CreateUserAsync(newUserEntity);
             var authenticationModel = _mapper.Map<AuthenticationModel>(registrationModel);
 
-            return await CreateTokenAsync(newUserEntity, authenticationModel);
+            var token = await CreateTokenAsync(newUserEntity, authenticationModel);
+            newUserEntity.Token = token;
+
+            return _mapper.Map<UserModel>(newUserEntity);
         }
 
         public async Task<string> CreateTokenAsync(User userEntity, AuthenticationModel authenticationModel)
@@ -92,6 +99,7 @@ namespace DroneMaintenance.BLL.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
+                    new Claim("id", userEntity.Id.ToString()),
                     new Claim(ClaimTypes.Email, userEntity.Email),
                     new Claim(ClaimTypes.Role, roleEntity.Name)
                 }),
@@ -100,10 +108,15 @@ namespace DroneMaintenance.BLL.Services
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            userEntity.Token = tokenString;
+            await _userRepository.UpdateUserAsync(userEntity);
+
+            return tokenString;
         }
 
-        public async Task<string> AuthenticateAsync(AuthenticationModel authenticationModel)
+        public async Task<UserModel> AuthenticateAsync(AuthenticationModel authenticationModel)
         {
             var userEntity = await _userRepository.GetUserByEmailAsync(authenticationModel.Email);
             if (userEntity == null)
@@ -111,12 +124,21 @@ namespace DroneMaintenance.BLL.Services
                 return null;
             }
 
-            return await CreateTokenAsync(userEntity, authenticationModel);
+            var token = await CreateTokenAsync(userEntity, authenticationModel);
+            if(token == null)
+            {
+                return null;
+            }
+
+            userEntity.Token = token;
+
+            return _mapper.Map<UserModel>(userEntity);
         }
 
         public async Task<UserModel> GetUserAsync(Guid id)
         {
             var userEntity = await _userRepository.GetUserByIdAsync(id);
+            CheckEntityExistence(id, userEntity, nameof(User));
 
             return _mapper.Map<UserModel>(userEntity);
         }
@@ -126,6 +148,69 @@ namespace DroneMaintenance.BLL.Services
             var userEntities = await _userRepository.GetAllUsersAsync();
 
             return _mapper.Map<List<UserModel>>(userEntities);
+        }
+
+        public async Task UpdateToken(Guid id, string token)
+        {
+            var userEntity = await _userRepository.GetUserByIdAsync(id);
+            CheckEntityExistence(id, userEntity, nameof(User));
+
+            userEntity.Token = token;
+            await _userRepository.UpdateUserAsync(userEntity);
+        }
+
+        public async Task<ServiceRequest> TryGetServiceRequestEntityForUserAsync(Guid userId, Guid id)
+        {
+            var userEntity = await _userRepository.GetUserByIdAsync(userId);
+            CheckEntityExistence(id, userEntity, nameof(User));
+
+            var requestEntity = await _requestRepository.GetServiceRequestForUserAsync(userId, id);
+            CheckEntityExistence(userId, id, requestEntity, nameof(ServiceRequest), nameof(User));
+
+            return requestEntity;
+        }
+
+        public async Task<ServiceRequestModel> GetServiceRequestForUserAsync(Guid userId, Guid id)
+        {
+            var requestEntity = await TryGetServiceRequestEntityForUserAsync(userId, id);
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
+        }
+
+        public async Task<List<ServiceRequestModel>> GetServiceRequestsForUserAsync(Guid userId)
+        {
+            var requestEntities = await _requestRepository.GetAllServiceRequestsForUserAsync(userId);
+
+            return _mapper.Map<List<ServiceRequestModel>>(requestEntities);
+        }
+
+        public async Task<ServiceRequestModel> CreateServiceRequestForUserAsync(Guid userId, 
+        ServiceRequestForCreationModel requestForCreationModel)
+        {
+            var requestEntity = _mapper.Map<ServiceRequest>(requestForCreationModel);
+            requestEntity.UserId = userId;
+
+            await _requestRepository.CreateServiceRequestAsync(requestEntity);
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
+        }
+
+        public async Task<ServiceRequestModel> UpdateServiceRequestForUserAsync(Guid userId, Guid id, 
+        ServiceRequestForUpdateModel requestForUpdateModel)
+        {
+            var requestEntity = await TryGetServiceRequestEntityForUserAsync(userId, id);
+            _mapper.Map(requestForUpdateModel, requestEntity);
+
+            await _requestRepository.UpdateServiceRequestAsync(requestEntity);
+
+            return _mapper.Map<ServiceRequestModel>(requestEntity);
+        }
+
+        public async Task DeleteServiceRequestForUserAsync(Guid userId, Guid id)
+        {
+            var requestEntity = await TryGetServiceRequestEntityForUserAsync(userId, id);
+
+            await _requestRepository.DeleteServiceRequestAsync(requestEntity);
         }
     }
 }

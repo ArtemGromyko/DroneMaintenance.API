@@ -371,3 +371,6 @@ client/coverage
 # production
 client/build
 
+#logs
+internal_logs
+

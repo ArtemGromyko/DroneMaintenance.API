@@ -26,6 +26,6 @@ namespace DroneMaintenance.DAL.Repositories
             await DeleteAsync(user);
 
         public async Task<User> GetUserByEmailAsync(string email) =>
-            await FindByCondition(u => u.Email.Equals(email)).SingleOrDefaultAsync();
+            await FindByCondition(u => u.Email.Equals(email)).Include(u => u.Role).SingleOrDefaultAsync();
     }
 }

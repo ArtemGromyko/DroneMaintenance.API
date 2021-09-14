@@ -19,31 +19,58 @@ namespace DroneMaintenance.DAL.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DroneMaintenance.DAL.Entities.Client", b =>
+            modelBuilder.Entity("DroneMaintenance.DAL.Entities.Comment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime>("Date")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Header")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Text")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cc38316e-ea63-473b-84fa-1efa00f3b6ce"),
-                            Name = "Tom"
+                            Id = new Guid("6b147a66-d62e-4252-9add-6cc17cee5d3b"),
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Header = "Header1",
+                            Text = "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text",
+                            UserId = new Guid("19dbd59c-cb4c-4f03-8703-08d96c7c875f")
                         },
                         new
                         {
-                            Id = new Guid("5bf2d2e5-25c7-47d4-b5a0-13068ce73ab2"),
-                            Name = "John"
+                            Id = new Guid("005bc605-f6b6-42db-a24d-ca2884d7a68e"),
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Header = "Header2",
+                            Text = "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text",
+                            UserId = new Guid("85d2dad8-5ad5-4ad7-ab42-2a883cf0846a")
+                        },
+                        new
+                        {
+                            Id = new Guid("d975dfe7-c50a-4c62-aaa9-b2897c0fd330"),
+                            Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Header = "Header3",
+                            Text = "some text some text some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text some text  some text  some text  some text  some text  some text  some text  some text  some text  some text",
+                            UserId = new Guid("bf62c2cd-aa17-47ea-b575-f8d769966fb9")
                         });
                 });
 
@@ -166,7 +193,7 @@ namespace DroneMaintenance.DAL.Migrations
 
                     b.HasAlternateKey("Name");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -187,12 +214,9 @@ namespace DroneMaintenance.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
+                        .HasColumnType("date")
                         .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("Description")
@@ -208,11 +232,14 @@ namespace DroneMaintenance.DAL.Migrations
                     b.Property<int>("ServiceType")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("DroneId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ServiceRequests");
 
@@ -220,21 +247,21 @@ namespace DroneMaintenance.DAL.Migrations
                         new
                         {
                             Id = new Guid("38a5dc95-3ff1-4c8f-8041-872a65b41d56"),
-                            ClientId = new Guid("cc38316e-ea63-473b-84fa-1efa00f3b6ce"),
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description",
                             DroneId = new Guid("9fffa88b-91c5-42a6-8692-1fd8701fb0e4"),
                             RequestStatus = 0,
-                            ServiceType = 2
+                            ServiceType = 2,
+                            UserId = new Guid("bf62c2cd-aa17-47ea-b575-f8d769966fb9")
                         },
                         new
                         {
                             Id = new Guid("fb35b9ce-61c0-4ce3-a309-e742582845af"),
-                            ClientId = new Guid("5bf2d2e5-25c7-47d4-b5a0-13068ce73ab2"),
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DroneId = new Guid("4e02aef0-98d7-430f-bd56-749992687066"),
                             RequestStatus = 0,
-                            ServiceType = 0
+                            ServiceType = 0,
+                            UserId = new Guid("bf62c2cd-aa17-47ea-b575-f8d769966fb9")
                         });
                 });
 
@@ -290,13 +317,16 @@ namespace DroneMaintenance.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasAlternateKey("Email");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
@@ -317,6 +347,17 @@ namespace DroneMaintenance.DAL.Migrations
                             RoleId = new Guid("f6736344-8a7e-43f4-9a1a-facf460b5f3f"),
                             Salt = "qoLvOfVLiKdwflEH1LoPwQ=="
                         });
+                });
+
+            modelBuilder.Entity("DroneMaintenance.DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("DroneMaintenance.DAL.Entities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DroneMaintenance.DAL.Entities.Contract", b =>
@@ -351,35 +392,32 @@ namespace DroneMaintenance.DAL.Migrations
 
             modelBuilder.Entity("DroneMaintenance.DAL.Entities.ServiceRequest", b =>
                 {
-                    b.HasOne("DroneMaintenance.DAL.Entities.Client", "Client")
-                        .WithMany("ServiceRequests")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DroneMaintenance.DAL.Entities.Drone", "Drone")
                         .WithMany("ServiceRequests")
                         .HasForeignKey("DroneId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.HasOne("DroneMaintenance.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Drone");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DroneMaintenance.DAL.Entities.User", b =>
                 {
-                    b.HasOne("DroneMaintenance.DAL.Entities.Role", null)
+                    b.HasOne("DroneMaintenance.DAL.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("DroneMaintenance.DAL.Entities.Client", b =>
-                {
-                    b.Navigation("ServiceRequests");
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("DroneMaintenance.DAL.Entities.Contract", b =>
@@ -405,6 +443,11 @@ namespace DroneMaintenance.DAL.Migrations
             modelBuilder.Entity("DroneMaintenance.DAL.Entities.SparePart", b =>
                 {
                     b.Navigation("ContractSpareParts");
+                });
+
+            modelBuilder.Entity("DroneMaintenance.DAL.Entities.User", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

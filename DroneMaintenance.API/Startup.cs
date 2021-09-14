@@ -1,4 +1,5 @@
 using DroneMaintenance.API.Extensions;
+using DroneMaintenance.API.Filters.ActionFilters;
 using DroneMaintenance.API.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,32 +14,34 @@ namespace DroneMaintenance
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureCors();
             services.ConfigureLoggerService();
-            services.ConfigureSqlContext(Configuration);
+            services.ConfigureSqlContext(Configuration, Environment);
             services.ConfigureRepositories();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.ConfigureServices();
             services.ConfigureSwagger();
-
+            services.AddScoped<TokenValidationFilterAttribute>();
             services.AddControllers().AddNewtonsoftJson();
 
             services.ConfigureAuthentication(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }

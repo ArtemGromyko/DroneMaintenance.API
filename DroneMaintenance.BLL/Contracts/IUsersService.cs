@@ -1,4 +1,7 @@
-﻿using DroneMaintenance.Models.RequestModels.User;
+﻿using DroneMaintenance.DAL.Entities;
+using DroneMaintenance.Models.RequestModels.ServiceRequest;
+using DroneMaintenance.Models.RequestModels.User;
+using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.User;
 using System;
 using System.Collections.Generic;
@@ -8,9 +11,17 @@ namespace DroneMaintenance.BLL.Contracts
 {
     public interface IUsersService
     {
-        Task<string> AuthenticateAsync(AuthenticationModel authenticationModel);
+        Task<UserModel> AuthenticateAsync(AuthenticationModel authenticationModel);
         Task<List<UserModel>> GetUsersAsync();
         Task<UserModel> GetUserAsync(Guid id);
-        Task<string> RegisterAsync(RegistrationModel registrationModel);
+        Task<UserModel> RegisterAsync(RegistrationModel registrationModel);
+        Task UpdateToken(Guid id, string token);
+        Task<ServiceRequest> TryGetServiceRequestEntityForUserAsync(Guid userId, Guid id);
+        Task<ServiceRequestModel> GetServiceRequestForUserAsync(Guid userId, Guid id);
+        Task<List<ServiceRequestModel>> GetServiceRequestsForUserAsync(Guid userId);
+        Task<ServiceRequestModel> CreateServiceRequestForUserAsync(Guid userId, ServiceRequestForCreationModel requestForCreationModel);
+        Task<ServiceRequestModel> UpdateServiceRequestForUserAsync(Guid userId, Guid id, 
+        ServiceRequestForUpdateModel requestForUpdateModel);
+        Task DeleteServiceRequestForUserAsync(Guid userId, Guid id);
     }
 }

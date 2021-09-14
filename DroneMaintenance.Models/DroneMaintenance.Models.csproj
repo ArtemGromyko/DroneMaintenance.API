@@ -8,4 +8,8 @@
     <ProjectReference Include="..\DroneMaintenance.DAL\DroneMaintenance.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="RequestModels\Comment\" />
+  </ItemGroup>
+
 </Project>

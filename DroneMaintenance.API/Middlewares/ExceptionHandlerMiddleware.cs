@@ -1,7 +1,6 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.BLL.Exceptions;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -17,7 +16,7 @@ namespace DroneMaintenance.API.Middlewares
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context, ILoggerManager logger)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {

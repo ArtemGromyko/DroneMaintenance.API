@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ServiceRequestMaintenance.API.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize]
     [Route("api/requests")]
     [ApiController]
     public class ServiceRequestsController : ControllerBase

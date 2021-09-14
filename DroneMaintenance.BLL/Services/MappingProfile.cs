@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using DroneMaintenance.DAL.Entities;
-using DroneMaintenance.Models.RequestModels.Client;
+using DroneMaintenance.Models.RequestModels.Comment;
 using DroneMaintenance.Models.RequestModels.Contract;
 using DroneMaintenance.Models.RequestModels.ContractSparePart;
 using DroneMaintenance.Models.RequestModels.Drone;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.RequestModels.SparePart;
 using DroneMaintenance.Models.RequestModels.User;
-using DroneMaintenance.Models.ResponseModels.Client;
+using DroneMaintenance.Models.ResponseModels.Comment;
 using DroneMaintenance.Models.ResponseModels.Contract;
 using DroneMaintenance.Models.ResponseModels.ContractSparePart;
 using DroneMaintenance.Models.ResponseModels.Drone;
@@ -22,24 +22,35 @@ namespace DroneMaintenance.BLL.Services
         public MappingProfile()
         {
             CreateMapsForServiceRequest();
-            CreateMapsForClient();
             CreateMapsForDrone();
             CreateMapsForContract();
             CreateMapsForSparePart();
             CreateMapsForContractSparePart();
             CreateMapsForUser();
+            CreateMapsForComments();
+        }
+
+        private void CreateMapsForComments()
+        {
+            CreateMap<Comment, CommentModel>()
+                .ForMember(cm => cm.UserName, x => x.MapFrom(c => c.User.Name))
+                .ForMember(cm => cm.UserRole, x => x.MapFrom(c => c.User.Role.Name));
+            CreateMap<CommentForCreationModel, Comment>();
+            CreateMap<CommentForUpdateModel, Comment>();
         }
 
         private void CreateMapsForUser()
         {
-            CreateMap<User, UserModel>();
+            CreateMap<User, UserModel>()
+                .ForMember(u => u.Role, um => um.MapFrom(um => um.Role.Name));
             CreateMap<RegistrationModel, User>();
             CreateMap<RegistrationModel, AuthenticationModel>();
         }
 
         private void CreateMapsForContractSparePart()
         {
-            CreateMap<ContractSparePart, ContractSparePartModel>();
+            CreateMap<ContractSparePart, ContractSparePartModel>()
+                .ForMember(cspm => cspm.SparePartName, x => x.MapFrom(csp => csp.SparePart.Name));
             CreateMap<ContractSparePartForCreationModel, ContractSparePart>();
             CreateMap<ContractSparePartForUpdateModel, ContractSparePart>();
         }
@@ -67,13 +78,6 @@ namespace DroneMaintenance.BLL.Services
             CreateMap<ServiceRequestForUpdateModel, ServiceRequest>().ReverseMap();
         }
 
-        private void CreateMapsForClient()
-        {
-            CreateMap<Client, ClientModel>();
-            CreateMap<ClientForCreationModel, Client>();
-            CreateMap<ClientForUpdateModel, Client>().ReverseMap();
-        }
-
         private void CreateMapsForDrone()
         {
             CreateMap<Drone, DroneModel>();
@@ -86,7 +90,7 @@ namespace DroneMaintenance.BLL.Services
             switch(request)
             {
                 case RequestStatus.Recived:
-                    return "Request recived";
+                    return "Request received";
                 case RequestStatus.WorkInProgress:
                     return "Work in progress";
                 case RequestStatus.WorkFinished:
@@ -103,7 +107,7 @@ namespace DroneMaintenance.BLL.Services
                 case ServiceType.Diagnostics:
                     return "Diagnostics";
                 case ServiceType.RepairWithoutReplacement:
-                    return "Repair Without Replacement";
+                    return "Repair without replacement";
                 case ServiceType.RepairWithReplacement:
                     return "Repair with replacement";
                 default:

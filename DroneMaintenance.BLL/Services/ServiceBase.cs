@@ -21,6 +21,13 @@ namespace DroneMaintenance.BLL.Services
                 throw new EntityNotFoundException($"{entityName} with id: {id} and {parentEntityName} id: {parentId} doesn't exist in the database.");
             }
         }
-
+        
+        public void CheckEntityExistence(Guid firstId, Guid secondId, object entity, string entityName)
+        {
+            if (entity == null)
+            {
+                throw new EntityNotFoundException($"{entityName} with {nameof(firstId)} and {nameof(secondId)} doesn't exist in the database.");
+            }
+        }
     }
 }

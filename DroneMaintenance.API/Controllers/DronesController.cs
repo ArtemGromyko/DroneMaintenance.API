@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DroneMaintenance.API.Controllers
 {
-    //[Authorize(Roles = "admin")]
+    [Authorize]
     [Produces("application/json")]
     [Route("api/drones")]
     [ApiController]
@@ -25,6 +25,7 @@ namespace DroneMaintenance.API.Controllers
             _dronesService = dronesService;
         }
 
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
