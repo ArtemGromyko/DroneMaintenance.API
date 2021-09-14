@@ -12,6 +12,7 @@ import { RequestsContextProvider } from '../../contexts/requests-context';
 import CommentsPage from '../comments-page';
 import DronesPage from '../drones-page';
 import ContractForm from '../contract-form';
+import ContractsPage from '../contracts-page';
 
 function App() {
     return (
@@ -64,6 +65,12 @@ function App() {
                 <Route path='/contract-form'>
                     <WithJwt>
                         <ContractForm />
+                    </WithJwt>
+                </Route>
+                <Route path='/contracts'>
+                    <WithJwt>
+                        <Header />
+                        <ContractsPage />
                     </WithJwt>
                 </Route>
             </RequestsContextProvider>

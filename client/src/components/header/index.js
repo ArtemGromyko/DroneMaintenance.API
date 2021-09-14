@@ -116,7 +116,7 @@ const Header = () => {
                             </Link>
                         </h4>
                         <h4>
-                            <Link className={classes.link} to="/comments">
+                            <Link className={classes.link} to="/contracts">
                                 Contracts
                             </Link>
                         </h4>

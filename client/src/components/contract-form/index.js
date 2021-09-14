@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
         margin: '20px auto'
     },
     buttonStyle: {
-        marginTop: '2rem',
+        marginTop: '5rem',
         marginBottom: '2rem'
     },
     textField: {
@@ -58,32 +58,25 @@ const ContractForm = () => {
             <Grid>
                 <Paper className={classes.paperStyle} variant="outlined">
                     <Grid align='center'>
-                        <h2>Hello</h2>
+                        <h2>Add spare parts</h2>
                     </Grid>
                     <Autocomplete
-                        id="combo-box-demo"
+                        id="spare-part"
                         options={rows}
                         getOptionLabel={(option) => option.name}
-                        renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Spare part" variant="outlined" />}
                     />
-                    <TextField name='description' label='Description'
+                    <TextField name='quantity' label='Quantity'
                         className={classes.textField}
                         type='number'
-                        placeholder='Enter description'
+                        placeholder='Enter quantity'
                         min={0}
                         fullWidth variant="outlined" />
-                    <Grid direction='row' container alignItems='center' justifyContent='space-between'>
                     <Button className={classes.buttonStyle} type='submit' color='primary'
-                        variant='contained'>
+                        variant='contained' fullWidth>
                             Add
                     </Button>
-                    <Button className={classes.buttonStyle} type='submit' color='primary'
-                        variant='contained'>
-                            Submit
-                    </Button>
-                    </Grid>
-                
-                    <Typography align='right' style={{ marginTop: '1.5rem' }}>
+                    <Typography align='right' style={{ marginTop: '6rem' }}>
                         <Link style={{ textDecoration: 'none' }} to="/requests">
                             Cancel
                         </Link>
