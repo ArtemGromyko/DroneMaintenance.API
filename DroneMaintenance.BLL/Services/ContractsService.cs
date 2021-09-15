@@ -22,11 +22,11 @@ namespace DroneMaintenance.BLL.Services
         private readonly IContractSparePartRepository _contractPartRepository;
         private readonly ISparePartRepository _partRepository;
         private readonly ISparePartsService _partsService;
-        private readonly IOrderSparePartService _orderSparePartService;
+        private readonly IOrdersProducerService _orderSparePartService;
 
         public ContractsService(IContractRepository contractRepository, IServiceRequestRepository requestRepository, IMapper mapper,
         IContractSparePartRepository contractPartRepository, ISparePartsService partsService, 
-        ISparePartRepository partRepository, IOrderSparePartService orderSparePartService)
+        ISparePartRepository partRepository, IOrdersProducerService orderSparePartService)
         {
             _contractRepository = contractRepository;
             _requestRepository = requestRepository;

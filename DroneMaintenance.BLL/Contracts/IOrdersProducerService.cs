@@ -2,7 +2,7 @@
 
 namespace DroneMaintenance.BLL.Contracts
 {
-    public interface IOrderSparePartService
+    public interface IOrdersProducerService
     {
         void PostSparePartOrder(SparePartDto sparePartDto);
     }

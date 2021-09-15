@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DroneMaintenance.BLL.Services
 {
-    public class OrderSparePartService : IOrderSparePartService
+    public class OrdersProducerService : IOrdersProducerService
     {
         public void PostSparePartOrder(SparePartDto sparePartDto)
         {
