@@ -176,8 +176,11 @@ namespace DroneMaintenance.BLL.Services
             var contractPartEntity = _mapper.Map<ContractSparePart>(contractPartForCreationModel);
             await _contractPartRepository.CreateContractSparePartAsync(contractPartEntity);
 
-            var sparePartDto = _mapper.Map<SparePartDto>(sparePartEntity);
-            _orderSparePartService.PostSparePartOrder(sparePartDto);
+            var orderDto = _mapper.Map<OrderDto>(sparePartEntity);
+            orderDto.Quantity = contractPartEntity.Quantity;
+            orderDto.RequestId = requestEntity.Id;
+
+            _orderSparePartService.PostSparePartOrder(orderDto);
 
             requestEntity.RequestStatus = RequestStatus.SparePartsOnTheWay;
             await _requestRepository.UpdateServiceRequestAsync(requestEntity);

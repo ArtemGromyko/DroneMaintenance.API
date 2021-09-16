@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using SparePartsOrders.API.Entities;
+using SparePartsOrders.API.Services;
+using System;
 
 namespace SparePartsOrders.API
 {
@@ -17,6 +21,16 @@ namespace SparePartsOrders.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<OrdersDatabaseSettings>(
+                Configuration.GetSection(nameof(OrdersDatabaseSettings)));
+
+            services.AddSingleton<IDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<OrdersDatabaseSettings>>().Value);
+
+            services.AddSingleton<OrdersService>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddControllers();
         }
 

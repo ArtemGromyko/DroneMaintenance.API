@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using AutoMapper;
+using DroneMaintenance.DTO;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using SparePartsOrders.API.Models;
 using System;
 using System.Text;
 using System.Threading;
@@ -36,12 +40,21 @@ namespace SparePartsOrders.API.Services
 
             var consumer = new EventingBasicConsumer(_channel);
 
-            consumer.Received += (model, ea) =>
+            consumer.Received += async (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 Console.WriteLine(message);
-                var sparePartDto = JsonConvert.DeserializeObject(message);
+                var orderDto = JsonConvert.DeserializeObject<OrderDto>(message);
+
+                using (var scope = _sp.CreateScope())
+                {
+                    var ordersService = scope.ServiceProvider.GetRequiredService<OrdersService>();
+                    var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+                    var order = mapper.Map<Order>(orderDto);
+                    await ordersService.CreateAsync(order);
+                }
             };
 
             _channel.BasicConsume(queue: "orders", autoAck: true, consumer: consumer);

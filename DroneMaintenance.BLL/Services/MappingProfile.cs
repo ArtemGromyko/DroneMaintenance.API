@@ -54,7 +54,11 @@ namespace DroneMaintenance.BLL.Services
                 .ForMember(cspm => cspm.SparePartName, x => x.MapFrom(csp => csp.SparePart.Name));
             CreateMap<ContractSparePartForCreationModel, ContractSparePart>();
             CreateMap<ContractSparePartForUpdateModel, ContractSparePart>();
-            CreateMap<SparePart, SparePartDto>().ReverseMap();
+            CreateMap<ContractSparePart, OrderDto>()
+                .ForMember(o => o.SparePartName, x => x.MapFrom(csp => csp.SparePart.Name))
+                .ForMember(o => o.SparePartName, x => x.MapFrom(csp => csp.Contract.ServiceRequestId))
+                .ForMember(o => o.Price, x => x.MapFrom(csp => csp.SparePart.Price))
+                .ReverseMap();
         }
 
         private void CreateMapsForContract()
@@ -69,6 +73,8 @@ namespace DroneMaintenance.BLL.Services
             CreateMap<SparePart, SparePartModel>();
             CreateMap<SparePartForUpdateModel, SparePart>();
             CreateMap<SparePartForCreationModel, SparePart>();
+            CreateMap<SparePart, OrderDto>()
+                .ForMember(o => o.SparePartName, x => x.MapFrom(sp => sp.Name));
         }
 
         private void CreateMapsForServiceRequest()

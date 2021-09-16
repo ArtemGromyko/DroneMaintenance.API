@@ -13,7 +13,7 @@ namespace SparePartsOrders.API.Models
         public Guid RequestId { get; set; }
         public string SparePartName { get; set; }
         [BsonRepresentation(BsonType.Int32)]
-        public uint Quantity { get; set; }
+        public int Quantity { get; set; }
         [BsonRepresentation(BsonType.Double)]
         public decimal Price { get; set; }
     }
