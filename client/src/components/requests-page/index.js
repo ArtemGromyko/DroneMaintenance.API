@@ -142,14 +142,13 @@ export default function RequestsPage() {
     setOpenFail(false);
   };
 
-  const handleOpen = (serviceType) => {
+  const handleOpen = (serviceType, id) => {
     if (serviceType != 'Repair with replacement') {
       setOpenSuccess(true);
     } else {
+      setRequest(rows.find((r) => r.id === id));
       history.push('/contract-form');
-      setOpenFail(true);
     }
-
   }
 
   const successBody = (
@@ -216,7 +215,7 @@ export default function RequestsPage() {
                       <EditIcon />
                     </IconButton>
                     {user?.role === 'admin' ? 
-                    (<IconButton onClick={() => handleOpen(row.serviceType)}>
+                    (<IconButton onClick={() => handleOpen(row.serviceType, row.id)}>
                       <NoteAddIcon />
                     </IconButton>) : null}
                   </TableCell>

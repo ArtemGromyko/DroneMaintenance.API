@@ -68,14 +68,7 @@ const RequestForm = ({ mode }) => {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        let res;
-        if(mode === 'creating') {
-            res = await handleCreate();
-        }
-        else {
-            res = await handleUpdate();
-        }
-
+        let res = mode == 'creating' ? await handleCreate() : await handleUpdate();
         if(res.ok) {
             history.push('/requests');
         }
@@ -108,8 +101,6 @@ const RequestForm = ({ mode }) => {
             serviceType,
             description
         };
-        console.log('handleUpdate()');
-        console.log(updatedRequest);
         return await updateRequestForUser(user.id, user.token, request.id, updatedRequest);
     }
 

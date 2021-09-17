@@ -39,8 +39,11 @@ const useStyles = makeStyles(() => ({
 
 const ContractForm = () => {
     const [rows, setRows] = useState([]);
-    const { user } = useContext(MainContext);
     const classes = useStyles();
+
+    const { user } = useContext(MainContext);
+    const { request } = useContext(RequestsContext);
+    const  history = useHistory();
 
     useEffect(() => {
         if (user) {
@@ -51,7 +54,10 @@ const ContractForm = () => {
         } else {
             setRows([]);
         }
+        console.log(request);
     }, [user]);
+
+    
 
     return (
         <Typography>

@@ -158,7 +158,7 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task AddSparePartForContractAsync(Guid contractId, 
         ContractSparePartForCreationModel contractPartForCreationModel)
-        {
+         {
             var contractEntity = await TryGetContractEntityByIdAsync(contractId);
             var sparePartEntity = await _partsService.TryGetSparePartEntityByIdAsync(contractPartForCreationModel.SparePartId);
             var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(contractEntity.ServiceRequestId);
