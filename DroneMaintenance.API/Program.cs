@@ -1,4 +1,6 @@
+using DroneMaintenance.BLL.Services;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace DroneMaintenance
@@ -14,7 +16,12 @@ namespace DroneMaintenance
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .UseStartup<Startup>()
+                        .ConfigureServices(services =>
+                        {
+                            services.AddHostedService<RequestStatusChanger>();
+                        });
                 });
     }
 }

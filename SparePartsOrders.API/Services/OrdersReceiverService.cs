@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DroneMaintenance.DTO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -23,7 +24,12 @@ namespace SparePartsOrders.API.Services
         public OrdersReceiverService(IServiceProvider sp)
         {
             _sp = sp;
-            _factory = new ConnectionFactory() { HostName = "localhost", Port = 5672 };
+            var configuration = sp.GetRequiredService<IConfiguration>();
+            _factory = new ConnectionFactory() 
+            {
+                HostName = configuration["RabbitMQ:hostName"],
+                Port = int.Parse(configuration["RabbitMQ:port"])
+            };
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.QueueDeclare(queue: "orders", durable: false, exclusive: false, autoDelete: false, arguments: null);
@@ -51,6 +57,7 @@ namespace SparePartsOrders.API.Services
                 {
                     var ordersService = scope.ServiceProvider.GetRequiredService<OrdersService>();
                     var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+                    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
                     var order = mapper.Map<Order>(orderDto);
                     await ordersService.CreateAsync(order);

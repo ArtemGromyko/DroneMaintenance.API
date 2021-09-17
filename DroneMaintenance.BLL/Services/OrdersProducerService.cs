@@ -1,5 +1,6 @@
 ﻿using DroneMaintenance.BLL.Contracts;
 using DroneMaintenance.DTO;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
@@ -8,9 +9,20 @@ namespace DroneMaintenance.BLL.Services
 {
     public class OrdersProducerService : IOrdersProducerService
     {
+        private readonly IConfiguration _configuration;
+
+        public OrdersProducerService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public void PostSparePartOrder(OrderDto orderDto)
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", Port = 5672 };
+            var factory = new ConnectionFactory() 
+            {
+                HostName = _configuration["RabbitMQ:hostName"], 
+                Port = int.Parse(_configuration["RabbitMQ:port"]) 
+            };
             using var connection = factory.CreateConnection();
             using (var channel = connection.CreateModel())
             {
