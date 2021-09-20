@@ -8,5 +8,6 @@ namespace DroneMaintenance.DTO
         public string SparePartName { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
+        public bool Received { get; set; } = false;
     }
 }

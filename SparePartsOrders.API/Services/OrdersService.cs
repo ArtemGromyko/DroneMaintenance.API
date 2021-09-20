@@ -20,6 +20,9 @@ namespace SparePartsOrders.API.Services
 
         public async Task<List<Order>> GetAsync() =>
             await _orders.FindAsync(order => true).Result.ToListAsync();
+
+        public async Task<List<Order>> GetReceivedAsync() =>
+            await _orders.FindAsync(order => order.Received == true).Result.ToListAsync();
         
         public async Task<Order> GetAsync(string id) =>
             await _orders.FindAsync(order => order.Id == id).Result.FirstOrDefaultAsync();

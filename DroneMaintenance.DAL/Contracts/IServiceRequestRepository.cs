@@ -16,5 +16,6 @@ namespace DroneMaintenance.DAL.Contracts
         Task DeleteServiceRequestAsync(ServiceRequest serviceRequest);
         Task<List<ServiceRequest>> GetAllServiceRequestsForUserAsync(Guid userId);
         Task<ServiceRequest> GetServiceRequestForUserAsync(Guid userId, Guid id);
+        Task UpdateRequestStatusesAsync(List<Guid> ids);
     }
 }

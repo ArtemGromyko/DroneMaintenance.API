@@ -1,7 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DroneMaintenance.DAL.Contracts;
+using DroneMaintenance.DTO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +36,9 @@ namespace DroneMaintenance.BLL.Services
                 using (var response = await httpClient.GetAsync(configuration["SparePartsOrders.API:url"])) 
                 {
                     var res = await response.Content.ReadAsStringAsync();
+                    var orders = JsonConvert.DeserializeObject<List<OrderDto>>(res);
+                    var requestRepository = scope.ServiceProvider.GetRequiredService<IServiceRequestRepository>();
+                    await requestRepository.UpdateRequestStatusesAsync(orders.Select(o => o.RequestId).ToList());
                     Console.WriteLine(res);
                 }
             }

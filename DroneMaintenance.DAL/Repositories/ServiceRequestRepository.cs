@@ -3,13 +3,19 @@ using DroneMaintenance.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DroneMaintenance.DAL.Repositories
 {
     public class ServiceRequestRepository : RepositoryBase<ServiceRequest>, IServiceRequestRepository
     {
-        public ServiceRequestRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
+        private readonly RepositoryContext _repositoryContext;
+        public ServiceRequestRepository(RepositoryContext repositoryContext) : base(repositoryContext) 
+        {
+            _repositoryContext = repositoryContext;
+        }
+
         public async Task<List<ServiceRequest>> GetAllServiceRequestsAsync() =>
             await FindAll().ToListAsync();
 
@@ -35,5 +41,12 @@ namespace DroneMaintenance.DAL.Repositories
 
         public async Task<ServiceRequest> GetServiceRequestForDroneAsync(Guid droneId, Guid id) =>
             await FindByCondition(s => s.Id.Equals(id) && s.DroneId.Equals(droneId)).SingleOrDefaultAsync();
+
+        public async Task UpdateRequestStatusesAsync(List<Guid> ids)
+        {
+            var requestEntities = _repositoryContext.ServiceRequests.Where(r => ids.Contains(r.Id));
+            await requestEntities.ForEachAsync(r => r.RequestStatus = RequestStatus.WorkInProgress);
+            await _repositoryContext.SaveChangesAsync();
+        }
     }
 }

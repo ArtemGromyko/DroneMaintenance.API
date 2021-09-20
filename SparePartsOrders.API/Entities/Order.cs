@@ -16,5 +16,7 @@ namespace SparePartsOrders.API.Models
         public int Quantity { get; set; }
         [BsonRepresentation(BsonType.Double)]
         public decimal Price { get; set; }
+        [BsonRepresentation(BsonType.Boolean)]
+        public bool Received { get; set; }
     }
 }
