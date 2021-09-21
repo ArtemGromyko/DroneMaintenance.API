@@ -18,11 +18,13 @@ namespace SparePartsOrders.API.Services
             _orders = database.GetCollection<Order>(settings.CollectionName);
         }
 
-        public async Task<List<Order>> GetAsync() =>
-            await _orders.FindAsync(order => true).Result.ToListAsync();
+        public async Task<List<Order>> GetAsync(RequestParameters parameters)
+        {
+            if (parameters.Received == null)
+                return await _orders.FindAsync(order => true).Result.ToListAsync();
 
-        public async Task<List<Order>> GetReceivedAsync() =>
-            await _orders.FindAsync(order => order.Received == true).Result.ToListAsync();
+            return await _orders.FindAsync(order => order.Received == parameters.Received).Result.ToListAsync();
+        }     
         
         public async Task<Order> GetAsync(string id) =>
             await _orders.FindAsync(order => order.Id == id).Result.FirstOrDefaultAsync();

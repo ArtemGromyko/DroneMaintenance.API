@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SparePartsOrders.API.Entities;
 using SparePartsOrders.API.Models;
 using SparePartsOrders.API.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SparePartsOrders.API.Controllers
@@ -21,12 +19,8 @@ namespace SparePartsOrders.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Order>>> Get() =>
-            await _ordersService.GetAsync();
-
-        [HttpGet("{api/received-orders}")]
-        public async Task<ActionResult<List<Order>>> GetReceivedAsync() =>
-            await _ordersService.GetReceivedAsync();
+        public async Task<ActionResult<List<Order>>> Get([FromQuery]RequestParameters parameters) =>
+            await _ordersService.GetAsync(parameters);
 
         [HttpPut("{id}")]
         public async Task<ActionResult<Order>> Put(string id, Order updateOrder)

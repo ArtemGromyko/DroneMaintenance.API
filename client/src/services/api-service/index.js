@@ -1,5 +1,10 @@
 const _apiBase = 'https://localhost:5001/api';
 
+const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+}
+
 const postOptions = {
     method: 'POST',
     headers: {
@@ -7,6 +12,33 @@ const postOptions = {
         'Content-Type': 'application/json',
     }
 };
+
+function getAuthorization(token) {
+    return {authorization: `Bearer ${token}`};
+}
+
+function getOptions(method = null, headers = null, body = null) {
+    const options = {
+        method: method,
+        headers: headers,
+        body: JSON.stringify(body)
+    }
+
+    return options;
+}
+
+async function getResource(url, options = null) {
+    const res = await fetch(`${_apiBase}${url}`, options);
+    if (!res.ok) {
+        throw new Error(`Could not fetch ${url}, received ${res.status}`);
+    }
+
+    return await res.json();
+}
+
+async function postResource(url, options = null) {
+    return await fetch(`${_apiBase}${url}`, options);
+}
 
 const getPostOptionsWithToken = (token, body) => {
     const options = { ...postOptions };
@@ -20,20 +52,6 @@ const getPostOptionsWithToken = (token, body) => {
 };
 
 const getPostOptionsWithBody = (body) => ({ ...postOptions, body: JSON.stringify(body)});
-
-async function getResource(url, options = null) {
-    console.log(options);
-    const res = await fetch(`${_apiBase}${url}`, options);
-    if (!res.ok) {
-        throw new Error(`Could not fetch ${url}, received ${res.status}`);
-    }
-
-    return await res.json();
-}
-
-async function postResource(url, options) {
-    return await fetch(`${_apiBase}${url}`, options);
-}
 
 const getRequestsForUser = async (id, token) => {
     console.log(id);
@@ -108,4 +126,4 @@ const getAllDrones = async (token) =>
 
 export { getAllDrones, 
     authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser, getAllComments,
-    _apiBase, postOptions,  getPostOptionsWithToken, getPostOptionsWithBody, getResource};
+    _apiBase, postOptions,  getPostOptionsWithToken, getPostOptionsWithBody, getResource, getOptions, headers, getAuthorization};

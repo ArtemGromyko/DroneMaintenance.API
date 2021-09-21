@@ -30,7 +30,7 @@ namespace SparePartsOrders.API
             services.AddSingleton<OrdersService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+          
             services.AddControllers();
         }
 
