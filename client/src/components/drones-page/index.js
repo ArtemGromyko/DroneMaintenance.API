@@ -13,6 +13,7 @@ import { RequestsContext } from '../../contexts/requests-context';
 import { getAllComments } from '../../services/api-service';
 import { Grid } from '@material-ui/core';
 import { getAllDrones } from '../../services/api-service';
+import { getDrones } from '../../services/api-service/drones-service'
 
 const useStyles = makeStyles({
     root: {
@@ -53,7 +54,7 @@ const DronesPage = () => {
 
     useEffect(() => {
         if (user) {
-            getAllDrones(user.token).then((res) => setRows(res));
+            getDrones(user.token).then((res) => setRows(res));
         } else {
             setRows([]);
         }

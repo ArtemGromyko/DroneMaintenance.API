@@ -13,6 +13,7 @@ import { RequestsContext } from '../../contexts/requests-context';
 import { getAllComments } from '../../services/api-service';
 import { useHistory } from 'react-router';
 import { Grid } from '@material-ui/core';
+import { getComments } from '../../services/api-service/comments-service';
 
 const useStyles = makeStyles({
     root: {
@@ -60,7 +61,7 @@ const CommentsPage = () => {
 
     useEffect(() => {
         if (user) {
-            getAllComments(user.token).then((res) => setRows(res));
+            getComments(user.token).then((res) => setRows(res));
         } else {
             setRows([]);
         }

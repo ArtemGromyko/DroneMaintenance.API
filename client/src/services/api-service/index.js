@@ -14,10 +14,10 @@ const postOptions = {
 };
 
 function getAuthorization(token) {
-    return {authorization: `Bearer ${token}`};
+    return { authorization: `Bearer ${token}` };
 }
 
-function getOptions(method = null, headers = null, body = null) {
+function getOptions(method, headers, body) {
     const options = {
         method: method,
         headers: headers,
@@ -42,8 +42,10 @@ async function postResource(url, options = null) {
 
 const getPostOptionsWithToken = (token, body) => {
     const options = { ...postOptions };
-    options.headers = {...options.headers, 'Authorization': 'Bearer ' + token, 'Accept': 'application/json',
-    'Content-Type': 'application/json',};
+    options.headers = {
+        ...options.headers, 'Authorization': 'Bearer ' + token, 'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    };
     if (body) {
         options.body = JSON.stringify(body);
     }
@@ -51,11 +53,11 @@ const getPostOptionsWithToken = (token, body) => {
     return options;
 };
 
-const getPostOptionsWithBody = (body) => ({ ...postOptions, body: JSON.stringify(body)});
+const getPostOptionsWithBody = (body) => ({ ...postOptions, body: JSON.stringify(body) });
 
 const getRequestsForUser = async (id, token) => {
     console.log(id);
-    return await getResource(`/requests/`, {headers: {authorization: 'Bearer ' + token}});
+    return await getResource(`/requests/`, { headers: { authorization: 'Bearer ' + token } });
 }
 
 const authenticate = async (user, auth) => {
@@ -119,11 +121,13 @@ const updateRequestForUser = async (id, token, requestId, updatedRequest) => {
 }
 
 const getAllComments = async (token) =>
-    await getResource('/comments/', {headers: {authorization: 'Bearer ' + token}});
+    await getResource('/comments/', { headers: { authorization: 'Bearer ' + token } });
 
 const getAllDrones = async (token) =>
-    await getResource('/drones/', {headers: {authorization: 'Bearer ' + token}});
+    await getResource('/drones/', { headers: { authorization: 'Bearer ' + token } });
 
-export { getAllDrones, 
+export {
+    getAllDrones,
     authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser, getAllComments,
-    _apiBase, postOptions,  getPostOptionsWithToken, getPostOptionsWithBody, getResource, getOptions, headers, getAuthorization};
+    _apiBase, postOptions, getPostOptionsWithToken, getPostOptionsWithBody, getResource, getOptions, headers, getAuthorization, postResource
+};

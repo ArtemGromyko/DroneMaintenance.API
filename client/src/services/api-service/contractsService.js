@@ -5,7 +5,7 @@ function getContracts(token) {
 }
 
 function createContract(token, body) {
-
+    
 }
 
 export { getContracts };
