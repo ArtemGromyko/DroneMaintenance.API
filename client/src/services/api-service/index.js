@@ -14,11 +14,11 @@ const postOptions = {
 };
 
 function createUrlWithId(url, id) {
-    return `${url}/${id}`;
+    return `${url}${id}`;
 }
 
 function createUrl(parent, id, child, childId) {
-    return `${parent}/${id}${child}/${childId ?? ''}`;
+    return `${parent}${id}${child}${childId ?? ''}`;
 }
 
 function getAuthorization(token) {
@@ -41,6 +41,10 @@ async function fetchData(url, options) {
         throw new Error(`Could not fetch ${url}, received ${res.status}`);
     }
 
+    if(options.method !== 'GET') {
+        return res;
+    }
+    
     return await res.json();
 }
 
@@ -105,6 +109,8 @@ const createRequestForUser = async (id, token, createdRequest) => {
         },
         body: JSON.stringify(createdRequest)
     };
+
+    console.log(options);
 
     return await fetch(`${_apiBase}/requests/`, options);
 }

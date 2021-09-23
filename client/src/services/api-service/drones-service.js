@@ -1,6 +1,6 @@
 import { headers, getOptions, fetchData, createUrlWithId } from ".";
 
-const url = '/drones';
+const url = '/drones/';
 
 async function getDrones(token) {
     const options = getOptions('GET', headers, token);

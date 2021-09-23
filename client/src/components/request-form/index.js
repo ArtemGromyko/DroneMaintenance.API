@@ -13,6 +13,7 @@ import { createRequestForUser, updateRequestForUser } from '../../services/api-s
 import { MainContext } from '../../contexts/main-context';
 import { useHistory } from 'react-router';
 import { RequestsContext } from '../../contexts/requests-context';
+import { createRequest, updateRequest } from '../../services/api-service/requests-service';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -93,7 +94,7 @@ const RequestForm = ({ mode }) => {
             description
         };
 
-        return await createRequestForUser(user.id, user.token, createdRequest);
+        return await createRequest(user, createdRequest);
     }
 
     async function handleUpdate() {
@@ -101,7 +102,7 @@ const RequestForm = ({ mode }) => {
             serviceType,
             description
         };
-        return await updateRequestForUser(user.id, user.token, request.id, updatedRequest);
+        return await updateRequest(user, request.id, updatedRequest);
     }
 
     return (

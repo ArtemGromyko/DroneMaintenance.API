@@ -20,9 +20,8 @@ import { RequestsContext } from '../../contexts/requests-context';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import { Modal } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
-import Notification from '../notification';
 import ClearIcon from '@material-ui/icons/Clear';
-import { getRequests } from '../../services/api-service/requests-service';
+import { getRequests, deleteRequest } from '../../services/api-service/requests-service';
 
 const columns = [
   {
@@ -96,8 +95,9 @@ export default function RequestsPage() {
   const [openFail, setOpenFail] = useState(false);
 
   const { user } = useContext(MainContext);
-  const history = useHistory();
   const { setRequest } = useContext(RequestsContext);
+
+  const history = useHistory();
   const classes = useStyles();
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export default function RequestsPage() {
   }, [user]);
 
   const handleDelete = (id) => {
-    deleteRequestForUser(id, user.token)
+    deleteRequest(user, id)
       .then((response) => {
         if (response.ok) {
           var array = rows.filter((i) => i.id !== id);
@@ -135,7 +135,6 @@ export default function RequestsPage() {
   const handleCloseSuccess = () => {
     setOpenSuccess(false);
   };
-
 
   const handleCloseFail = () => {
     setOpenFail(false);
