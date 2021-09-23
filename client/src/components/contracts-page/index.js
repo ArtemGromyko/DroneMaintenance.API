@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { MainContext } from '../../contexts/main-context';
-import { getContracts } from '../../services/api-service/contractsService';
+import { getContracts } from '../../services/api-service/contracts-service';
 
 const useStyles = makeStyles({
   table: {

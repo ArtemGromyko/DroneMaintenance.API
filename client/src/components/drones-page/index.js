@@ -9,10 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { MainContext } from '../../contexts/main-context';
-import { RequestsContext } from '../../contexts/requests-context';
-import { getAllComments } from '../../services/api-service';
 import { Grid } from '@material-ui/core';
-import { getAllDrones } from '../../services/api-service';
 import { getDrones } from '../../services/api-service/drones-service'
 
 const useStyles = makeStyles({
@@ -49,7 +46,7 @@ const DronesPage = () => {
     const [rows, setRows] = useState([]);
 
     const { user } = useContext(MainContext);
-    const { setRequest } = useContext(RequestsContext);
+
     const classes = useStyles();
 
     useEffect(() => {
@@ -60,12 +57,11 @@ const DronesPage = () => {
         }
     }, [user]);
 
-
     return (
         <Grid className={classes.root}>
             <Grid direction='row' container alignItems='center' justifyContent='space-between'>
                 <Typography variant='h5'>Here you can see maintained drones.</Typography>
-                <Button className={classes.addButton}>Add</Button>
+                {user?.role === 'admin' ? (<Button className={classes.addButton}>Add</Button>) : null}
             </Grid>
             <Grid className={classes.cards}>
                 {rows.map((row) => {

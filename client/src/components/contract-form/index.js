@@ -14,7 +14,7 @@ import { MainContext } from '../../contexts/main-context';
 import { useHistory } from 'react-router';
 import { RequestsContext } from '../../contexts/requests-context';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { getParts } from '../../services/api-service/partsService';
+import { getParts } from '../../services/api-service/parts-service';
 
 const useStyles = makeStyles(() => ({
     root: {

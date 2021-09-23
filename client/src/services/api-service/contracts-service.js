@@ -1,17 +1,17 @@
 import { headers, getOptions, fetchData, postResource, getAuthorization } from ".";
 
-const url = '/comments';
+const url = '/contracts';
 
-async function getComments(token) {
+async function getContracts(token) {
     const options = getOptions('GET', headers, token);
 
     return await fetchData(url, options);
 }
 
-async function createComment(token, comment) {
-    const options = getOptions('POST', headers, token, comment);
+async function createContract(token, drone) {
+    const options = getOptions('POST', headers, token, drone);
 
     return await postResource(url, options);
 }
 
-export { getComments, createComment }
+export { getContracts, createContract }

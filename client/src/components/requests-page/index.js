@@ -15,7 +15,6 @@ import { deleteRequestForUser } from '../../services/api-service';
 import EditIcon from '@material-ui/icons/Edit';
 import TableFooter from '@material-ui/core/TableFooter';
 import Button from '@material-ui/core/Button';
-import { getRequestsForUser } from '../../services/api-service';
 import { useHistory } from 'react-router';
 import { RequestsContext } from '../../contexts/requests-context';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
@@ -23,6 +22,7 @@ import { Modal } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import Notification from '../notification';
 import ClearIcon from '@material-ui/icons/Clear';
+import { getRequests } from '../../services/api-service/requests-service';
 
 const columns = [
   {
@@ -102,8 +102,7 @@ export default function RequestsPage() {
 
   useEffect(() => {
     if (user) {
-      getRequestsForUser(user.id, user.token).then((res) => setRows(res));
-      console.log(rows);
+      getRequests(user).then((res) => setRows(res));
     } else {
       setRows([]);
     }

@@ -13,21 +13,29 @@ const postOptions = {
     }
 };
 
+function createUrlWithId(url, id) {
+    return `${url}/${id}`;
+}
+
+function createUrl(parent, id, child, childId) {
+    return `${parent}/${id}${child}/${childId ?? ''}`;
+}
+
 function getAuthorization(token) {
     return { authorization: `Bearer ${token}` };
 }
 
-function getOptions(method, headers, body) {
+function getOptions(method, headers, token, body) {
     const options = {
         method: method,
-        headers: headers,
+        headers: headers ? {...headers, ...getAuthorization(token)} : getAuthorization(token),
         body: JSON.stringify(body)
     }
 
     return options;
 }
 
-async function getResource(url, options = null) {
+async function fetchData(url, options) {
     const res = await fetch(`${_apiBase}${url}`, options);
     if (!res.ok) {
         throw new Error(`Could not fetch ${url}, received ${res.status}`);
@@ -57,7 +65,7 @@ const getPostOptionsWithBody = (body) => ({ ...postOptions, body: JSON.stringify
 
 const getRequestsForUser = async (id, token) => {
     console.log(id);
-    return await getResource(`/requests/`, { headers: { authorization: 'Bearer ' + token } });
+    return await fetchData(`/requests/`, { headers: { authorization: 'Bearer ' + token } });
 }
 
 const authenticate = async (user, auth) => {
@@ -121,13 +129,14 @@ const updateRequestForUser = async (id, token, requestId, updatedRequest) => {
 }
 
 const getAllComments = async (token) =>
-    await getResource('/comments/', { headers: { authorization: 'Bearer ' + token } });
+    await fetchData('/comments/', { headers: { authorization: 'Bearer ' + token } });
 
 const getAllDrones = async (token) =>
-    await getResource('/drones/', { headers: { authorization: 'Bearer ' + token } });
+    await fetchData('/drones/', { headers: { authorization: 'Bearer ' + token } });
 
 export {
     getAllDrones,
     authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser, getAllComments,
-    _apiBase, postOptions, getPostOptionsWithToken, getPostOptionsWithBody, getResource, getOptions, headers, getAuthorization, postResource
+    _apiBase, postOptions, getPostOptionsWithToken, getPostOptionsWithBody, fetchData, getOptions, headers, getAuthorization, postResource,
+    createUrl, createUrlWithId
 };

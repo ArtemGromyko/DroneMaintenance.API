@@ -1,17 +1,29 @@
-import { _apiBase, headers, getOptions, getResource, postResource, getAuthorization } from ".";
+import { headers, getOptions, fetchData, createUrlWithId } from ".";
 
 const url = '/drones';
 
 async function getDrones(token) {
-    const options = getOptions('GET', {...headers, ...getAuthorization(token)});
+    const options = getOptions('GET', headers, token);
 
-    return await getResource(url, options);
+    return await fetchData(url, options);
 }
 
 async function createDrone(token, drone) {
-    const options = getOptions('POST', {...headers, ...getAuthorization(token)}, drone);
+    const options = getOptions('POST', headers, token, drone);
 
-    return await postResource(url, options);
+    return await fetchData(url, options);
 }
 
-export { getDrones, createDrone }
+async function deleteDrone(token, id) {
+    const options = getOptions('DELETE', headers, token);
+
+    return await fetchData(createUrlWithId(url, id), options);
+}
+
+async function updateDrone(token, id, drone) {
+    const options = getOptions('PUT', headers, token, drone);
+
+    return await fetchData(createUrlWithId(url, id), options);
+}
+
+export { getDrones, createDrone, deleteDrone, updateDrone }
