@@ -1,4 +1,4 @@
-import { headers, getOptions, fetchData, createUrl } from ".";
+import { headers, getOptionsWithToken, fetchData, createUrl } from ".";
 
 const requestUrl = '/requests/';
 const userUrl = '/users/';
@@ -11,7 +11,7 @@ function createUrlForRequests({role, id}, requestId) {
 }
 
 async function getRequests(user) {
-    const options = getOptions('GET', headers, user.token);
+    const options = getOptionsWithToken('GET', headers, user.token);
 
     return await fetchData(createUrlForRequests(user), options);
 }
@@ -19,7 +19,7 @@ async function getRequests(user) {
 async function createRequest(user, request) {
     request.userId = user.id;
     request.droneId = '9fffa88b-91c5-42a6-8692-1fd8701fb0e4';
-    const options = getOptions('POST', headers, user.token, request);
+    const options = getOptionsWithToken('POST', headers, user.token, request);
 
     console.log(createUrlForRequests(user));
     console.log(options);
@@ -30,13 +30,13 @@ async function createRequest(user, request) {
 async function updateRequest(user, requestId, request) {
     request.userId = user.id;
     request.droneId = '9fffa88b-91c5-42a6-8692-1fd8701fb0e4';
-    const options = getOptions('PUT', headers, user.token, request);
+    const options = getOptionsWithToken('PUT', headers, user.token, request);
 
     return await fetchData(createUrlForRequests(user, requestId), options);
 }
 
 async function deleteRequest(user, requestId) {
-    const options = getOptions('DELETE', headers, user.token);
+    const options = getOptionsWithToken('DELETE', headers, user.token);
 
     return await fetchData(createUrlForRequests(user, requestId), options);
 }

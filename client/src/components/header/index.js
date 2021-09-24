@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { MainContext } from '../../contexts/main-context';
-import { signOut } from '../../services/api-service';
+import { signOut } from '../../services/api-service/users-service';
 
 const useStyles = makeStyles({
     root: {

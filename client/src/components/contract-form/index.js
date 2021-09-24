@@ -5,13 +5,7 @@ import { Button } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import { createRequestForUser, updateRequestForUser } from '../../services/api-service';
 import { MainContext } from '../../contexts/main-context';
-import { useHistory } from 'react-router';
 import { RequestsContext } from '../../contexts/requests-context';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { getParts } from '../../services/api-service/parts-service';
@@ -43,7 +37,6 @@ const ContractForm = () => {
 
     const { user } = useContext(MainContext);
     const { request } = useContext(RequestsContext);
-    const  history = useHistory();
 
     useEffect(() => {
         if (user) {
@@ -56,8 +49,6 @@ const ContractForm = () => {
         }
         console.log(request);
     }, [user]);
-
-    
 
     return (
         <Typography>

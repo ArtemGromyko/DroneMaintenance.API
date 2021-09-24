@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router';
-import { authenticate } from '../../services/api-service';
+import { authenticate } from '../../services/api-service/users-service';
 import { Avatar, Grid, Paper } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';

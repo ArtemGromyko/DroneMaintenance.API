@@ -5,14 +5,10 @@ import { Button } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import { MainContext } from '../../contexts/main-context';
-import { useHistory } from 'react-router';
 import { RequestsContext } from '../../contexts/requests-context';
-import { createRequest, updateRequest } from '../../services/api-service/requests-service';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { getParts } from '../../services/api-service/parts-service';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -27,81 +23,16 @@ const useStyles = makeStyles(() => ({
         margin: '20px auto'
     },
     buttonStyle: {
-        marginTop: '2rem',
+        marginTop: '5rem',
         marginBottom: '2rem'
+    },
+    textField: {
+        marginTop: '2rem'
     }
 }));
 
-const serviceTypes = [
-    {value: '', label: 'None'}, 
-    {value: 0, label: 'Repair without replacement'},
-    {value: 1, label: 'Repair with replacement'},
-    {value: 2, label: 'Diagnostics'}
-]
-
-const RequestForm = ({ mode }) => {
-    const [serviceType, setServiceType] = useState('');
-    const [description, setDescription] = useState('');
-    const [isDisabled, changeDisabled] = useState(true);
-
-    const { user } = useContext(MainContext);
-    const { request } = useContext(RequestsContext);
-    const  history = useHistory();
-
-    useEffect(() => {
-        if (serviceType === '') {
-            changeDisabled(true);
-        } else {
-            changeDisabled(false);
-        }
-    }, [serviceType]);
-
-    useEffect(() => {
-        if (mode === 'editing') {
-            setServiceType(serviceTypes.find( (st) => st.label === request.serviceType).value);
-            setDescription(request.description);
-        }
-    }, [request]);
-
-    const classes = useStyles();
-
-    async function handleSubmit(event) {
-        event.preventDefault();
-
-        let res = mode == 'creating' ? await handleCreate() : await handleUpdate();
-        if(res.ok) {
-            history.push('/requests');
-        }
-    }
-
-    function handleChange(event) {
-        switch (event.target.name) {
-            case 'description':
-                setDescription(event.target.value);
-                break;
-            case 'serviceType':
-                setServiceType(event.target.value);
-                break;
-        }
-    }
-
-    async function handleCreate() {
-        const createdRequest = {
-            serviceType,
-            description
-        };
-
-        return await createRequest(user, createdRequest);
-    }
-
-    async function handleUpdate() {
-        const updatedRequest = {
-            serviceType,
-            description
-        };
-        
-        return await updateRequest(user, request.id, updatedRequest);
-    }
+export default function CommentForm() {
+    
 
     return (
         <Typography>
@@ -146,5 +77,3 @@ const RequestForm = ({ mode }) => {
         </Typography>
     );
 }
-
-export default RequestForm;

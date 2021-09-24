@@ -25,11 +25,21 @@ function getAuthorization(token) {
     return { authorization: `Bearer ${token}` };
 }
 
-function getOptions(method, headers, token, body) {
+function getOptionsWithToken(method, headers, token, body) {
     const options = {
         method: method,
         headers: headers ? {...headers, ...getAuthorization(token)} : getAuthorization(token),
         body: JSON.stringify(body)
+    }
+
+    return options;
+}
+
+function getOptionsWithTokenWithoutToken(method, headers, body) {
+    const options = {
+        method: method,
+        headers: headers ?? undefined,
+        body: body ? JSON.stringify(body) : undefined
     }
 
     return options;
@@ -143,6 +153,6 @@ const getAllDrones = async (token) =>
 export {
     getAllDrones,
     authenticate, signOut, getRequestsForUser, deleteRequestForUser, createRequestForUser, updateRequestForUser, getAllComments,
-    _apiBase, postOptions, getPostOptionsWithToken, getPostOptionsWithBody, fetchData, getOptions, headers, getAuthorization, postResource,
-    createUrl, createUrlWithId
+    _apiBase, postOptions, getPostOptionsWithToken, getPostOptionsWithBody, fetchData, getOptionsWithToken, headers, getAuthorization, postResource,
+    createUrl, createUrlWithId, getOptionsWithTokenWithoutToken
 };

@@ -1,7 +1,9 @@
 ﻿using DroneMaintenance.API.Filters.ActionFilters;
 using DroneMaintenance.BLL.Contracts;
+using DroneMaintenance.Models.RequestModels.Comment;
 using DroneMaintenance.Models.RequestModels.ServiceRequest;
 using DroneMaintenance.Models.RequestModels.User;
+using DroneMaintenance.Models.ResponseModels.Comment;
 using DroneMaintenance.Models.ResponseModels.ServiceRequest;
 using DroneMaintenance.Models.ResponseModels.User;
 using Microsoft.AspNetCore.Authorization;
@@ -102,6 +104,36 @@ namespace DroneMaintenance.API.Controllers
             await _usersService.DeleteServiceRequestForUserAsync(userId, id);
 
             return NoContent();
+        }
+
+        [HttpGet("{userId}/comments")]
+        public async Task<ActionResult<IEnumerable<CommentModel>>> GetCommentsForUserAsync(Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("{userId}/comments/{id}")]
+        public async Task<ActionResult<CommentModel>> GetCommentForUserAsync(Guid userId, Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{userId}/comments")]
+        public async Task<ActionResult<CommentModel>> CreateCommentForUserAsyn(Guid userId, [FromBody]CommentForCreationModel comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut("{userId}/comments/{id}")]
+        public async Task<ActionResult<CommentModel>> UpdateCommentForUserAsync(Guid userId, Guid id, [FromBody]CommentForUpdateModel comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("{userId}/comments/{id}")]
+        public async Task<ActionResult> DeleteCommentForUserAsync(Guid userId, Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
