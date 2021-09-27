@@ -21,10 +21,12 @@ namespace DroneMaintenance.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;
+        private readonly ICommentsForUserService _commentsForUserService;
 
-        public UsersController(IUsersService usersService)
+        public UsersController(IUsersService usersService, ICommentsForUserService commentsForUserService)
         {
             _usersService = usersService;
+            _commentsForUserService = commentsForUserService;
         }
 
         [AllowAnonymous]
@@ -107,33 +109,27 @@ namespace DroneMaintenance.API.Controllers
         }
 
         [HttpGet("{userId}/comments")]
-        public async Task<ActionResult<IEnumerable<CommentModel>>> GetCommentsForUserAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<ActionResult<IEnumerable<CommentModel>>> GetCommentsForUserAsync(Guid userId) =>
+            await _commentsForUserService.GetCommentsForUserAsync(userId);
 
         [HttpGet("{userId}/comments/{id}")]
-        public async Task<ActionResult<CommentModel>> GetCommentForUserAsync(Guid userId, Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<ActionResult<CommentModel>> GetCommentForUserAsync(Guid userId, Guid id) =>
+            await _commentsForUserService.GetCommentForUserAsync(userId, id);
 
         [HttpPost("{userId}/comments")]
-        public async Task<ActionResult<CommentModel>> CreateCommentForUserAsyn(Guid userId, [FromBody]CommentForCreationModel comment)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<ActionResult<CommentModel>> CreateCommentForUserAsyn(Guid userId, [FromBody] CommentForCreationModel comment) =>
+            await _commentsForUserService.CreateCommentForUserAsync(userId, comment);
 
         [HttpPut("{userId}/comments/{id}")]
-        public async Task<ActionResult<CommentModel>> UpdateCommentForUserAsync(Guid userId, Guid id, [FromBody]CommentForUpdateModel comment)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<ActionResult<CommentModel>> UpdateCommentForUserAsync(Guid userId, Guid id, [FromBody] CommentForUpdateModel comment) =>
+            await _commentsForUserService.UpdateCommentForUserAsync(userId, id, comment);
 
         [HttpDelete("{userId}/comments/{id}")]
         public async Task<ActionResult> DeleteCommentForUserAsync(Guid userId, Guid id)
         {
-            throw new NotImplementedException();
+            await _commentsForUserService.DeleteCommentForUserAsyn(userId, id);
+
+            return NoContent();
         }
     }
 }

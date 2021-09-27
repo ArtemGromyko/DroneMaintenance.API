@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { MainContext } from '../../contexts/main-context';
-import { RequestsContext } from '../../contexts/requests-context';
+import { modelContext } from '../../contexts/models-context';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { getParts } from '../../services/api-service/parts-service';
 
@@ -36,7 +36,7 @@ const ContractForm = () => {
     const classes = useStyles();
 
     const { user } = useContext(MainContext);
-    const { request } = useContext(RequestsContext);
+    const { model } = useContext(modelContext);
 
     useEffect(() => {
         if (user) {
@@ -47,7 +47,7 @@ const ContractForm = () => {
         } else {
             setRows([]);
         }
-        console.log(request);
+        console.log(model);
     }, [user]);
 
     return (
@@ -74,7 +74,7 @@ const ContractForm = () => {
                             Add
                     </Button>
                     <Typography align='right' style={{ marginTop: '6rem' }}>
-                        <Link style={{ textDecoration: 'none' }} to="/requests">
+                        <Link style={{ textDecoration: 'none' }} to="/models">
                             Cancel
                         </Link>
                     </Typography>

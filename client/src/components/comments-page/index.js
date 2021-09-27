@@ -9,11 +9,10 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { MainContext } from '../../contexts/main-context';
-import { RequestsContext } from '../../contexts/requests-context';
-import { getAllComments } from '../../services/api-service';
+import { modelContext } from '../../contexts/models-context';
 import { useHistory } from 'react-router';
 import { Grid } from '@material-ui/core';
-import { getComments } from '../../services/api-service/comments-service';
+import { getComments, deleteCommentForUser, deleteComment } from '../../services/api-service/comments-service';
 
 const useStyles = makeStyles({
     root: {
@@ -56,7 +55,7 @@ const CommentsPage = () => {
 
     const { user } = useContext(MainContext);
     const history = useHistory();
-    const { setRequest } = useContext(RequestsContext);
+    const { setModel } = useContext(modelContext);
     const classes = useStyles();
 
     useEffect(() => {
@@ -67,10 +66,29 @@ const CommentsPage = () => {
         }
     }, [user]);
 
+    async function handleDelete(id, userId) {
+        let res;
+        if(user.id !== userId && user.role === 'admin') {
+            res = await deleteComment(user.token, id);
+        } else {
+            res = await deleteCommentForUser(user, id);
+        }
+
+        if(res.ok) {
+            const arr = rows.filter((r) => r.id !== id);
+            setRows(arr);
+        }
+    }
+
+    function handleEdit(id) {
+        setModel(rows.find((r) => r.id === id));
+        history.push('/comment-editing');
+    }
+
     return (
         <Grid className={classes.root}>
             <Grid className={classes.buttons} direction='row' container alignItems='center' justifyContent='space-between'>
-                <Button className={classes.createCommentButton}>write a comment</Button>
+                <Button className={classes.createCommentButton} onClick={() => history.push('/comment-creating')}>write a comment</Button>
                 <Grid>
                     <Button variant="outlined" color="primary">
                         positive
@@ -114,10 +132,10 @@ const CommentsPage = () => {
                         </CardContent>
                         {user?.id === row.userId || user?.role === 'admin' ? (
                             <CardActions>
-                                <IconButton>
+                                <IconButton onClick={() => handleDelete(row.id)}>
                                     <DeleteIcon />
                                 </IconButton>
-                                <IconButton>
+                                <IconButton onClick={() => handleEdit(row.id)}>
                                     <EditIcon />
                                 </IconButton>
                             </CardActions>

@@ -16,7 +16,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import TableFooter from '@material-ui/core/TableFooter';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router';
-import { RequestsContext } from '../../contexts/requests-context';
+import { modelContext } from '../../contexts/models-context';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import { Modal } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
@@ -30,7 +30,7 @@ const columns = [
   },
   {
     id: 'requestStatus',
-    label: 'RequestStatus',
+    label: 'modelStatus',
     align: 'left'
   },
   {
@@ -95,7 +95,7 @@ export default function RequestsPage() {
   const [openFail, setOpenFail] = useState(false);
 
   const { user } = useContext(MainContext);
-  const { setRequest } = useContext(RequestsContext);
+  const { setModel } = useContext(modelContext);
 
   const history = useHistory();
   const classes = useStyles();
@@ -119,7 +119,7 @@ export default function RequestsPage() {
   };
 
   const handleEdit = (id) => {
-    setRequest(rows.find((r) => r.id === id));
+    setModel(rows.find((r) => r.id === id));
     history.push('/request-editing');
   }
 
@@ -144,7 +144,7 @@ export default function RequestsPage() {
     if (serviceType != 'Repair with replacement') {
       setOpenSuccess(true);
     } else {
-      setRequest(rows.find((r) => r.id === id));
+      setModel(rows.find((r) => r.id === id));
       history.push('/contract-form');
     }
   }

@@ -79,7 +79,7 @@ const getPostOptionsWithBody = (body) => ({ ...postOptions, body: JSON.stringify
 
 const getRequestsForUser = async (id, token) => {
     console.log(id);
-    return await fetchData(`/requests/`, { headers: { authorization: 'Bearer ' + token } });
+    return await fetchData(`/models/`, { headers: { authorization: 'Bearer ' + token } });
 }
 
 const authenticate = async (user, auth) => {
@@ -100,15 +100,15 @@ const deleteRequestForUser = async (id, token) => {
         }
     };
 
-    return await fetch(`${_apiBase}/requests/${id}`, deleteOptions);
+    return await fetch(`${_apiBase}/models/${id}`, deleteOptions);
 }
 
-const createRequestForUser = async (id, token, createdRequest) => {
+const createRequestForUser = async (id, token, createdmodel) => {
 
-    createdRequest.userId = id;
-    createdRequest.droneId = '9fffa88b-91c5-42a6-8692-1fd8701fb0e4';
+    createdmodel.userId = id;
+    createdmodel.droneId = '9fffa88b-91c5-42a6-8692-1fd8701fb0e4';
 
-    console.log(createdRequest);
+    console.log(createdmodel);
 
     const options = {
         method: 'POST',
@@ -117,19 +117,19 @@ const createRequestForUser = async (id, token, createdRequest) => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify(createdRequest)
+        body: JSON.stringify(createdmodel)
     };
 
     console.log(options);
 
-    return await fetch(`${_apiBase}/requests/`, options);
+    return await fetch(`${_apiBase}/models/`, options);
 }
 
-const updateRequestForUser = async (id, token, requestId, updatedRequest) => {
-    updatedRequest.userId = id;
-    updatedRequest.droneId = '9fffa88b-91c5-42a6-8692-1fd8701fb0e4';
+const updateRequestForUser = async (id, token, modelId, updatedmodel) => {
+    updatedmodel.userId = id;
+    updatedmodel.droneId = '9fffa88b-91c5-42a6-8692-1fd8701fb0e4';
 
-    console.log(updatedRequest);
+    console.log(updatedmodel);
 
     const options = {
         method: 'PUT',
@@ -138,10 +138,10 @@ const updateRequestForUser = async (id, token, requestId, updatedRequest) => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify(updatedRequest)
+        body: JSON.stringify(updatedmodel)
     };
 
-    return await fetch(`${_apiBase}/requests/${requestId}`, options);
+    return await fetch(`${_apiBase}/models/${modelId}`, options);
 }
 
 const getAllComments = async (token) =>

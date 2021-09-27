@@ -10,7 +10,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { MainContext } from '../../contexts/main-context';
 import { Grid } from '@material-ui/core';
-import { getDrones } from '../../services/api-service/drones-service'
+import { deleteDrone, getDrones } from '../../services/api-service/drones-service'
+import { useHistory } from 'react-router';
+import { modelContext } from '../../contexts/models-context';
+import { DragHandleRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles({
     root: {
@@ -46,8 +49,10 @@ const DronesPage = () => {
     const [rows, setRows] = useState([]);
 
     const { user } = useContext(MainContext);
+    const { setModel } = useContext(modelContext);
 
     const classes = useStyles();
+    const history = useHistory();
 
     useEffect(() => {
         if (user) {
@@ -57,11 +62,26 @@ const DronesPage = () => {
         }
     }, [user]);
 
+    async function handleDelete(id) {
+        console.log('hello');
+        debugger;
+        const res = await deleteDrone(user.token, id);
+        if(res.ok) {
+            const arr = rows.filter((r) => r.id !== id);
+            setRows(arr);
+        }
+    }
+
+    function handleEdit(id) {
+        setModel(rows.find((r) => r.id === id));
+        history.push('/drone-editing');
+    }
+
     return (
         <Grid className={classes.root}>
             <Grid direction='row' container alignItems='center' justifyContent='space-between'>
                 <Typography variant='h5'>Here you can see maintained drones.</Typography>
-                {user?.role === 'admin' ? (<Button className={classes.addButton}>Add</Button>) : null}
+                {user?.role === 'admin' ? (<Button className={classes.addButton} onClick={() => history.push('/drone-creating')}>Add</Button>) : null}
             </Grid>
             <Grid className={classes.cards}>
                 {rows.map((row) => {
@@ -77,10 +97,10 @@ const DronesPage = () => {
                             </CardContent>
                             {user?.role === 'admin' ? (
                                 <CardActions>
-                                    <IconButton>
+                                    <IconButton onClick={() => handleDelete(row.id)}>
                                         <DeleteIcon />
                                     </IconButton>
-                                    <IconButton>
+                                    <IconButton onClick={() => handleEdit(row.id)}>
                                         <EditIcon />
                                     </IconButton>
                                 </CardActions>

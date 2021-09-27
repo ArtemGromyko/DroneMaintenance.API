@@ -67,6 +67,7 @@ namespace DroneMaintenance.API.Extensions
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<ICommentsService, CommentsService>();
             services.AddScoped<IOrdersProducerService, OrdersProducerService>();
+            services.AddScoped<ICommentsForUserService, CommentsForUserService>();
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)

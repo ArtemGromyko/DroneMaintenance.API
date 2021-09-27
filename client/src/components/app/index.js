@@ -8,11 +8,13 @@ import MainPage from '../main-page';
 import './app.css';
 import RequestsPage from '../requests-page';
 import RequestForm from '../request-form';
-import { RequestsContextProvider } from '../../contexts/requests-context';
+import { ModelContextProvider } from '../../contexts/models-context';
 import CommentsPage from '../comments-page';
 import DronesPage from '../drones-page';
 import ContractForm from '../contract-form';
 import ContractsPage from '../contracts-page';
+import CommentForm from '../comment-form';
+import DroneForm from '../drone-form';
 
 function App() {
     return (
@@ -33,7 +35,7 @@ function App() {
                     <LoggedComponent />
                 </WithJwt>
             </Route>
-            <RequestsContextProvider>
+            <ModelContextProvider>
                 <Route path='/requests'>
                     <WithJwt>
                         <Header />
@@ -56,10 +58,30 @@ function App() {
                         <CommentsPage />
                     </WithJwt>
                 </Route>
+                <Route path='/comment-creating'>
+                    <WithJwt>
+                        <CommentForm mode='creating' />
+                    </WithJwt>
+                </Route>
+                <Route path='/comment-editing'>
+                    <WithJwt>
+                        <CommentForm mode='editing' />
+                    </WithJwt>
+                </Route>
                 <Route path='/drones'>
                     <WithJwt>
                         <Header />
                         <DronesPage />
+                    </WithJwt>
+                </Route>
+                <Route path='/drone-creating'>
+                    <WithJwt>
+                        <DroneForm mode='creating' />
+                    </WithJwt>
+                </Route>
+                <Route path='/drone-editing'>
+                    <WithJwt>
+                        <DroneForm mode='editing' />
                     </WithJwt>
                 </Route>
                 <Route path='/contract-form'>
@@ -73,7 +95,7 @@ function App() {
                         <ContractsPage />
                     </WithJwt>
                 </Route>
-            </RequestsContextProvider>
+            </ModelContextProvider>
         </div>
     );
 }

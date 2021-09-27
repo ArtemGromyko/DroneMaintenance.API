@@ -1,23 +1,22 @@
 ﻿using AutoMapper;
 using DroneMaintenance.BLL.Contracts;
+using DroneMaintenance.DAL.Contracts;
 using DroneMaintenance.DAL.Entities;
-using DroneMaintenance.DAL.Repositories;
 using DroneMaintenance.Models.RequestModels.Comment;
 using DroneMaintenance.Models.ResponseModels.Comment;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DroneMaintenance.BLL.Services
 {
     public class CommentsForUserService : ServiceBase, ICommentsForUserService
     {
-        private readonly UserRepository _userRepository;
-        private readonly CommentRepository _commentRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ICommentRepository _commentRepository;
         private readonly IMapper _mapper;
 
-        public CommentsForUserService(UserRepository userRepository, CommentRepository commentRepository, IMapper mapper)
+        public CommentsForUserService(IUserRepository userRepository, ICommentRepository commentRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _commentRepository = commentRepository;
@@ -62,6 +61,7 @@ namespace DroneMaintenance.BLL.Services
             await CheckUserExistenceAsync(userId);
 
             var commentEntity = _mapper.Map<Comment>(commentForCreationModel);
+            commentEntity.UserId = userId;
             await _commentRepository.CreateCommentAsync(commentEntity);
 
             return _mapper.Map<CommentModel>(commentEntity);

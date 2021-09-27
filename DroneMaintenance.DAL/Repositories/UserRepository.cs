@@ -11,10 +11,10 @@ namespace DroneMaintenance.DAL.Repositories
     {
         public UserRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
         public async Task<List<User>> GetAllUsersAsync() =>
-           await FindAll().ToListAsync();
+           await FindAll().Include(u => u.Role).ToListAsync();
 
         public async Task<User> GetUserByIdAsync(Guid id) =>
-            await FindByCondition(u => u.Id.Equals(id)).SingleOrDefaultAsync();
+            await FindByCondition(u => u.Id.Equals(id)).Include(u => u.Role).SingleOrDefaultAsync();
 
         public async Task UpdateUserAsync(User user) =>
             await UpdateAsync(user);

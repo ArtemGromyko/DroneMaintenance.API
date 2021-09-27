@@ -11,7 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { MainContext } from '../../contexts/main-context';
 import { useHistory } from 'react-router';
-import { RequestsContext } from '../../contexts/requests-context';
+import { modelContext } from '../../contexts/models-context';
 import { createRequest, updateRequest } from '../../services/api-service/requests-service';
 
 const useStyles = makeStyles(() => ({
@@ -45,7 +45,7 @@ const RequestForm = ({ mode }) => {
     const [isDisabled, changeDisabled] = useState(true);
 
     const { user } = useContext(MainContext);
-    const { request } = useContext(RequestsContext);
+    const { model } = useContext(modelContext);
     const  history = useHistory();
 
     useEffect(() => {
@@ -58,10 +58,10 @@ const RequestForm = ({ mode }) => {
 
     useEffect(() => {
         if (mode === 'editing') {
-            setServiceType(serviceTypes.find( (st) => st.label === request.serviceType).value);
-            setDescription(request.description);
+            setServiceType(serviceTypes.find( (st) => st.label === model.serviceType).value);
+            setDescription(model.description);
         }
-    }, [request]);
+    }, [model]);
 
     const classes = useStyles();
 
@@ -70,7 +70,7 @@ const RequestForm = ({ mode }) => {
 
         let res = mode == 'creating' ? await handleCreate() : await handleUpdate();
         if(res.ok) {
-            history.push('/requests');
+            history.push('/models');
         }
     }
 
@@ -86,21 +86,21 @@ const RequestForm = ({ mode }) => {
     }
 
     async function handleCreate() {
-        const createdRequest = {
+        const createdmodel = {
             serviceType,
             description
         };
 
-        return await createRequest(user, createdRequest);
+        return await createRequest(user, createdmodel);
     }
 
     async function handleUpdate() {
-        const updatedRequest = {
+        const updatedmodel = {
             serviceType,
             description
         };
         
-        return await updateRequest(user, request.id, updatedRequest);
+        return await updateRequest(user, model.id, updatedmodel);
     }
 
     return (
@@ -108,7 +108,7 @@ const RequestForm = ({ mode }) => {
             <Grid>
                 <Paper className={classes.paperStyle} variant="outlined">
                     <Grid align='center'>
-                        <h2>{mode === 'creating' ? 'Request creating' : 'Request editing'}</h2>
+                        <h2>{mode === 'creating' ? 'model creating' : 'model editing'}</h2>
                     </Grid>
                     <FormControl variant="outlined" className={classes.root} fullWidth>
                         <InputLabel id="serviceType" required>Service Type</InputLabel>

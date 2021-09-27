@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { MainContext } from '../../contexts/main-context';
 import { modelContext } from '../../contexts/models-context';
-import { createCommentForUser, updateCommentForUser } from '../../services/api-service/comments-service';
+import { createDrone, updateDrone } from '../../services/api-service/drones-service';
 import { useHistory } from 'react-router';
 
 const useStyles = makeStyles(() => ({
@@ -31,9 +31,9 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export default function CommentForm({ mode }) {
-    const [header, setHeader] = useState(null);
-    const [text, setText] = useState(null);
+export default function DroneForm({ mode }) {
+    const [droneModel, setDroneModel] = useState(null);
+    const [manufacturer, setManufacturer] = useState(null);
     const [isDisabled, setDisabled] = useState(true);
 
     const { user } = useContext(MainContext);
@@ -43,47 +43,47 @@ export default function CommentForm({ mode }) {
     const history = useHistory();
 
     useEffect(() => {
-        if (text === null || text === '') {
+        if ( droneModel === null || droneModel === '') {
             setDisabled(true);
         } else {
             setDisabled(false);
         }
-    }, [text]);
+    }, [droneModel]);
 
     useEffect(() => {
         if (model && mode === 'editing') {
-            setHeader(model.header);
-            setText(model.text);
+            setDroneModel(model.model);
+            setManufacturer(model.manufacturer);
         } else {
-            setHeader(null);
-            setText(null);
+            setDroneModel(null);
+            setManufacturer(null);
         }
     }, [model]);
 
     function handleChange(event) {
         switch (event.target.name) {
-            case 'header':
-                setHeader(event.target.value);
+            case 'model':
+                setDroneModel(event.target.value);
                 break;
-            case 'text':
-                setText(event.target.value);
+            case 'manufacturer':
+                setManufacturer(event.target.value);
                 break;
         }
     }
 
     async function create() {
-        return await createCommentForUser(user, { header, text });
+        return await createDrone(user.token, {model: droneModel, manufacturer});
     }
 
     async function update() {
-        return await updateCommentForUser(user, model.id, { header, text });
+        return await updateDrone(user.token, model.id, {model: droneModel, manufacturer});
     }
 
     async function handleSubmit() {
         const res = mode === 'creating' ? await create() : await update();
 
         if (res.ok) {
-            history.push('/comments');
+            history.push('/drones');
         }
     }
 
@@ -92,26 +92,26 @@ export default function CommentForm({ mode }) {
             <Grid>
                 <Paper className={classes.paperStyle} variant="outlined">
                     <Grid align='center'>
-                        <h2>{mode === 'creating' ? 'Write a comment' : 'Comment editing'}</h2>
+                        <h2>{mode === 'creating' ? 'Add drone' : 'Edit drone'}</h2>
                     </Grid>
-                    <TextField name='header' label='Header'
-                        placeholder='Enter header'
-                        fullWidth value={header} variant="outlined"
+                    <TextField name='model' label='Model'
+                        placeholder='Enter model'
+                        fullWidth value={droneModel} variant="outlined"
                         onChange={handleChange}
-                    />
-                    <TextField name='text' label='Text'
-                        placeholder='Enter your comment'
-                        fullWidth value={text} variant="outlined" multiline rows={4}
+                        />
+                    <TextField name='manufacturer' label='Manufacturer'
+                        placeholder='Enter manufacturer'
+                        fullWidth value={manufacturer} variant="outlined" multiline rows={4}
                         className={classes.textField}
-                        onChange={handleChange}
-                        required />
+                        onChange={handleChange} 
+                        required/>
                     <Button className={classes.buttonStyle} type='submit' color='primary'
                         variant='contained' fullWidth disabled={isDisabled}
                         onClick={() => handleSubmit()}>
-                        {mode === 'creating' ? 'send' : 'edit'}
+                        {mode === 'creating' ? 'create' : 'edit'}
                     </Button>
                     <Typography align='right' style={{ marginTop: '1.5rem' }}>
-                        <Link style={{ textDecoration: 'none' }} to="/comments">
+                        <Link style={{ textDecoration: 'none' }} to="/drones">
                             Cancel
                         </Link>
                     </Typography>

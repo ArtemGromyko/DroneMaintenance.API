@@ -21,7 +21,7 @@ namespace DroneMaintenance.DAL.Repositories
             await FindByCondition(c => c.UserId.Equals(userId)).Include(c => c.User).ThenInclude(u => u.Role).ToListAsync();
 
         public async Task<Comment> GetCommentForUserAsync(Guid userId, Guid id) =>
-            await FindByCondition(c => c.User.Equals(userId) && c.Id.Equals(id)).Include(c => c.User)
+            await FindByCondition(c => c.UserId.Equals(userId) && c.Id.Equals(id)).Include(c => c.User)
                 .ThenInclude(u => u.Role).SingleOrDefaultAsync();
 
         public async Task UpdateCommentAsync(Comment comment) =>
