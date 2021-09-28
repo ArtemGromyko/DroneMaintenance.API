@@ -9,14 +9,16 @@ import { Button } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { MainContext } from '../../contexts/main-context';
+import HttpError from './../../errors/HttpError';
 
 const AuthComponent = ({ isSignUp }) => {
     const [name, changeName] = useState('');
     const [email, changeEmail] = useState('');
     const [password, changePassword] = useState('');
+    const [error, setError] = useState(false);
 
     const [isDisabled, changeDisabled] = useState(true);
-    const { user, setUser } = useContext(MainContext);
+    const { setUser } = useContext(MainContext);
     const history = useHistory();
 
     function toggleDisabled() {
@@ -28,6 +30,7 @@ const AuthComponent = ({ isSignUp }) => {
     }
 
     function handleChange(event) {
+        setError(false);
         switch (event.target.name) {
             case 'name':
                 changeName(event.target.value);
@@ -46,32 +49,23 @@ const AuthComponent = ({ isSignUp }) => {
         }
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-
-        if (isSignUp) {
-            authenticate({ email, name, password }, false)
-                .then((res) => {
-                    if (res.ok) {
-                        return res.json();
-                    }
-                })
-                .then((res) => {
-                    setUser(res);
-                    history.push('/');
-                });
-        } else {
-            authenticate({ email, password }, true)
-                .then((res) => {
-                    if(res.ok) {
-                        return res.json();
-                    }
-                })
-                .then((res) => {
-                    console.log(res);
-                    setUser(res);
-                    history.push('/');
-                });
+        
+        try {
+            let res;
+            if (isSignUp) {
+                res = await authenticate({ email, name, password }, false);
+               
+            } else {
+                res = await authenticate({ email, password }, true);
+            }
+            setUser(res);
+            history.push('/');
+        } catch(error) {
+            if(error instanceof HttpError) {
+                setError(error);
+            }
         }
     }
 
@@ -99,10 +93,12 @@ const AuthComponent = ({ isSignUp }) => {
                     <TextField name='name' label='Name' value={name} onChange={handleChange} placeholder='Enter name' fullWidth required />
                 ) : null}
 
-                <TextField name='email' label='Email' value={email} onChange={handleChange} placeholder='Enter email' fullWidth required />
+                <TextField name='email' label='Email' value={email} onChange={handleChange} placeholder='Enter email' fullWidth required 
+                error={error} helperText={error ? 'Incorrect email' : ''}/>
                 <TextField name='password' label='Password'
                     placeholder='Enter password'
-                    type='password' fullWidth required value={password} onChange={handleChange} />
+                    type='password' fullWidth required value={password} onChange={handleChange}
+                    error={error} helperText={error ? 'Incorrect password' : ''} />
                 <Button style={buttonStyle} type='submit' color='primary'
                     variant='contained' fullWidth onClick={handleSubmit} disabled={isDisabled}>{isSignUp ? 'Sign up' : 'Sign in'}
                 </Button>

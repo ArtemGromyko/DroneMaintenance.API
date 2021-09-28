@@ -5,14 +5,16 @@ const userUrl = '/users/';
 
 async function getComments(token) {
     const options = getOptionsWithToken('GET', headers, token);
+    const res = await fetchData(url, options);
 
-    return await fetchData(url, options);
+    return res.json();
 }
 
 async function getCommentsForUser(user) {
     const options = getOptionsWithToken('GET', headers, user.token);
+    const res = await fetchData(createUrl(userUrl, user.id, url), options);
 
-    return await fetchData(createUrl(userUrl, user.id, url), options);
+    return res.json();
 }
 
 async function getCommentById(token, id) {

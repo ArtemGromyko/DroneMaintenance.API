@@ -4,8 +4,9 @@ const url = '/drones/';
 
 async function getDrones(token) {
     const options = getOptionsWithToken('GET', headers, token);
+    const res = await fetchData(url, options);
 
-    return await fetchData(url, options);
+    return res.json();
 }
 
 async function createDrone(token, drone) {

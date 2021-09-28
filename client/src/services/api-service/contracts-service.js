@@ -4,8 +4,9 @@ const url = '/contracts';
 
 async function getContracts(token) {
     const options = getOptionsWithToken('GET', headers, token);
+    const res = await fetchData(url, options);
 
-    return await fetchData(url, options);
+    return res.json();
 }
 
 async function createContract(token, drone) {

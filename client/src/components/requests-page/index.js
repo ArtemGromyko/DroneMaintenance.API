@@ -22,6 +22,7 @@ import { Modal } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import { getRequests, deleteRequest } from '../../services/api-service/requests-service';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const columns = [
   {
@@ -93,6 +94,7 @@ export default function RequestsPage() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openFail, setOpenFail] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { user } = useContext(MainContext);
   const { setModel } = useContext(modelContext);
@@ -102,7 +104,10 @@ export default function RequestsPage() {
 
   useEffect(() => {
     if (user) {
-      getRequests(user).then((res) => setRows(res));
+      getRequests(user).then((res) => {
+        setRows(res);
+        setIsLoading(false);
+      });
     } else {
       setRows([]);
     }
@@ -200,38 +205,41 @@ export default function RequestsPage() {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+          {isLoading ? <CircularProgress /> : (
+            <TableBody>
+              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                  <TableCell align='left'>
-                    <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
-                      <EditIcon />
-                    </IconButton>
-                    {user?.role === 'admin' ? 
-                    (<IconButton onClick={() => handleOpen(row.serviceType, row.id)}>
-                      <NoteAddIcon />
-                    </IconButton>) : null}
-                  </TableCell>
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    <TableCell align='left'>
+                      <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
+                        <DeleteIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
+                        <EditIcon />
+                      </IconButton>
+                      {user?.role === 'admin' ?
+                        (<IconButton onClick={() => handleOpen(row.serviceType, row.id)}>
+                          <NoteAddIcon />
+                        </IconButton>) : null}
+                    </TableCell>
 
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    if (value !== undefined) {
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {value}
-                        </TableCell>
-                      );
-                    }
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      if (value !== undefined) {
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {value}
+                          </TableCell>
+                        );
+                      }
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          )}
+
         </Table>
       </TableContainer>
       <TableFooter >

@@ -13,7 +13,7 @@ import { Grid } from '@material-ui/core';
 import { deleteDrone, getDrones } from '../../services/api-service/drones-service'
 import { useHistory } from 'react-router';
 import { modelContext } from '../../contexts/models-context';
-import { DragHandleRounded } from '@material-ui/icons';
+import HttpError from '../../errors/HttpError';
 
 const useStyles = makeStyles({
     root: {
@@ -47,6 +47,7 @@ const useStyles = makeStyles({
 
 const DronesPage = () => {
     const [rows, setRows] = useState([]);
+    const [error, setError] = useState(false);
 
     const { user } = useContext(MainContext);
     const { setModel } = useContext(modelContext);
@@ -55,18 +56,25 @@ const DronesPage = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if (user) {
-            getDrones(user.token).then((res) => setRows(res));
-        } else {
-            setRows([]);
+        try {
+            if (user) {
+                getDrones(user.token).then((res) => setRows(res));
+            } else {
+                setRows([]);
+            }
+        } catch(error) {
+            if(error instanceof(HttpError)) {
+
+            }
         }
+       
     }, [user]);
 
     async function handleDelete(id) {
         console.log('hello');
         debugger;
         const res = await deleteDrone(user.token, id);
-        if(res.ok) {
+        if (res.ok) {
             const arr = rows.filter((r) => r.id !== id);
             setRows(arr);
         }

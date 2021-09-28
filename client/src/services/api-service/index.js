@@ -1,3 +1,5 @@
+import HttpError from './../../errors/HttpError';
+
 const _apiBase = 'https://localhost:5001/api';
 
 const headers = {
@@ -46,16 +48,14 @@ function getOptionsWithTokenWithoutToken(method, headers, body) {
 }
 
 async function fetchData(url, options) {
-    const res = await fetch(`${_apiBase}${url}`, options);
-    if (!res.ok) {
-        throw new Error(`Could not fetch ${url}, received ${res.status}`);
+    const response = await fetch(`${_apiBase}${url}`, options);
+
+    if (!response.ok) {
+        const result = await response.json();
+        throw new HttpError(result.message, response.status);
     }
 
-    if(options.method !== 'GET') {
-        return res;
-    }
-    
-    return await res.json();
+    return response;
 }
 
 async function postResource(url, options = null) {

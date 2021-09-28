@@ -3,8 +3,10 @@ import { headers, getOptionsWithToken, fetchData, getOptionsWithTokenWithoutToke
 async function authenticate(user, auth) {
     const options = getOptionsWithTokenWithoutToken('POST', headers, user);
 
-    return auth ? await fetchData(`/users/`, options) :
+    const res = auth ? await fetchData(`/users/`, options) :
         await fetchData(`/users/registration`, options);
+
+    return await res.json();
 };
 
 async function signOut(id, token) {
