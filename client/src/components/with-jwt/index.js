@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { MainContext } from '../../contexts/main-context';
 import { useHistory } from "react-router-dom";
 
-function WithJwt({ children }) {
+export default function WithJwt({ children }) {
     const { user } = useContext(MainContext);
     const history = useHistory();
 
@@ -14,5 +14,3 @@ function WithJwt({ children }) {
 
     return children;
 }
-
-export default WithJwt;

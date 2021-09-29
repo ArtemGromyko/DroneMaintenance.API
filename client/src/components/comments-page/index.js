@@ -13,6 +13,8 @@ import { modelContext } from '../../contexts/models-context';
 import { useHistory } from 'react-router';
 import { Grid } from '@material-ui/core';
 import { getComments, deleteCommentForUser, deleteComment } from '../../services/api-service/comments-service';
+import Spinner from '../spinner';
+import Error from '../error';
 
 const useStyles = makeStyles({
     root: {
@@ -52,6 +54,8 @@ const useStyles = makeStyles({
 
 const CommentsPage = () => {
     const [rows, setRows] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     const { user } = useContext(MainContext);
     const history = useHistory();
@@ -60,7 +64,15 @@ const CommentsPage = () => {
 
     useEffect(() => {
         if (user) {
-            getComments(user.token).then((res) => setRows(res));
+            getComments(user.token).then((res) => {
+                setRows(res);
+                setIsLoading(false);
+            }).catch((error) => {
+                if (error.code === 401) {
+                    history.push('/login');
+                }
+                setError(error);
+            });
         } else {
             setRows([]);
         }
@@ -68,13 +80,13 @@ const CommentsPage = () => {
 
     async function handleDelete(id, userId) {
         let res;
-        if(user.id !== userId && user.role === 'admin') {
+        if (user.id !== userId && user.role === 'admin') {
             res = await deleteComment(user.token, id);
         } else {
             res = await deleteCommentForUser(user, id);
         }
 
-        if(res.ok) {
+        if (res.ok) {
             const arr = rows.filter((r) => r.id !== id);
             setRows(arr);
         }
@@ -86,64 +98,72 @@ const CommentsPage = () => {
     }
 
     return (
-        <Grid className={classes.root}>
-            <Grid className={classes.buttons} direction='row' container alignItems='center' justifyContent='space-between'>
-                <Button className={classes.createCommentButton} onClick={() => history.push('/comment-creating')}>write a comment</Button>
-                <Grid>
-                    <Button variant="outlined" color="primary">
-                        positive
-                    </Button>
-                    <Button variant="outlined" color="secondary">
-                        negative
-                    </Button>
-                    <Button variant="outlined" disabled>
-                        all
-                    </Button>
-                    <Button variant="outlined" color="primary" href="#outlined-buttons">
-                        mine
-                    </Button>
-                </Grid>
-            </Grid>
+        <>
+            {error ? <Error /> : (
+                <Grid className={classes.root}>
+                    <Grid className={classes.buttons} direction='row' container alignItems='center' justifyContent='space-between'>
+                        <Button className={classes.createCommentButton} onClick={() => history.push('/comment-creating')}>write a comment</Button>
+                        <Grid>
+                            <Button variant="outlined" color="primary">
+                                positive
+                            </Button>
+                            <Button variant="outlined" color="secondary">
+                                negative
+                            </Button>
+                            <Button variant="outlined" disabled>
+                                all
+                            </Button>
+                            <Button variant="outlined" color="primary" href="#outlined-buttons">
+                                mine
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    {isLoading ? <Spinner /> : (
 
-            {rows.map((row) => {
-                return (
-                    <Card key={row.id} className={classes.card} variant="outlined">
-                        <CardContent>
-                            <Grid direction='row' container alignItems='center' justifyContent='space-between'>
-                                {row.userRole === 'user' ? (
-                                    <Typography className={classes.titleUser} color='textSecondary' gutterBottom>
-                                        {row.userName}
-                                    </Typography>
-                                ) : (
-                                    <Typography className={classes.titleAdmin} color='primary' gutterBottom>
-                                        {row.userName} (admin)
-                                    </Typography>
-                                )}
-                                <Typography className={classes.title} color='textSecondary' gutterBottom>
-                                    {row.date}
-                                </Typography>
-                            </Grid>
-                            <Typography variant='h5' component='h2'>
-                                {row.header}
-                            </Typography>
-                            <Typography variant='body2' component='p'>
-                                {row.text}
-                            </Typography>
-                        </CardContent>
-                        {user?.id === row.userId || user?.role === 'admin' ? (
-                            <CardActions>
-                                <IconButton onClick={() => handleDelete(row.id)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                                <IconButton onClick={() => handleEdit(row.id)}>
-                                    <EditIcon />
-                                </IconButton>
-                            </CardActions>
-                        ) : (null)}
-                    </Card>
-                );
-            })}
-        </Grid>
+                        rows.map((row) => {
+                            return (
+                                <Card key={row.id} className={classes.card} variant="outlined">
+                                    <CardContent>
+                                        <Grid direction='row' container alignItems='center' justifyContent='space-between'>
+                                            {row.userRole === 'user' ? (
+                                                <Typography className={classes.titleUser} color='textSecondary' gutterBottom>
+                                                    {row.userName}
+                                                </Typography>
+                                            ) : (
+                                                <Typography className={classes.titleAdmin} color='primary' gutterBottom>
+                                                    {row.userName} (admin)
+                                                </Typography>
+                                            )}
+                                            <Typography className={classes.title} color='textSecondary' gutterBottom>
+                                                {row.date}
+                                            </Typography>
+                                        </Grid>
+                                        <Typography variant='h5' component='h2'>
+                                            {row.header}
+                                        </Typography>
+                                        <Typography variant='body2' component='p'>
+                                            {row.text}
+                                        </Typography>
+                                    </CardContent>
+                                    {user?.id === row.userId || user?.role === 'admin' ? (
+                                        <CardActions>
+                                            <IconButton onClick={() => handleDelete(row.id)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                            <IconButton onClick={() => handleEdit(row.id)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </CardActions>
+                                    ) : (null)}
+                                </Card>
+                            );
+                        })
+                    )}
+
+                </Grid>
+            )}
+        </>
+
     );
 }
 

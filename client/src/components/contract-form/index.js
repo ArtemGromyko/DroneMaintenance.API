@@ -74,7 +74,7 @@ const ContractForm = () => {
                             Add
                     </Button>
                     <Typography align='right' style={{ marginTop: '6rem' }}>
-                        <Link style={{ textDecoration: 'none' }} to="/models">
+                        <Link style={{ textDecoration: 'none' }} to="/requests">
                             Cancel
                         </Link>
                     </Typography>

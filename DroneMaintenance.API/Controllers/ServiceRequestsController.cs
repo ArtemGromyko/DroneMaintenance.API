@@ -25,8 +25,12 @@ namespace ServiceRequestMaintenance.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ServiceRequestModel>>> GetServiceRequestsAsync() =>
+        public async Task<ActionResult<IEnumerable<ServiceRequestModel>>> GetServiceRequestsAsync()
+        {
             await _requestsService.GetRequestsAsync();
+
+            return StatusCode(500);
+        }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

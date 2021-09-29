@@ -14,6 +14,8 @@ import { deleteDrone, getDrones } from '../../services/api-service/drones-servic
 import { useHistory } from 'react-router';
 import { modelContext } from '../../contexts/models-context';
 import HttpError from '../../errors/HttpError';
+import Spinner from '../spinner';
+import Error from './../error/index';
 
 const useStyles = makeStyles({
     root: {
@@ -48,6 +50,7 @@ const useStyles = makeStyles({
 const DronesPage = () => {
     const [rows, setRows] = useState([]);
     const [error, setError] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const { user } = useContext(MainContext);
     const { setModel } = useContext(modelContext);
@@ -56,18 +59,24 @@ const DronesPage = () => {
     const history = useHistory();
 
     useEffect(() => {
-        try {
-            if (user) {
-                getDrones(user.token).then((res) => setRows(res));
-            } else {
-                setRows([]);
-            }
-        } catch(error) {
-            if(error instanceof(HttpError)) {
-
-            }
+        if (user) {
+            getDrones(user.token).then((res) => {
+                setRows(res)
+                setIsLoading(false);
+            }).catch((error) => {
+                if (error instanceof (HttpError)) {
+                    console.log(error.code);
+                    if (error.code === 401) {
+                        history.push('/login');
+                    } else {
+                        setError(error);
+                    }
+                }
+            });
+        } else {
+            setRows([]);
         }
-       
+
     }, [user]);
 
     async function handleDelete(id) {
@@ -86,38 +95,45 @@ const DronesPage = () => {
     }
 
     return (
-        <Grid className={classes.root}>
-            <Grid direction='row' container alignItems='center' justifyContent='space-between'>
-                <Typography variant='h5'>Here you can see maintained drones.</Typography>
-                {user?.role === 'admin' ? (<Button className={classes.addButton} onClick={() => history.push('/drone-creating')}>Add</Button>) : null}
-            </Grid>
-            <Grid className={classes.cards}>
-                {rows.map((row) => {
-                    return (
-                        <Card key={row.id} className={classes.card} variant='outlined'>
-                            <CardContent>
-                                <Typography variant='h5' component='h2'>
-                                    Model: {row.model}
-                                </Typography>
-                                <Typography variant='body2' component='p'>
-                                    Manufacturer: {row.manufacturer}
-                                </Typography>
-                            </CardContent>
-                            {user?.role === 'admin' ? (
-                                <CardActions>
-                                    <IconButton onClick={() => handleDelete(row.id)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                    <IconButton onClick={() => handleEdit(row.id)}>
-                                        <EditIcon />
-                                    </IconButton>
-                                </CardActions>
-                            ) : null}
-                        </Card>
-                    );
-                })}
-            </Grid>
-        </Grid>
+        <>
+            {error ? <Error /> : (
+                <Grid className={classes.root}>
+                    <Grid direction='row' container alignItems='center' justifyContent='space-between'>
+                        <Typography variant='h5'>Here you can see maintained drones.</Typography>
+                        {user?.role === 'admin' ? (<Button className={classes.addButton} onClick={() => history.push('/drone-creating')}>Add</Button>) : null}
+                    </Grid>
+                    {isLoading ? <Spinner /> : (
+                        <Grid className={classes.cards}>
+                            {rows.map((row) => {
+                                return (
+                                    <Card key={row.id} className={classes.card} variant='outlined'>
+                                        <CardContent>
+                                            <Typography variant='h5' component='h2'>
+                                                Model: {row.model}
+                                            </Typography>
+                                            <Typography variant='body2' component='p'>
+                                                Manufacturer: {row.manufacturer}
+                                            </Typography>
+                                        </CardContent>
+                                        {user?.role === 'admin' ? (
+                                            <CardActions>
+                                                <IconButton onClick={() => handleDelete(row.id)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                                <IconButton onClick={() => handleEdit(row.id)}>
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </CardActions>
+                                        ) : null}
+                                    </Card>
+                                );
+                            })}
+                        </Grid>
+                    )}
+                </Grid>
+            )}
+
+        </>
     );
 }
 

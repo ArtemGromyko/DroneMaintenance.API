@@ -25,7 +25,6 @@ namespace DroneMaintenance.API.Controllers
             _dronesService = dronesService;
         }
 
-        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]

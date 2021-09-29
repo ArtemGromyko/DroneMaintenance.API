@@ -50,6 +50,7 @@ function getOptionsWithTokenWithoutToken(method, headers, body) {
 async function fetchData(url, options) {
     const response = await fetch(`${_apiBase}${url}`, options);
 
+    console.log(response.status);
     if (!response.ok) {
         const result = await response.json();
         throw new HttpError(result.message, response.status);

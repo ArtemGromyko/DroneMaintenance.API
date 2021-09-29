@@ -11,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { MainContext } from '../../contexts/main-context';
-import { deleteRequestForUser } from '../../services/api-service';
+import Spinner from '../spinner';
 import EditIcon from '@material-ui/icons/Edit';
 import TableFooter from '@material-ui/core/TableFooter';
 import Button from '@material-ui/core/Button';
@@ -22,7 +22,9 @@ import { Modal } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import { getRequests, deleteRequest } from '../../services/api-service/requests-service';
-import CircularProgress from '@mui/material/CircularProgress';
+import Error from '../error';
+import { Grid } from '@material-ui/core';
+import HttpError from './../../errors/HttpError';
 
 const columns = [
   {
@@ -31,7 +33,7 @@ const columns = [
   },
   {
     id: 'requestStatus',
-    label: 'modelStatus',
+    label: 'Rquest Status',
     align: 'left'
   },
   {
@@ -95,6 +97,7 @@ export default function RequestsPage() {
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openFail, setOpenFail] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const { user } = useContext(MainContext);
   const { setModel } = useContext(modelContext);
@@ -107,6 +110,14 @@ export default function RequestsPage() {
       getRequests(user).then((res) => {
         setRows(res);
         setIsLoading(false);
+      }).catch((error) => {
+        if (error instanceof (HttpError)) {
+          if (error.code === 401) {
+            history.push('/login');
+          }
+
+          setError(error);
+        }
       });
     } else {
       setRows([]);
@@ -175,94 +186,102 @@ export default function RequestsPage() {
   );
 
   return (
-    <Paper className={classes.root}>
-      <Modal
-        className={classes.modal}
-        open={openSuccess}
-        onClose={handleCloseSuccess}
-      >
-        {successBody}
-      </Modal>
-      <Modal
-        className={classes.modal}
-        open={openFail}
-        onClose={handleCloseFail}
-      >
-        {failBody}
-      </Modal>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          {isLoading ? <CircularProgress /> : (
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    <TableCell align='left'>
-                      <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
-                        <EditIcon />
-                      </IconButton>
-                      {user?.role === 'admin' ?
-                        (<IconButton onClick={() => handleOpen(row.serviceType, row.id)}>
-                          <NoteAddIcon />
-                        </IconButton>) : null}
-                    </TableCell>
-
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      if (value !== undefined) {
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {value}
-                          </TableCell>
-                        );
-                      }
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          )}
-
-        </Table>
-      </TableContainer>
-      <TableFooter >
-        <TableRow >
-          <TableCell colSpan={1}>
-            <Button variant="contained" className={classes.buttonCreate} onClick={() => history.push('/request-creating')}>
-              Create
-            </Button>
-          </TableCell>
-          <TableCell className={classes.pagination}>
-            <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
-              component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
+    <>
+      {error ? <Error message={error.message} code={error.code} /> : (
+        isLoading ? (
+          <Spinner />
+        ) : (
+          <Paper className={classes.root}>
+            <Modal
+              className={classes.modal}
+              open={openSuccess}
+              onClose={handleCloseSuccess}
             >
-            </TablePagination>
-          </TableCell>
-        </TableRow>
-      </TableFooter>
-    </Paper>
+              {successBody}
+            </Modal>
+            <Modal
+              className={classes.modal}
+              open={openFail}
+              onClose={handleCloseFail}
+            >
+              {failBody}
+            </Modal>
+            <TableContainer className={classes.container}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column) => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
+                      >
+                        {column.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                        <TableCell align='left'>
+                          <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
+                            <DeleteIcon />
+                          </IconButton>
+                          <IconButton onClick={() => handleEdit(row.id)} aria-label="delete">
+                            <EditIcon />
+                          </IconButton>
+                          {user?.role === 'admin' ?
+                            (<IconButton onClick={() => handleOpen(row.serviceType, row.id)}>
+                              <NoteAddIcon />
+                            </IconButton>) : null}
+                        </TableCell>
+
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          if (value !== undefined) {
+                            return (
+                              <TableCell key={column.id} align={column.align}>
+                                {value}
+                              </TableCell>
+                            );
+                          }
+                        })}
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+
+              </Table>
+            </TableContainer>
+            <TableFooter >
+              <TableRow >
+                <TableCell colSpan={1}>
+                  <Button variant="contained" className={classes.buttonCreate} onClick={() => history.push('/request-creating')}>
+                    Create
+                  </Button>
+                </TableCell>
+                <TableCell className={classes.pagination}>
+                  <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  >
+                  </TablePagination>
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Paper>
+        )
+      )}
+
+    </>
   );
 }
