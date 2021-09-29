@@ -64,7 +64,10 @@ const DronesPage = () => {
                 setRows(res)
                 setIsLoading(false);
             }).catch((error) => {
+                console.log('a');
+                console.log(typeof error);
                 if (error instanceof (HttpError)) {
+                    console.log('b');
                     console.log(error.code);
                     if (error.code === 401) {
                         history.push('/login');

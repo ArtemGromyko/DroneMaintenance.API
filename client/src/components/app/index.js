@@ -18,7 +18,7 @@ import DroneForm from '../drone-form';
 
 function App() {
     return (
-        <div>
+        <>
             <Route exact path='/'>
                 <Header />
                 <MainPage />
@@ -39,7 +39,9 @@ function App() {
                 <Route path='/requests'>
                     <WithJwt>
                         <Header />
-                        <RequestsPage />
+                        <main>
+                            <RequestsPage />
+                        </main>
                     </WithJwt>
                 </Route>
                 <Route path='/request-creating'>
@@ -96,7 +98,7 @@ function App() {
                     </WithJwt>
                 </Route>
             </ModelContextProvider>
-        </div>
+        </>
     );
 }
 

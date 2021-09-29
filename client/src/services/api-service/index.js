@@ -52,6 +52,7 @@ async function fetchData(url, options) {
 
     console.log(response.status);
     if (!response.ok) {
+        console.log('hello');
         const result = await response.json();
         throw new HttpError(result.message, response.status);
     }
