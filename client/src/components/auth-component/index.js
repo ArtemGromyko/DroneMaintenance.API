@@ -10,6 +10,8 @@ import { Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { MainContext } from '../../contexts/main-context';
 import HttpError from './../../errors/HttpError';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const AuthComponent = ({ isSignUp }) => {
     const [name, changeName] = useState('');
@@ -74,8 +76,8 @@ const AuthComponent = ({ isSignUp }) => {
     const buttonStyle = { marginTop: 40, marginBottom: 40 };
 
     return (
-        <Grid>
-            <Paper elevation={10} style={paperStyle}>
+        <Grid container justifyContent='center' alignItems='center' style={{height: '100%'}}>
+            <Paper variant='outlined' style={paperStyle}>
                 <Grid align='center'>
                     {isSignUp ? (
                         <>

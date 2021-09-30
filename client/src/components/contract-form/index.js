@@ -12,9 +12,7 @@ import { getParts } from '../../services/api-service/parts-service';
 
 const useStyles = makeStyles(() => ({
     root: {
-        minWidth: 120,
-        marginBottom: '2rem',
-        marginTop: '5rem'
+        height: '100%'
     },
     paperStyle: {
         padding: 20,
@@ -32,7 +30,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ContractForm = () => {
-    const [rows, setRows] = useState([]);
+    const [parts, setParts] = useState([]);
     const classes = useStyles();
 
     const { user } = useContext(MainContext);
@@ -41,25 +39,24 @@ const ContractForm = () => {
     useEffect(() => {
         if (user) {
             getParts(user.token).then((res) => {
-                setRows(res);
+                setParts(res);
             })
-            console.log(rows);
+            console.log(parts);
         } else {
-            setRows([]);
+            setParts([]);
         }
         console.log(model);
     }, [user]);
 
     return (
-        <Typography>
-            <Grid>
+            <Grid className={classes.root} container justifyContent='center' alignItems='center'>
                 <Paper className={classes.paperStyle} variant="outlined">
                     <Grid align='center'>
                         <h2>Add spare parts</h2>
                     </Grid>
                     <Autocomplete
                         id="spare-part"
-                        options={rows}
+                        options={parts}
                         getOptionLabel={(option) => option.name}
                         renderInput={(params) => <TextField {...params} label="Spare part" variant="outlined" />}
                     />
@@ -80,7 +77,6 @@ const ContractForm = () => {
                     </Typography>
                 </Paper>
             </Grid>
-        </Typography>
     );
 }
 

@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 
 export default function Spinner() {
     return (
-        <Grid item container alignItems='center' justifyContent='center'>
+        <Grid container className='loader' style={{width: '100%'}} justifyContent='center' alignItems='center'>
             <CircularProgress size={100} />
         </Grid>
     );

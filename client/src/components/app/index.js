@@ -15,6 +15,7 @@ import ContractForm from '../contract-form';
 import ContractsPage from '../contracts-page';
 import CommentForm from '../comment-form';
 import DroneForm from '../drone-form';
+import Error from './../error/index';
 
 function App() {
     return (
@@ -39,9 +40,7 @@ function App() {
                 <Route path='/requests'>
                     <WithJwt>
                         <Header />
-                        <main>
-                            <RequestsPage />
-                        </main>
+                        <RequestsPage />
                     </WithJwt>
                 </Route>
                 <Route path='/request-creating'>
@@ -62,7 +61,9 @@ function App() {
                 </Route>
                 <Route path='/comment-creating'>
                     <WithJwt>
+
                         <CommentForm mode='creating' />
+
                     </WithJwt>
                 </Route>
                 <Route path='/comment-editing'>
@@ -96,6 +97,10 @@ function App() {
                         <Header />
                         <ContractsPage />
                     </WithJwt>
+                </Route>
+                <Route path='/error'>
+                    <Header />
+                    <Error />
                 </Route>
             </ModelContextProvider>
         </>

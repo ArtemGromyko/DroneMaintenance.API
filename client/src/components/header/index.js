@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Typography, Card } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -6,12 +6,13 @@ import { makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router';
 import { MainContext } from '../../contexts/main-context';
 import { signOut } from '../../services/api-service/users-service';
+import HttpError from './../../errors/HttpError';
 
 const useStyles = makeStyles({
     root: {
         width: '80%',
         minHeight: '75px',
-        margin: '0 auto'
+        margin: '0 auto',
     },
     link: {
         color: '#000000',
@@ -57,6 +58,15 @@ const Header = () => {
             if (response.ok) {
                 setUser(null);
                 history.push('/');
+            }
+        }).catch((error) => {
+            if(error instanceof HttpError) {
+                if (error.code === 401) {
+                    setUser(null);
+                    history.push('/');
+                } else {
+                    history.push('/error');
+                }
             }
         });
     }

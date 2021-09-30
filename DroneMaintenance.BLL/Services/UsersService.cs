@@ -103,7 +103,7 @@ namespace DroneMaintenance.BLL.Services
                     new Claim(ClaimTypes.Email, userEntity.Email),
                     new Claim(ClaimTypes.Role, roleEntity.Name)
                 }),
-                Expires = DateTime.Now.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

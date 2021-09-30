@@ -21,7 +21,8 @@ const useStyles = makeStyles({
     root: {
         width: '30%',
         margin: '0 auto',
-        marginTop: '1rem'
+        marginTop: '1rem',
+        height: '100%'
     },
     card: {
         minWidth: 275,
@@ -65,8 +66,9 @@ const DronesPage = () => {
                 setIsLoading(false);
             }).catch((error) => {
                 console.log('a');
+                console.log(error);
                 console.log(typeof error);
-                if (error instanceof (HttpError)) {
+                if (error instanceof HttpError) {
                     console.log('b');
                     console.log(error.code);
                     if (error.code === 401) {

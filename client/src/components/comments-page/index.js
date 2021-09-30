@@ -19,7 +19,8 @@ import Error from '../error';
 const useStyles = makeStyles({
     root: {
         width: '60%',
-        margin: '0 auto'
+        margin: '0 auto',
+        height: '100%'
     },
     card: {
         minWidth: 275,

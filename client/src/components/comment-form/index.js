@@ -12,9 +12,7 @@ import { useHistory } from 'react-router';
 
 const useStyles = makeStyles(() => ({
     root: {
-        minWidth: 120,
-        marginBottom: '2rem',
-        marginTop: '5rem'
+        height: '100%'
     },
     paperStyle: {
         padding: 20,
@@ -38,7 +36,7 @@ export default function CommentForm({ mode }) {
 
     const { user } = useContext(MainContext);
     const { model } = useContext(modelContext);
-
+    
     const classes = useStyles();
     const history = useHistory();
 
@@ -88,8 +86,8 @@ export default function CommentForm({ mode }) {
     }
 
     return (
-        <Typography>
-            <Grid>
+
+        <Grid className={classes.root} container justifyContent='center' alignItems='center'>
                 <Paper className={classes.paperStyle} variant="outlined">
                     <Grid align='center'>
                         <h2>{mode === 'creating' ? 'Write a comment' : 'Comment editing'}</h2>
@@ -116,7 +114,7 @@ export default function CommentForm({ mode }) {
                         </Link>
                     </Typography>
                 </Paper>
-            </Grid>
-        </Typography>
+        </Grid>
+
     );
 }
