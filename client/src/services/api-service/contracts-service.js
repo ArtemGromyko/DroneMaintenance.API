@@ -1,6 +1,6 @@
-import { headers, getOptionsWithToken, fetchData, postResource, getAuthorization } from ".";
+import { headers, getOptionsWithToken, fetchData, postResource, getAuthorization, createUrl } from ".";
 
-const url = '/contracts';
+const url = '/contracts/';
 
 async function getContracts(token) {
     const options = getOptionsWithToken('GET', headers, token);
@@ -9,10 +9,16 @@ async function getContracts(token) {
     return res.json();
 }
 
-async function createContract(token, drone) {
-    const options = getOptionsWithToken('POST', headers, token, drone);
+async function createContract(token, contract) {
+    const options = getOptionsWithToken('POST', headers, token, contract);
 
-    return await postResource(url, options);
+    return await fetchData(url, options);
 }
 
-export { getContracts, createContract }
+async function addSparePartForContractAsync(token, contractId, contractPart) {
+    const options = getOptionsWithToken('POST', headers, token, contractPart);
+
+    return await fetchData(createUrl(url, contractId, '/parts'), options);
+}
+
+export { getContracts, createContract, addSparePartForContractAsync }

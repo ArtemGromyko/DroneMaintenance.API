@@ -13,6 +13,7 @@ import HttpError from './../../errors/HttpError';
 import Error from '../error';
 import { useHistory } from 'react-router-dom';
 import Spinner from '../spinner';
+import { createContract, addSparePartForContractAsync } from '../../services/api-service/contracts-service';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -34,7 +35,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ContractForm = () => {
-    const [part, setPart] = useState('');
+    const [inputPart, setInputPart] = useState('');
+    const [part, setPart] = useState(null);
     const [quantity, setQuantity] = useState('');
     const [parts, setParts] = useState([]);
     const [isDisabled, setDisabled] = useState(true);
@@ -99,6 +101,14 @@ const ContractForm = () => {
         }
     }
 
+    async function addSparePartsForContract() {
+        const response = await createContract(user.token,
+            {workStartDate: '2021-07-20T00:00:00', workEndDate: '0001-01-01T00:00:00', serviceRequestId: model.id});
+        const contract = await response.json();
+
+        await addSparePartForContractAsync(user.token, contract.id, {sparePartId: part.id, quantity: quantity});
+    }
+
     return (
         <>
             {isLoading ? <Spinner /> :
@@ -109,11 +119,18 @@ const ContractForm = () => {
                                 <h2>Add spare parts</h2>
                             </Grid>
                             <Autocomplete
+                                value={part}
+                                onChange={(event, newPart) => {
+                                    setPart(newPart);
+                                }}
+                                inputValue={inputPart}
+                                onInputChange={(event, newInputPart) => {
+                                    setInputPart(newInputPart);
+                                }}
                                 options={parts}
                                 getOptionLabel={(option) => option.name}
                                 renderInput={(params) =>
                                     <TextField
-                                        name="spare-part" onChange={handleChange}
                                         required {...params} label="Spare part" variant="outlined" />}
                             />
                             <TextField name='quantity' label='Quantity'
@@ -126,6 +143,7 @@ const ContractForm = () => {
                                 fullWidth variant="outlined" />
                             <Button className={classes.buttonStyle} type='submit' color='primary'
                                 disabled={isDisabled}
+                                onClick={addSparePartsForContract}
                                 variant='contained' fullWidth>
                                 Add
                             </Button>

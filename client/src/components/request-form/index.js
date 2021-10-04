@@ -70,7 +70,7 @@ const RequestForm = ({ mode }) => {
 
         let res = mode == 'creating' ? await handleCreate() : await handleUpdate();
         if(res.ok) {
-            history.push('/models');
+            history.push('/requests');
         }
     }
 
