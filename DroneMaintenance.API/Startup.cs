@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
 using System;
 using System.IO;
 
@@ -35,11 +37,11 @@ namespace DroneMaintenance
             services.ConfigureSwagger();
             services.AddScoped<TokenValidationFilterAttribute>();
             services.AddControllers().AddNewtonsoftJson();
-
             services.ConfigureAuthentication(Configuration);
+            services.AddOcelot();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public async void Configure(IApplicationBuilder app)
         {
             if (Environment.IsDevelopment())
             {
@@ -73,6 +75,8 @@ namespace DroneMaintenance
             {
                 endpoints.MapControllers();
             });
+
+            await app.UseOcelot();
         }
     }
 }
