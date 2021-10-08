@@ -1,13 +1,13 @@
 {
-  "Routes": [
+  "ReRoutes": [
     //SparePartsOrders API
     {
       "DownstreamPathTemplate": "/api/orders",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "5002"
+          "Port": "5003"
         }
       ],
       "UpstreamPathTemplate": "/orders",
