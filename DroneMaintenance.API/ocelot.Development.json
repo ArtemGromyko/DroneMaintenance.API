@@ -3,14 +3,14 @@
     //SparePartsOrders API
     {
       "DownstreamPathTemplate": "/api/orders",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "5003"
+          "Port": "5002"
         }
       ],
-      "UpstreamPathTemplate": "/orders",
+      "UpstreamPathTemplate": "/api/orders/",
       "UpstreamHttpMethod": [ "GET" ]
     }
   ]
