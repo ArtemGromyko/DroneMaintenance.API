@@ -116,12 +116,13 @@ namespace DroneMaintenance.API.Extensions
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var key = Encoding.ASCII.GetBytes(configuration["AppSettings:Secret"]);
+            var authenticationProviderKey = "TestKey";
 
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
+            }).AddJwtBearer(authenticationProviderKey, x =>
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;

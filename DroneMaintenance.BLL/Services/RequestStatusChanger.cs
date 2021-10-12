@@ -49,7 +49,7 @@ namespace DroneMaintenance.BLL.Services
             while(!stoppingToken.IsCancellationRequested)
             {
                 await UpdateRequestStatusAsync(stoppingToken);
-                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
             }
         }
     }

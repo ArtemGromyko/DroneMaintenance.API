@@ -11,7 +11,33 @@
         }
       ],
       "UpstreamPathTemplate": "/api/orders/",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "RouteClaimsRequirement": {
+        "Role": "admin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/{userId}/orders",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "5002"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/{userId}/orders",
+      "UpstreamHttpMethod": [ "GET" ],
+      "RouteClaimsRequirement": {
+        "Role": "user"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     }
   ]
 }

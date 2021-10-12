@@ -25,8 +25,8 @@ namespace DroneMaintenance.BLL.Services
         private readonly IOrdersProducerService _orderSparePartService;
 
         public ContractsService(IContractRepository contractRepository, IServiceRequestRepository requestRepository, IMapper mapper,
-        IContractSparePartRepository contractPartRepository, ISparePartsService partsService, 
-        ISparePartRepository partRepository, IOrdersProducerService orderSparePartService)
+        IContractSparePartRepository contractPartRepository, ISparePartsService partsService,
+        ISparePartRepository partRepository, IOrdersProducerService orderSparePartService, IUserRepository userRepository)
         {
             _contractRepository = contractRepository;
             _requestRepository = requestRepository;
@@ -158,7 +158,7 @@ namespace DroneMaintenance.BLL.Services
 
         public async Task AddSparePartForContractAsync(Guid contractId, 
         ContractSparePartForCreationModel contractPartForCreationModel)
-         {
+        {
             var contractEntity = await TryGetContractEntityByIdAsync(contractId);
             var sparePartEntity = await _partsService.TryGetSparePartEntityByIdAsync(contractPartForCreationModel.SparePartId);
             var requestEntity = await _requestRepository.GetServiceRequestByIdAsync(contractEntity.ServiceRequestId);
@@ -179,6 +179,9 @@ namespace DroneMaintenance.BLL.Services
             var orderDto = _mapper.Map<OrderDto>(sparePartEntity);
             orderDto.Quantity = contractPartEntity.Quantity;
             orderDto.RequestId = requestEntity.Id;
+            orderDto.UserId = requestEntity.UserId;
+            orderDto.UserName = requestEntity.User.Name;
+            orderDto.UserEmail = requestEntity.User.Email;
 
             _orderSparePartService.PostSparePartOrder(orderDto);
 
@@ -196,7 +199,8 @@ namespace DroneMaintenance.BLL.Services
             await _contractPartRepository.DeleteContractSparePartAsync(contractPartEntity);
         }
 
-        public async Task<ContractSparePartModel> UpdateSparePartForContractAsync(Guid contractId, Guid partId, ContractSparePartForUpdateModel contractPartForUpdateModel)
+        public async Task<ContractSparePartModel> UpdateSparePartForContractAsync(Guid contractId, Guid partId, 
+        ContractSparePartForUpdateModel contractPartForUpdateModel)
         {
             await CheckContractExistenceAsync(contractId);
             await _partsService.CheckSparePartExistenceAsync(partId);
